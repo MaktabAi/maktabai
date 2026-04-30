@@ -761,6 +761,7 @@ function fbW(path,data){if(!window._fbReady)return;window._set(window._ref(windo
 function fbP(path,data){if(!window._fbReady)return;return window._push(window._ref(window._db,path),data);}
 function fbR(path,cb){if(!window._fbReady){cb({});return;}window._get(window._ref(window._db,path)).then(function(s){cb(s.val()||{});}).catch(function(){cb({});});}
 function fbListen(path,cb){if(!window._fbReady)return;window._onValue(window._ref(window._db,path),function(s){cb(s.val()||{});})}
+function fbL(path,cb){fbListen(path,cb);}
 function fbDel(path){if(!window._fbReady)return;window._remove(window._ref(window._db,path));}
 
 // ── LOGIN ────────────────────────────────────────────────────
@@ -1661,19 +1662,19 @@ function loadTStats(){
     tNat=Object.values(d).filter(function(n){return !fanNames.length||fanNames.includes(n.fan)}).sort(function(a,b){return b.ts-a.ts});
     var students=new Set(tNat.map(function(n){return n.ism})).size;
     var avg=tNat.length?Math.round(tNat.reduce(function(s,n){return s+n.foiz},0)/tNat.length):0;
-    document.getElementById('t-stcnt').textContent=students;
-    document.getElementById('t-testcnt').textContent=tNat.length;
-    document.getElementById('t-avgcnt').textContent=avg+'%';
-    document.getElementById('t-top-tb').innerHTML=[].concat(tNat).sort(function(a,b){return b.foiz-a.foiz}).slice(0,10)
+    if(document.getElementById('t-stcnt'))document.getElementById('t-stcnt').textContent=students;
+    if(document.getElementById('t-testcnt'))document.getElementById('t-testcnt').textContent=tNat.length;
+    if(document.getElementById('t-avgcnt'))document.getElementById('t-avgcnt').textContent=avg+'%';
+    if(document.getElementById('t-top-tb'))document.getElementById('t-top-tb').innerHTML=[].concat(tNat).sort(function(a,b){return b.foiz-a.foiz}).slice(0,10)
       .map(function(n,i){return '<tr><td>'+(['&#127945;','&#129351;','&#129352;'][i]||i+1)+'</td><td><strong>'+n.ism+'</strong></td><td>'+n.sinf+'-sinf</td><td>'+n.test+'</td><td><strong>'+n.foiz+'%</strong></td><td><span class="bb '+bc(n.foiz)+'">'+bt(n.foiz)+'</span></td></tr>';}).join('');
     var sinflar=[].concat([]).concat(Array.from(new Set(tNat.map(function(n){return n.sinf})))).sort();
-    document.getElementById('tf-sinf').innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
+    if(document.getElementById('tf-sinf'))document.getElementById('tf-sinf').innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
   });
   fbListen('topshiriqlar',function(d){
     tTop=Object.values(d).sort(function(a,b){return b.ts-a.ts});
-    document.getElementById('t-topcnt').textContent=tTop.length;
+    if(document.getElementById('t-topcnt'))document.getElementById('t-topcnt').textContent=tTop.length;
     var sts=Array.from(new Set(tTop.map(function(t){return t.ism})));
-    document.getElementById('tf-top-st').innerHTML='<option value="">Barcha o\'quvchilar</option>'+sts.map(function(s){return '<option>'+s+'</option>';}).join('');
+    if(document.getElementById('tf-top-st'))document.getElementById('tf-top-st').innerHTML='<option value="">Barcha o\'quvchilar</option>'+sts.map(function(s){return '<option>'+s+'</option>';}).join('');
     filterTTop();
   });
 }
