@@ -1417,7 +1417,8 @@ function loadTOzlashtirish(){
     el.innerHTML='<div class="empty"><div class="empty-ico">&#128202;</div><p>Kurs kiritilmagan</p></div>';
     return;
   }
-  // Filter variantlarini to'ldirish
+
+  // Filter to'ldirish
   var sinflar=Array.from(new Set(mc.map(function(k){return String(k.kurs.sinf)}))).sort(function(a,b){return a-b});
   var sf=document.getElementById('tf-ozl-sinf');
   if(sf)sf.innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
@@ -1426,133 +1427,124 @@ function loadTOzlashtirish(){
   var mf=document.getElementById('tf-ozl-mavzu');
   if(mf)mf.innerHTML='<option value="">Barcha mavzular</option>'+mavzuNoms.map(function(m){return '<option>'+m+'</option>';}).join('');
 
-  // Firebase dan HAMMA ma'lumot bir vaqtda
+  // Firebase dan ma'lumot
   fbR('natijalar',function(natijalar){
   fbR('grades',function(grades){
-  fbR('darslar',function(darslar){
   fbR('topshiriqlar',function(topshiriqlar){
     tOzlData=[];
     var natArr=Object.values(natijalar||{}).filter(Boolean);
     var topArr=Object.values(topshiriqlar||{}).filter(Boolean);
-    var darsObj=darslar||{};
     var gradesObj=grades||{};
 
     mc.forEach(function(k){
       var kId=k._fbKey||k.id;
+      var fanNom=k.kurs.nom;
 
-      // Bu kurs uchun o'quvchilarni topish
-      // 1. Test yechgan o'quvchilar (natijalar)
-      // 2. Topshiriq yuborgan o'quvchilar
-      // 3. Dars ko'rgan o'quvchilar
+      // O'quvchilarni topish: natijalar + topshiriqlar
       var studentMap={};
 
-      // Natijalardan - istalgan test bo'lsa ham qo'shamiz
+      // Natijalardan — fan nomi yoki test nomi mavzu bilan mos kelsa
       natArr.forEach(function(n){
         if(!n||!n.ism)return;
-        // Bu kursning mavzularidan biri mos kelsa
-        var matched=k.mavzular.some(function(m){
-          var mNom=m.nom.toLowerCase();
-          var tNom=(n.test||'').toLowerCase();
-          var words=mNom.split(' ').filter(function(w){return w.length>3;});
-          return words.length>0&&words.some(function(w){return tNom.indexOf(w)>-1;});
+        var hasMatch=k.mavzular.some(function(m){
+          var mL=m.nom.toLowerCase();
+          var tL=(n.test||'').toLowerCase();
+          var words=mL.split(' ').filter(function(w){return w.length>3;});
+          if(!words.length)words=mL.split(' ').filter(function(w){return w.length>2;});
+          return words.some(function(w){return tL.indexOf(w)>-1;});
         });
-        if(matched){
+        // Fan nomi mos kelsa ham qo'shamiz
+        var fanMatch=(n.fan||'').toLowerCase().indexOf(fanNom.toLowerCase().substring(0,8))>-1||
+                     fanNom.toLowerCase().indexOf((n.fan||'').toLowerCase().substring(0,8))>-1;
+        if(hasMatch||fanMatch){
           studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
         }
       });
 
-      // Topshiriqlardan - kId bo'yicha
+      // Topshiriqlardan — kId yoki fan nomi bo'yicha
       topArr.forEach(function(t){
         if(!t||!t.ism)return;
-        if(t.kId===kId){
+        var kMatch=t.kId===kId;
+        var fMatch=(t.fan||'').toLowerCase().indexOf(fanNom.toLowerCase().substring(0,8))>-1||
+                   fanNom.toLowerCase().indexOf((t.fan||'').toLowerCase().substring(0,8))>-1;
+        if(kMatch||fMatch){
           studentMap[t.ism]={ism:t.ism,sinf:String(t.sinf||'')};
         }
       });
 
-      // Grades dan - key = sk(ism)_kId_mi_sk(nom)
+      // Grades dan — kId bo'yicha
       Object.keys(gradesObj).forEach(function(gKey){
         if(gKey.indexOf('_'+kId+'_')>-1){
-          // ismni topish
-          natArr.forEach(function(n){
-            if(n&&n.ism&&gKey.indexOf(sk(n.ism))===0){
-              studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
+          // Bu gradening ism qismini topamiz
+          topArr.forEach(function(t){
+            if(t&&t.ism){
+              var expected=sk(t.ism)+'_'+kId;
+              if(gKey.indexOf(expected)===0){
+                studentMap[t.ism]={ism:t.ism,sinf:String(t.sinf||'')};
+              }
             }
           });
-          topArr.forEach(function(t){
-            if(t&&t.ism&&gKey.indexOf(sk(t.ism))===0){
-              studentMap[t.ism]={ism:t.ism,sinf:String(t.sinf||'')};
+          natArr.forEach(function(n){
+            if(n&&n.ism){
+              var expected=sk(n.ism)+'_'+kId;
+              if(gKey.indexOf(expected)===0){
+                studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
+              }
             }
           });
         }
       });
 
-      // Darslardan - key = sk(ism)_kId_mi
-      Object.keys(darsObj).forEach(function(dKey){
-        if(dKey.indexOf('_'+kId+'_')>-1){
-          // Ism ni aniqlash
-          var ismKey=dKey.split('_'+kId+'_')[0];
-          natArr.forEach(function(n){
-            if(n&&n.ism&&sk(n.ism)===ismKey){
-              studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
-            }
-          });
-          topArr.forEach(function(t){
-            if(t&&t.ism&&sk(t.ism)===ismKey){
-              studentMap[t.ism]={ism:t.ism,sinf:String(t.sinf||'')};
-            }
-          });
-        }
-      });
+      if(!Object.keys(studentMap).length)return;
 
-      // Har o'quvchi uchun har mavzu hisoblash
+      // Har o'quvchi, har mavzu
       Object.values(studentMap).forEach(function(st){
         var ism=st.ism;
         var ismSk=sk(ism);
 
         k.mavzular.forEach(function(m,mi){
-          // 1. DARS: Firebase darslar da sk(ism)_kId_mi
-          var darsKey=ismSk+'_'+kId+'_'+mi;
-          var darsDone=!!(darsObj[darsKey]);
-          var darsBall=darsDone?34:0;
-
-          // 2. TEST: mavzu nomidagi so'zlar test nomida bo'lsin
-          var mNomLow=m.nom.toLowerCase();
-          var mWords=mNomLow.split(' ').filter(function(w){return w.length>3;});
-          if(!mWords.length)mWords=mNomLow.split(' ').filter(function(w){return w.length>2;});
+          // TEST foizi
+          var mNomL=m.nom.toLowerCase();
+          var mWords=mNomL.split(' ').filter(function(w){return w.length>3;});
+          if(!mWords.length)mWords=mNomL.split(' ').filter(function(w){return w.length>2;});
 
           var myTests=natArr.filter(function(n){
             if(!n||n.ism!==ism)return false;
-            var tNom=(n.test||'').toLowerCase();
-            return mWords.length>0&&mWords.some(function(w){return tNom.indexOf(w)>-1;});
+            var tL=(n.test||'').toLowerCase();
+            return mWords.some(function(w){return tL.indexOf(w)>-1;});
           }).sort(function(a,b){return (b.ts||0)-(a.ts||0);});
-
           var testFoiz=myTests.length?myTests[0].foiz:null;
-          var testBall=testFoiz!==null?Math.round(testFoiz*33/100):0;
 
-          // 3. TOPSHIRIQ: grades da sk(ism)_kId_mi_sk(nom)
+          // TOPSHIRIQ foizi — grades dan
           var tops=(k.topshiriqlar||[]).filter(function(t){
             return parseInt(t.mavzuNum)===parseInt(m.num);
           });
           var topToplam=tops.reduce(function(s,t){return s+(parseInt(t.maxBall)||0);},0);
-          var topEarned=tops.reduce(function(s,t){
+          var topEarned=0;
+          tops.forEach(function(t){
             var gKey=ismSk+'_'+kId+'_'+mi+'_'+sk(t.nom);
             var g=gradesObj[gKey];
-            return s+(g&&g.ball!==undefined?Number(g.ball):0);
-          },0);
+            if(g&&g.ball!==undefined)topEarned+=Number(g.ball);
+          });
           var topFoiz=topToplam?Math.round((topEarned/topToplam)*100):null;
-          var topBall=topFoiz!==null?Math.round(topFoiz*33/100):0;
 
-          // 4. JAMI
-          var total=Math.min(100,darsBall+testBall+topBall);
+          // DARS
+          var darsObj2={}; // darslar alohida o'qilinmayapti, LocalStorage dan tekshirish mumkin emas server tomonda
+          var darsDone=false; // faqat vizual uchun
 
-          // Kamida bitta bajarilgan bo'lsa
-          if(darsDone||testFoiz!==null||topFoiz!==null){
+          // UMUMIY: mavjud natijalar o'rtachasi
+          var vals=[];
+          if(testFoiz!==null)vals.push(testFoiz);
+          if(topFoiz!==null)vals.push(topFoiz);
+          var total=vals.length?Math.round(vals.reduce(function(s,v){return s+v;},0)/vals.length):0;
+
+          if(vals.length>0){
             tOzlData.push({
               ism:ism,sinf:st.sinf,
-              fan:k.kurs.nom,mavzu:m.nom,mavzuNum:m.num,
-              darsDone:darsDone,darsBall:darsBall,
-              testFoiz:testFoiz,testBall:testBall,
-              topFoiz:topFoiz,topBall:topBall,
+              fan:fanNom,mavzu:m.nom,mavzuNum:m.num,
+              darsDone:darsDone,
+              testFoiz:testFoiz,
+              topFoiz:topFoiz,
               total:total
             });
           }
@@ -1560,7 +1552,7 @@ function loadTOzlashtirish(){
       });
     });
     filterTOzl();
-  });});});});
+  });});});
 }
 
 function renderOzl(){
