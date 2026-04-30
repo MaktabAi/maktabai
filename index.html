@@ -1658,15 +1658,19 @@ function filterTN(){
     '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--fog)">Ma\'lumot yo\'q</td></tr>';
 }
 
+// Filtrlangan topshiriqlar (gradeTop uchun)
+var tTopFiltered=[];
+
 function filterTTop(){
-  var fst=document.getElementById('tf-top-st').value;
-  var fstat=document.getElementById('tf-top-stat').value;
-  var d=tTop;
-  if(fst)d=d.filter(function(t){return t.ism===fst});
-  if(fstat)d=d.filter(function(t){return t.holat===fstat});
+  var fst=(document.getElementById('tf-top-st')||{}).value||'';
+  var fstat=(document.getElementById('tf-top-stat')||{}).value||'';
+  tTopFiltered=tTop.slice();
+  if(fst)tTopFiltered=tTopFiltered.filter(function(t){return t.ism===fst;});
+  if(fstat)tTopFiltered=tTopFiltered.filter(function(t){return t.holat===fstat;});
   var el=document.getElementById('t-top-list');
-  if(!d.length){el.innerHTML='<div class="empty"><div class="empty-ico">&#128221;</div><p>Topshiriq yo\'q</p></div>';return;}
-  el.innerHTML=d.map(function(t,i){
+  if(!el)return;
+  if(!tTopFiltered.length){el.innerHTML='<div class="empty"><div class="empty-ico">&#128221;</div><p>Topshiriq yoq</p></div>';return;}
+  el.innerHTML=tTopFiltered.map(function(t,i){
     return '<div class="tj-card">'+
       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">'+
       '<strong style="font-size:14px">'+t.nom+'</strong>'+
@@ -1681,26 +1685,29 @@ function filterTTop(){
         '<div style="background:var(--sage2);color:#065f46;padding:7px 13px;border-radius:8px;font-weight:800">&#9989; '+t.ball+'/'+t.maxBall+' ball'+(t.izoh?'<span style="font-size:12px;color:var(--fog);margin-left:8px">'+t.izoh+'</span>':'')+'</div>':
         '<input type="number" class="ginp" id="gi-'+i+'" min="0" max="'+t.maxBall+'" placeholder="0-'+t.maxBall+'">'+
         '<input type="text" class="iinp" id="iz-'+i+'" placeholder="Izoh (ixtiyoriy)">'+
-        '<button class="gbtn" onclick="gradeTop('+i+',\''+encodeURIComponent(JSON.stringify(t))+'\')">&#9989; Baholash</button>'
+        '<button class="gbtn" onclick="gradeTop('+i+')">&#9989; Baholash</button>'
       )+
       '<span style="font-size:12px;color:var(--fog)">Max: '+t.maxBall+'</span>'+
       '</div></div>';
   }).join('');
 }
 
-function gradeTop(i,dataEnc){
-  var t=JSON.parse(decodeURIComponent(dataEnc));
+function gradeTop(i){
+  var t=tTopFiltered[i];
+  if(!t){alert('Topshiriq topilmadi!');return;}
   var b=parseInt(document.getElementById('gi-'+i).value);
-  var iz=document.getElementById('iz-'+i).value||'';
+  var iz=(document.getElementById('iz-'+i)||{}).value||'';
   if(isNaN(b)||b<0||b>t.maxBall){alert('Ball 0 dan '+t.maxBall+' gacha bolishi kerak!');return;}
-  var sKey=sk(t.ism)+'_'+t.kId+'_'+t.mi+'_'+sk(t.nom);
-  var gData={ism:t.ism,kId:t.kId,mi:t.mi,nom:t.nom,ball:b,maxBall:t.maxBall,izoh:iz,sana:now()};
-  // Firebase da topshiriq holatini yangilaymiz
+  // Firebase key: topshiriq yuborilganda saqlanishi kerak
+  // submitTop da: sk(ism)_kId_mi_sk(nom) formatida
+  var kId=t.kId||'';
+  var mi=t.mi!==undefined?t.mi:0;
+  var sKey=sk(t.ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
+  var gData={ism:t.ism,kId:kId,mi:mi,nom:t.nom,ball:b,maxBall:t.maxBall,izoh:iz,sana:now()};
   var updatedTop=Object.assign({},t,{ball:b,izoh:iz,holat:'baholangan',bahosana:now()});
   fbW('topshiriqlar/'+sKey,updatedTop);
-  // Grades kolleksiyaga yozamiz - o'quvchi real-time ko'rsin
   fbW('grades/'+sKey,gData);
-  alert('Baholandi: '+t.ism+' '+b+'/'+t.maxBall+' ball');
+  alert(t.ism+' - '+b+'/'+t.maxBall+' ball berildi!');
   setTimeout(function(){loadTTops();},600);
 }
 
