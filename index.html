@@ -506,30 +506,13 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>%</th><th>Baho</th></tr></thead><tbody id="t-top-tb"></tbody></table></div>
     </div>
     <div id="tt2" style="display:none">
-      <div class="sh"><div class="st">&#127775; Mavzu o'zlashtirish</div><div class="ss">Test (50%) + Topshiriq (50%) = Umumiy o'zlashtirish</div></div>
+      <div class="sh"><div class="st">&#127775; Mavzu o'zlashtirish</div><div class="ss">Har mavzu: Test % + Topshiriq % → avtomatik umumiy natija</div></div>
       <div class="frow">
         <select class="fsel" id="tf-ozl-sinf" onchange="renderOzl()"><option value="">Barcha sinflar</option></select>
         <select class="fsel" id="tf-ozl-mavzu" onchange="renderOzl()"><option value="">Barcha mavzular</option></select>
         <button class="xbtn" onclick="exportTOzl()">&#128229; Excel</button>
       </div>
       <div id="t-ozl-list"><div class="loader"><div class="spin"></div>Yuklanmoqda...</div></div>
-      
-      <!-- Test natijalari -->
-      <div class="sh" style="margin-top:16px"><div class="st">&#128203; Test natijalari</div></div>
-      <div class="frow">
-        <select class="fsel" id="tf-sinf" onchange="filterTN()"><option value="">Barcha sinflar</option></select>
-        <button class="xbtn" onclick="exportTNat()">&#128229; Excel</button>
-      </div>
-      <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>To'g'ri</th><th>%</th><th>Baho</th><th>Sana</th></tr></thead><tbody id="t-nat-tb"></tbody></table></div>
-
-      <!-- Topshiriqlarni baholash -->
-      <div class="sh" style="margin-top:16px"><div class="st">&#128221; Topshiriqlarni baholash</div></div>
-      <div class="frow">
-        <select class="fsel" id="tf-top-st" onchange="filterTTop()"><option value="">Barcha o'quvchilar</option></select>
-        <select class="fsel" id="tf-top-stat" onchange="filterTTop()"><option value="">Barcha holat</option><option value="yuborilgan">Baholanmagan</option><option value="baholangan">Baholangan</option></select>
-        <button class="xbtn" onclick="exportTTop()">&#128229; Excel</button>
-      </div>
-      <div id="t-top-list"></div>
     </div>
     <div id="tt3" style="display:none">
       <div class="sh"><div class="st">&#128275; Mavzu ochilish vaqti</div><div class="ss">Har mavzu uchun ochilish sanasini belgilang</div></div>
@@ -1417,7 +1400,7 @@ function tTab(n){
     if(bt)bt.classList.toggle('active',i===n);
   }
   if(n===1)loadTStats();
-  if(n===2){loadTOzlashtirish();loadTStats();filterTN();loadTTops();}
+  if(n===2)loadTOzlashtirish();
   if(n===3)buildSchedule();
   if(n===4)loadTCourses();
   if(n===5)buildTPassInfo();
@@ -1593,15 +1576,14 @@ function filterTOzl(){
   if(fSinf)d=d.filter(function(r){return r.sinf===fSinf;});
   if(fMavzu)d=d.filter(function(r){return r.mavzu===fMavzu;});
   if(!d.length){
-    el.innerHTML='<div class="empty"><div class="empty-ico">&#127775;</div><p>Malumot topilmadi</p></div>';
+    el.innerHTML='<div class="empty"><div class="empty-ico">&#127775;</div><p>Malumot topilmadi. Oquvchilar test yoki topshiriq bajarishi kerak.</p></div>';
     return;
   }
-  // Guruhlash: mavzu bo'yicha
+  // Mavzu bo'yicha guruhlash
   var groups={};
   d.forEach(function(r){
     var key=r.fan+'::'+r.mavzu;
     if(!groups[key])groups[key]={fan:r.fan,mavzu:r.mavzu,items:[]};
-    // Bir o'quvchi bir mavzuda bir marta (eng yaxshi natija)
     var ex=groups[key].items.findIndex(function(x){return x.ism===r.ism;});
     if(ex>=0){if(r.total>groups[key].items[ex].total)groups[key].items[ex]=r;}
     else groups[key].items.push(r);
@@ -1611,17 +1593,19 @@ function filterTOzl(){
     var avg=g.items.length?Math.round(g.items.reduce(function(s,r){return s+r.total;},0)/g.items.length):0;
     var ac=avg>=80?'var(--sage)':avg>=50?'var(--gold)':'var(--rose)';
     html+='<div class="card" style="margin-bottom:12px;padding:0;overflow:hidden">';
-    html+='<div style="padding:11px 14px;background:var(--snow);border-bottom:1.5px solid var(--mist);display:flex;align-items:center;gap:10px">';
+    // Mavzu sarlavhasi
+    html+='<div style="padding:10px 14px;background:var(--snow);border-bottom:1.5px solid var(--mist);display:flex;align-items:center;gap:10px">';
     html+='<div style="font-size:13px;font-weight:800;flex:1">'+g.mavzu+'</div>';
-    html+='<div style="font-size:11px;color:var(--fog)">'+g.fan+'  •  '+g.items.length+' nafar</div>';
+    html+='<div style="font-size:11px;color:var(--fog)">'+g.fan+' — '+g.items.length+' nafar</div>';
     html+='<div style="font-size:16px;font-weight:900;color:'+ac+'">'+avg+'%</div>';
     html+='</div>';
-    html+='<div style="overflow-x:auto"><table class="tbl" style="min-width:600px"><thead><tr>';
+    // Jadval
+    html+='<div style="overflow-x:auto"><table class="tbl" style="min-width:500px"><thead><tr>';
     html+='<th>Oquvchi</th><th>Sinf</th>';
-    html+='<th style="color:#60a5fa">Dars</th>';
-    html+='<th style="color:#a78bfa">Test %</th>';
+    html+='<th>Dars</th>';
+    html+='<th style="color:#60a5fa">Test %</th>';
     html+='<th style="color:#fbbf24">Topshiriq %</th>';
-    html+='<th style="background:#1e2638">JAMI (100)</th>';
+    html+='<th style="background:var(--snow)">Umumiy</th>';
     html+='<th>Daraja</th>';
     html+='</tr></thead><tbody>';
     g.items.sort(function(a,b){return b.total-a.total;}).forEach(function(r){
@@ -1630,16 +1614,10 @@ function filterTOzl(){
       html+='<tr>';
       html+='<td><strong>'+r.ism+'</strong></td>';
       html+='<td>'+r.sinf+'-sinf</td>';
-      html+='<td>'+(r.darsDone
-        ?'<span style="color:var(--sage);font-weight:700">&#9989;</span>'
-        :'<span style="color:var(--fog)">—</span>')+'</td>';
-      html+='<td>'+(r.testFoiz!==null
-        ?'<strong>'+r.testFoiz+'%</strong> <span style="color:var(--fog);font-size:10px">('+r.testBall+' ball)</span>'
-        :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
-      html+='<td>'+(r.topFoiz!==null
-        ?'<strong>'+r.topFoiz+'%</strong> <span style="color:var(--fog);font-size:10px">('+r.topBall+' ball)</span>'
-        :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
-      html+='<td style="background:var(--snow)"><strong style="font-size:16px;color:'+(r.total>=80?'var(--sage)':r.total>=50?'var(--gold)':'var(--rose)')+'">'+r.total+'</strong><span style="font-size:11px;color:var(--fog)">/100</span></td>';
+      html+='<td>'+(r.darsDone?'<span style="color:var(--sage)">&#9989;</span>':'<span style="color:var(--fog)">—</span>')+'</td>';
+      html+='<td>'+(r.testFoiz!==null?'<strong>'+r.testFoiz+'%</strong>':'<span style="color:var(--fog)">—</span>')+'</td>';
+      html+='<td>'+(r.topFoiz!==null?'<strong>'+r.topFoiz+'%</strong>':'<span style="color:var(--fog)">—</span>')+'</td>';
+      html+='<td style="background:var(--snow)"><strong style="font-size:15px;color:'+(r.total>=80?'var(--sage)':r.total>=50?'var(--gold)':'var(--rose)')+'">'+r.total+'%</strong></td>';
       html+='<td><span class="bb '+cl+'">'+dlbl+'</span></td>';
       html+='</tr>';
     });
