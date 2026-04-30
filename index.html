@@ -488,11 +488,9 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
     <div class="nlogo">MaktabAI</div>
     <button class="ntab active" id="tb1" onclick="tTab(1)">Umumiy</button>
     <button class="ntab" id="tb2" onclick="tTab(2)">O'zlashtirish</button>
-    <button class="ntab" id="tb3" onclick="tTab(3)">Natijalar</button>
-    <button class="ntab" id="tb4" onclick="tTab(4)">Topshiriqlar</button>
-    <button class="ntab" id="tb5" onclick="tTab(5)">Vaqt sozlash</button>
-    <button class="ntab" id="tb6" onclick="tTab(6)">Kurs import</button>
-    <button class="ntab" id="tb7" onclick="tTab(7)">Parol</button>
+    <button class="ntab" id="tb3" onclick="tTab(3)">Vaqt sozlash</button>
+    <button class="ntab" id="tb4" onclick="tTab(4)">Kurs import</button>
+    <button class="ntab" id="tb5" onclick="tTab(5)">Parol</button>
     <div class="nr"><div class="nbadge nb-v" id="t-nbadge"></div><button class="outbtn" onclick="logout()">Chiqish</button></div>
   </nav>
   <div class="main">
@@ -508,24 +506,24 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>%</th><th>Baho</th></tr></thead><tbody id="t-top-tb"></tbody></table></div>
     </div>
     <div id="tt2" style="display:none">
-      <div class="sh"><div class="st">&#127775; Mavzu o'zlashtirish</div><div class="ss">Dars + Test + Topshiriq — umumiy ball</div></div>
+      <div class="sh"><div class="st">&#127775; Mavzu o'zlashtirish</div><div class="ss">Test (50%) + Topshiriq (50%) = Umumiy o'zlashtirish</div></div>
       <div class="frow">
         <select class="fsel" id="tf-ozl-sinf" onchange="renderOzl()"><option value="">Barcha sinflar</option></select>
         <select class="fsel" id="tf-ozl-mavzu" onchange="renderOzl()"><option value="">Barcha mavzular</option></select>
         <button class="xbtn" onclick="exportTOzl()">&#128229; Excel</button>
       </div>
       <div id="t-ozl-list"><div class="loader"><div class="spin"></div>Yuklanmoqda...</div></div>
-    </div>
-    <div id="tt3" style="display:none">
-      <div class="sh"><div class="st">&#128203; Test natijalari</div></div>
+      
+      <!-- Test natijalari -->
+      <div class="sh" style="margin-top:16px"><div class="st">&#128203; Test natijalari</div></div>
       <div class="frow">
         <select class="fsel" id="tf-sinf" onchange="filterTN()"><option value="">Barcha sinflar</option></select>
         <button class="xbtn" onclick="exportTNat()">&#128229; Excel</button>
       </div>
       <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>To'g'ri</th><th>%</th><th>Baho</th><th>Sana</th></tr></thead><tbody id="t-nat-tb"></tbody></table></div>
-    </div>
-    <div id="tt4" style="display:none">
-      <div class="sh"><div class="st">&#128221; Topshiriqlarni baholash</div></div>
+
+      <!-- Topshiriqlarni baholash -->
+      <div class="sh" style="margin-top:16px"><div class="st">&#128221; Topshiriqlarni baholash</div></div>
       <div class="frow">
         <select class="fsel" id="tf-top-st" onchange="filterTTop()"><option value="">Barcha o'quvchilar</option></select>
         <select class="fsel" id="tf-top-stat" onchange="filterTTop()"><option value="">Barcha holat</option><option value="yuborilgan">Baholanmagan</option><option value="baholangan">Baholangan</option></select>
@@ -533,11 +531,11 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       </div>
       <div id="t-top-list"></div>
     </div>
-    <div id="tt5" style="display:none">
+    <div id="tt3" style="display:none">
       <div class="sh"><div class="st">&#128275; Mavzu ochilish vaqti</div><div class="ss">Har mavzu uchun ochilish sanasini belgilang</div></div>
       <div id="sch-list"></div>
     </div>
-    <div id="tt6" style="display:none">
+    <div id="tt4" style="display:none">
       <div class="sh"><div class="st">&#128229; Kurs import</div></div>
       <div class="card">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
@@ -559,7 +557,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       <div class="sh" style="margin-top:16px"><div class="st">&#128218; Kiritilgan kurslar</div></div>
       <div id="t-courses"></div>
     </div>
-    <div id="tt7" style="display:none">
+    <div id="tt5" style="display:none">
       <div class="sh"><div class="st">&#128273; Sozlamalar</div><div class="ss">Login, ism va parolni o'zgartirish</div></div>
 
       <!-- Ma'lumotlarim -->
@@ -1412,19 +1410,17 @@ function initTeacher(){
 }
 
 function tTab(n){
-  for(var i=1;i<=7;i++){
+  for(var i=1;i<=5;i++){
     var el=document.getElementById('tt'+i);
     var bt=document.getElementById('tb'+i);
     if(el)el.style.display=i===n?'block':'none';
     if(bt)bt.classList.toggle('active',i===n);
   }
   if(n===1)loadTStats();
-  if(n===2)loadTOzlashtirish();
-  if(n===3){loadTStats();filterTN();}
-  if(n===4){loadTTops();}
-  if(n===5)buildSchedule();
-  if(n===6)loadTCourses();
-  if(n===7)buildTPassInfo();
+  if(n===2){loadTOzlashtirish();loadTStats();filterTN();loadTTops();}
+  if(n===3)buildSchedule();
+  if(n===4)loadTCourses();
+  if(n===5)buildTPassInfo();
 }
 // ── O'ZLASHTIRISH (TEST + TOPSHIRIQ O'RTACHA) ────────────────
 var tOzlData=[];
@@ -1622,10 +1618,10 @@ function filterTOzl(){
     html+='</div>';
     html+='<div style="overflow-x:auto"><table class="tbl" style="min-width:600px"><thead><tr>';
     html+='<th>Oquvchi</th><th>Sinf</th>';
-    html+='<th style="color:#60a5fa">Dars (34%)</th>';
-    html+='<th style="color:#a78bfa">Test (33%)</th>';
-    html+='<th style="color:#fbbf24">Topshiriq (33%)</th>';
-    html+='<th style="background:#1e2638">JAMI</th>';
+    html+='<th style="color:#60a5fa">Dars</th>';
+    html+='<th style="color:#a78bfa">Test %</th>';
+    html+='<th style="color:#fbbf24">Topshiriq %</th>';
+    html+='<th style="background:#1e2638">JAMI (100)</th>';
     html+='<th>Daraja</th>';
     html+='</tr></thead><tbody>';
     g.items.sort(function(a,b){return b.total-a.total;}).forEach(function(r){
@@ -1635,8 +1631,8 @@ function filterTOzl(){
       html+='<td><strong>'+r.ism+'</strong></td>';
       html+='<td>'+r.sinf+'-sinf</td>';
       html+='<td>'+(r.darsDone
-        ?'<span style="color:var(--sage);font-weight:700">&#9989; '+r.darsBall+' ball</span>'
-        :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
+        ?'<span style="color:var(--sage);font-weight:700">&#9989;</span>'
+        :'<span style="color:var(--fog)">—</span>')+'</td>';
       html+='<td>'+(r.testFoiz!==null
         ?'<strong>'+r.testFoiz+'%</strong> <span style="color:var(--fog);font-size:10px">('+r.testBall+' ball)</span>'
         :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
