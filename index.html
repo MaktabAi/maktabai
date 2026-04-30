@@ -1435,6 +1435,20 @@ function loadTOzlashtirish(){
     var natArr=Object.values(natijalar||{}).filter(Boolean);
     var topArr=Object.values(topshiriqlar||{}).filter(Boolean);
     var gradesObj=grades||{};
+    // DEBUG
+    console.log('=== OZLASHTIRISH DEBUG ===');
+    console.log('Kurslar soni:', mc.length);
+    console.log('Natijalar soni:', natArr.length);
+    console.log('Topshiriqlar soni:', topArr.length);
+    console.log('Grades soni:', Object.keys(gradesObj).length);
+    if(mc.length>0){
+      var k0=mc[0];
+      console.log('1-kurs:', k0.kurs.nom, 'kId:', k0._fbKey||k0.id);
+      console.log('Mavzular:', k0.mavzular.map(function(m){return m.nom;}));
+    }
+    if(natArr.length>0)console.log('1-natija:', natArr[0].ism, natArr[0].fan, natArr[0].test, natArr[0].foiz);
+    if(topArr.length>0)console.log('1-topshiriq:', topArr[0].ism, topArr[0].fan, topArr[0].kId);
+    console.log('Grades keys:', Object.keys(gradesObj).slice(0,3));
 
     mc.forEach(function(k){
       var kId=k._fbKey||k.id;
@@ -1495,7 +1509,8 @@ function loadTOzlashtirish(){
         }
       });
 
-      if(!Object.keys(studentMap).length)return;
+      console.log('Kurs:', kId, 'fanNom:', fanNom, 'studentMap:', Object.keys(studentMap));
+      if(!Object.keys(studentMap).length){console.log('studentMap BO\x27SH!');return;}
 
       // Har o'quvchi, har mavzu
       Object.values(studentMap).forEach(function(st){
@@ -1568,6 +1583,7 @@ function filterTOzl(){
   if(fSinf)d=d.filter(function(r){return r.sinf===fSinf;});
   if(fMavzu)d=d.filter(function(r){return r.mavzu===fMavzu;});
   if(!d.length){
+    console.log('tOzlData bo\x27sh! Filtrlashdan keyin 0 natija');
     el.innerHTML='<div class="empty"><div class="empty-ico">&#127775;</div><p>Malumot topilmadi. Oquvchilar test yoki topshiriq bajarishi kerak.</p></div>';
     return;
   }
