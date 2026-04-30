@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -509,7 +508,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>%</th><th>Baho</th></tr></thead><tbody id="t-top-tb"></tbody></table></div>
     </div>
     <div id="tt2" style="display:none">
-      <div class="sh"><div class="st">&#127775; Mavzu o'zlashtirish</div><div class="ss">Dars + Test + Topshiriq — umumiy ball</div></div>
+      <div class="sh"><div class="st">&#127775; Mavzu o'zlashtirish</div><div class="ss">Test (50%) + Topshiriq (50%) = Umumiy o'zlashtirish</div></div>
       <div class="frow">
         <select class="fsel" id="tf-ozl-sinf" onchange="renderOzl()"><option value="">Barcha sinflar</option></select>
         <select class="fsel" id="tf-ozl-mavzu" onchange="renderOzl()"><option value="">Barcha mavzular</option></select>
@@ -781,6 +780,7 @@ function fbW(path,data){if(!window._fbReady)return;window._set(window._ref(windo
 function fbP(path,data){if(!window._fbReady)return;return window._push(window._ref(window._db,path),data);}
 function fbR(path,cb){if(!window._fbReady){cb({});return;}window._get(window._ref(window._db,path)).then(function(s){cb(s.val()||{});}).catch(function(){cb({});});}
 function fbListen(path,cb){if(!window._fbReady)return;window._onValue(window._ref(window._db,path),function(s){cb(s.val()||{});})}
+function fbL(path,cb){fbListen(path,cb);}
 function fbDel(path){if(!window._fbReady)return;window._remove(window._ref(window._db,path));}
 
 // ── LOGIN ────────────────────────────────────────────────────
@@ -1434,126 +1434,124 @@ function loadTOzlashtirish(){
   var el=document.getElementById('t-ozl-list');
   if(!el)return;
   el.innerHTML='<div class="loader"><div class="spin"></div>Yuklanmoqda...</div>';
-  var mc=myCourses();
-  if(!mc.length){
-    el.innerHTML='<div class="empty"><div class="empty-ico">&#128202;</div><p>Kurs kiritilmagan. Avval kurs import qiling.</p></div>';
-    return;
-  }
-  // Filtr variantlarini to'ldirish
-  var sinflar=Array.from(new Set(mc.map(function(k){return String(k.kurs.sinf)}))).sort(function(a,b){return a-b;});
-  var sf=document.getElementById('tf-ozl-sinf');
-  if(sf)sf.innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
-  var mavzuNoms=[];
-  mc.forEach(function(k){k.mavzular.forEach(function(m){if(!mavzuNoms.includes(m.nom))mavzuNoms.push(m.nom);});});
-  var mf=document.getElementById('tf-ozl-mavzu');
-  if(mf)mf.innerHTML='<option value="">Barcha mavzular</option>'+mavzuNoms.map(function(m){return '<option>'+m+'</option>';}).join('');
+  loadAllCourses(function(){
+    var mc=allCourses.filter(function(k){return k.teacherLogin===CU.login||k.teacherId===CU.id;});
+    if(!mc.length){
+      el.innerHTML='<div class="empty"><div class="empty-ico">&#128202;</div><p>Kurs kiritilmagan. Avval kurs import qiling.</p></div>';
+      return;
+    }
+    // Filtr variantlari
+    var sinflar=Array.from(new Set(mc.map(function(k){return String(k.kurs.sinf)}))).sort(function(a,b){return a-b});
+    var sf=document.getElementById('tf-ozl-sinf');
+    if(sf)sf.innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
+    var mavzuNoms=[];
+    mc.forEach(function(k){k.mavzular.forEach(function(m){if(!mavzuNoms.includes(m.nom))mavzuNoms.push(m.nom);});});
+    var mf=document.getElementById('tf-ozl-mavzu');
+    if(mf)mf.innerHTML='<option value="">Barcha mavzular</option>'+mavzuNoms.map(function(m){return '<option>'+m+'</option>';}).join('');
 
-  // Firebase dan parallel o'qish
-  fbR('natijalar',function(natijalar){
+    // Firebase dan ma'lumotlar
+    fbR('natijalar',function(natijalar){
     fbR('grades',function(grades){
-      fbR('darslar',function(darslar){
-        tOzlData=[];
-        var natArr=Object.values(natijalar||{}).filter(Boolean);
-        var darsArr=Object.values(darslar||{}).filter(Boolean);
+    fbR('topshiriqlar',function(topshiriqlar){
+      tOzlData=[];
+      var natArr=Object.values(natijalar||{}).filter(Boolean);
+      var topArr=Object.values(topshiriqlar||{}).filter(Boolean);
+      var gradesObj=grades||{};
 
-        mc.forEach(function(k){
-          var kId=k._fbKey||k.id;
-          var fanNom=k.kurs.nom;
+      mc.forEach(function(k){
+        var kId=k.id||k._fbKey;
+        var fanNom=k.kurs.nom;
 
-          // 1. Bu fanga tegishli barcha o'quvchilar (test yechganlar)
-          var studentMap={};
-          natArr.forEach(function(n){
-            if(!n.ism||!n.fan)return;
-            // Fan mos keladi (substring)
-            if(n.fan.indexOf(fanNom.substring(0,12))>-1||fanNom.indexOf(n.fan.substring(0,12))>-1){
-              studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
+        // O'quvchilarni topish
+        var studentMap={};
+
+        // Natijalardan: test nomi mavzu nomiga mos kelsa
+        natArr.forEach(function(n){
+          if(!n||!n.ism)return;
+          var hasMatch=k.mavzular.some(function(m){
+            var mL=m.nom.toLowerCase();
+            var tL=(n.test||'').toLowerCase();
+            var words=mL.split(' ').filter(function(w){return w.length>3;});
+            if(!words.length)words=mL.split(' ').filter(function(w){return w.length>2;});
+            return words.length&&words.some(function(w){return tL.indexOf(w)>-1;});
+          });
+          if(hasMatch){
+            studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
+          }
+        });
+
+        // Topshiriqlardan: kId mos kelsa
+        topArr.forEach(function(t){
+          if(!t||!t.ism)return;
+          if(t.kId===kId){
+            studentMap[t.ism]={ism:t.ism,sinf:String(t.sinf||'')};
+          }
+        });
+
+        // Grades dan: key = sk(ism)_kId_mi_sk(nom)
+        Object.keys(gradesObj).forEach(function(gKey){
+          // gKey formatida: sk(ism)_kId_mi_sk(nom)
+          topArr.forEach(function(t){
+            if(t&&t.ism&&t.kId===kId){
+              studentMap[t.ism]={ism:t.ism,sinf:String(t.sinf||'')};
             }
           });
-          // Dars yechganlarni ham qo'shish
-          darsArr.forEach(function(d){
-            if(!d.ism)return;
-            if(d.fan&&(d.fan.indexOf(fanNom.substring(0,12))>-1||fanNom.indexOf(d.fan.substring(0,12))>-1)){
-              if(!studentMap[d.ism])studentMap[d.ism]={ism:d.ism,sinf:String(d.sinf||'')};
-            }
-          });
-          // Grades dan ham (topshiriq bajarib baholangan)
-          Object.keys(grades||{}).forEach(function(gKey){
-            var parts=gKey.split('_'+kId+'_');
-            if(parts.length>1){
-              var ismKey=parts[0].replace(/_/g,' ');
-              // Ism key dan asl ismni topish
-              natArr.forEach(function(n){
-                if(n.ism&&sk(n.ism)===parts[0]){
-                  studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
-                }
+        });
+
+        if(!Object.keys(studentMap).length)return;
+
+        // Har o'quvchi, har mavzu
+        Object.values(studentMap).forEach(function(st){
+          var ism=st.ism;
+          var ismSk=sk(ism);
+
+          k.mavzular.forEach(function(m,mi){
+            // TEST foizi
+            var mNomL=m.nom.toLowerCase();
+            var mWords=mNomL.split(' ').filter(function(w){return w.length>3;});
+            if(!mWords.length)mWords=mNomL.split(' ').filter(function(w){return w.length>2;});
+            var myTests=natArr.filter(function(n){
+              if(!n||n.ism!==ism)return false;
+              var tL=(n.test||'').toLowerCase();
+              return mWords.length&&mWords.some(function(w){return tL.indexOf(w)>-1;});
+            }).sort(function(a,b){return (b.ts||0)-(a.ts||0);});
+            var testFoiz=myTests.length?myTests[0].foiz:null;
+
+            // TOPSHIRIQ foizi - grades dan
+            var tops=(k.topshiriqlar||[]).filter(function(t){
+              return parseInt(t.mavzuNum)===parseInt(m.num);
+            });
+            var topToplam=tops.reduce(function(s,t){return s+(parseInt(t.maxBall)||0);},0);
+            var topEarned=tops.reduce(function(s,t){
+              var gKey=ismSk+'_'+kId+'_'+mi+'_'+sk(t.nom);
+              var g=gradesObj[gKey];
+              return s+(g&&g.ball!==undefined?Number(g.ball):0);
+            },0);
+            var topFoiz=topToplam?Math.round((topEarned/topToplam)*100):null;
+
+            // UMUMIY: mavjud natijalar o'rtachasi (test 50% + topshiriq 50%)
+            var vals=[];
+            if(testFoiz!==null)vals.push(testFoiz);
+            if(topFoiz!==null)vals.push(topFoiz);
+            var total=vals.length?Math.round(vals.reduce(function(s,v){return s+v;},0)/vals.length):0;
+
+            if(vals.length>0){
+              tOzlData.push({
+                ism:ism,sinf:st.sinf,
+                fan:fanNom,mavzu:m.nom,mavzuNum:m.num,
+                testFoiz:testFoiz,
+                topFoiz:topFoiz,
+                total:total
               });
             }
           });
-
-          if(!Object.keys(studentMap).length)return;
-
-          // 2. Har o'quvchi, har mavzu uchun hisoblash
-          Object.values(studentMap).forEach(function(st){
-            var ism=st.ism;
-            k.mavzular.forEach(function(m,mi){
-              // DARS: darslar Firebase da sk(ism)_kId_mi key
-              var darsKey=sk(ism)+'_'+kId+'_'+mi;
-              var darsDone=!!(darslar&&darslar[darsKey]);
-              var darsBall=darsDone?34:0;
-
-              // TEST: natijalar da test nomi mavzu nomini o'z ichiga oladi
-              var mNomLow=m.nom.toLowerCase();
-              var myTests=natArr.filter(function(n){
-                if(n.ism!==ism)return false;
-                // Fan tekshirish
-                var fanOk=!n.fan||(n.fan.indexOf(fanNom.substring(0,12))>-1||fanNom.indexOf(n.fan.substring(0,12))>-1);
-                if(!fanOk)return false;
-                // Test nomi mavzu nomini o'z ichiga oladi
-                var tNom=(n.test||'').toLowerCase();
-                // Mavzu nomidagi birinchi muhim so'z test nomida bo'lsin
-                var words=mNomLow.split(' ').filter(function(w){return w.length>4;});
-                if(!words.length)words=mNomLow.split(' ').filter(function(w){return w.length>2;});
-                var match=words.length?words.some(function(w){return tNom.indexOf(w)>-1;}):false;
-                return match;
-              }).sort(function(a,b){return (b.ts||0)-(a.ts||0);});
-              var testFoiz=myTests.length?myTests[0].foiz:null;
-              var testBall=testFoiz!==null?Math.round(testFoiz*33/100):0;
-
-              // TOPSHIRIQ: grades da sk(ism)_kId_mi_sk(topNom)
-              var tops=(k.topshiriqlar||[]).filter(function(t){return parseInt(t.mavzuNum)===parseInt(m.num);});
-              var topToplam=tops.reduce(function(s,t){return s+(parseInt(t.maxBall)||0);},0);
-              var topEarned=tops.reduce(function(s,t){
-                var gKey=sk(ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
-                var g=grades&&grades[gKey];
-                return s+(g&&g.ball!==undefined?Number(g.ball):0);
-              },0);
-              var topFoiz=topToplam?Math.round((topEarned/topToplam)*100):null;
-              var topBall=topFoiz!==null?Math.round(topFoiz*33/100):0;
-
-              // Umumiy
-              var total=darsBall+testBall+topBall;
-
-              // Kamida bitta amal bajarilgan bo'lsin
-              if(darsDone||testFoiz!==null||topFoiz!==null){
-                tOzlData.push({
-                  ism:ism,sinf:st.sinf,fan:fanNom,
-                  mavzu:m.nom,mavzuNum:m.num,
-                  darsDone:darsDone,darsBall:darsBall,
-                  testFoiz:testFoiz,testBall:testBall,
-                  topFoiz:topFoiz,topBall:topBall,
-                  total:Math.min(100,total)
-                });
-              }
-            });
-          });
         });
-        renderOzl();
       });
-    });
+      filterTOzl();
+    });});});
   });
 }
 
-// renderOzl = filterTOzl ning yangi nomi
 function renderOzl(){
   filterTOzl();
 }
@@ -1564,18 +1562,16 @@ function filterTOzl(){
   var fSinf=(document.getElementById('tf-ozl-sinf')||{}).value||'';
   var fMavzu=(document.getElementById('tf-ozl-mavzu')||{}).value||'';
   var d=tOzlData.slice();
-  if(fSinf)d=d.filter(function(r){return r.sinf===fSinf;});
+  if(fSinf)d=d.filter(function(r){return String(r.sinf)===fSinf;});
   if(fMavzu)d=d.filter(function(r){return r.mavzu===fMavzu;});
   if(!d.length){
-    el.innerHTML='<div class="empty"><div class="empty-ico">&#127775;</div><p>Malumot topilmadi</p></div>';
+    el.innerHTML='<div class="empty"><div class="empty-ico">&#127775;</div><p>Hali natija yoq. Oquvchilar test yoki topshiriq bajarishi kerak.</p></div>';
     return;
   }
-  // Guruhlash: mavzu bo'yicha
   var groups={};
   d.forEach(function(r){
     var key=r.fan+'::'+r.mavzu;
     if(!groups[key])groups[key]={fan:r.fan,mavzu:r.mavzu,items:[]};
-    // Bir o'quvchi bir mavzuda bir marta (eng yaxshi natija)
     var ex=groups[key].items.findIndex(function(x){return x.ism===r.ism;});
     if(ex>=0){if(r.total>groups[key].items[ex].total)groups[key].items[ex]=r;}
     else groups[key].items.push(r);
@@ -1585,18 +1581,13 @@ function filterTOzl(){
     var avg=g.items.length?Math.round(g.items.reduce(function(s,r){return s+r.total;},0)/g.items.length):0;
     var ac=avg>=80?'var(--sage)':avg>=50?'var(--gold)':'var(--rose)';
     html+='<div class="card" style="margin-bottom:12px;padding:0;overflow:hidden">';
-    html+='<div style="padding:11px 14px;background:var(--snow);border-bottom:1.5px solid var(--mist);display:flex;align-items:center;gap:10px">';
+    html+='<div style="padding:10px 14px;background:var(--snow);border-bottom:1.5px solid var(--mist);display:flex;align-items:center;gap:10px">';
     html+='<div style="font-size:13px;font-weight:800;flex:1">'+g.mavzu+'</div>';
-    html+='<div style="font-size:11px;color:var(--fog)">'+g.fan+'  •  '+g.items.length+' nafar</div>';
+    html+='<div style="font-size:11px;color:var(--fog)">'+g.fan+' — '+g.items.length+' nafar</div>';
     html+='<div style="font-size:16px;font-weight:900;color:'+ac+'">'+avg+'%</div>';
     html+='</div>';
-    html+='<div style="overflow-x:auto"><table class="tbl" style="min-width:600px"><thead><tr>';
-    html+='<th>Oquvchi</th><th>Sinf</th>';
-    html+='<th style="color:#60a5fa">Dars (34%)</th>';
-    html+='<th style="color:#a78bfa">Test (33%)</th>';
-    html+='<th style="color:#fbbf24">Topshiriq (33%)</th>';
-    html+='<th style="background:#1e2638">JAMI</th>';
-    html+='<th>Daraja</th>';
+    html+='<div style="overflow-x:auto"><table class="tbl" style="min-width:480px"><thead><tr>';
+    html+='<th>Oquvchi</th><th>Sinf</th><th style="color:#60a5fa">Test %</th><th style="color:#fbbf24">Topshiriq %</th><th style="background:var(--snow)">Umumiy</th><th>Daraja</th>';
     html+='</tr></thead><tbody>';
     g.items.sort(function(a,b){return b.total-a.total;}).forEach(function(r){
       var cl=r.total>=80?'bb5':r.total>=60?'bb4':r.total>=40?'bb3':'bb2';
@@ -1604,16 +1595,9 @@ function filterTOzl(){
       html+='<tr>';
       html+='<td><strong>'+r.ism+'</strong></td>';
       html+='<td>'+r.sinf+'-sinf</td>';
-      html+='<td>'+(r.darsDone
-        ?'<span style="color:var(--sage);font-weight:700">&#9989; '+r.darsBall+' ball</span>'
-        :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
-      html+='<td>'+(r.testFoiz!==null
-        ?'<strong>'+r.testFoiz+'%</strong> <span style="color:var(--fog);font-size:10px">('+r.testBall+' ball)</span>'
-        :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
-      html+='<td>'+(r.topFoiz!==null
-        ?'<strong>'+r.topFoiz+'%</strong> <span style="color:var(--fog);font-size:10px">('+r.topBall+' ball)</span>'
-        :'<span style="color:var(--fog)">— 0 ball</span>')+'</td>';
-      html+='<td style="background:var(--snow)"><strong style="font-size:16px;color:'+(r.total>=80?'var(--sage)':r.total>=50?'var(--gold)':'var(--rose)')+'">'+r.total+'</strong><span style="font-size:11px;color:var(--fog)">/100</span></td>';
+      html+='<td>'+(r.testFoiz!==null?'<strong>'+r.testFoiz+'%</strong>':'<span style="color:var(--fog)">—</span>')+'</td>';
+      html+='<td>'+(r.topFoiz!==null?'<strong>'+r.topFoiz+'%</strong>':'<span style="color:var(--fog)">—</span>')+'</td>';
+      html+='<td style="background:var(--snow)"><strong style="font-size:16px;color:'+(r.total>=80?'var(--sage)':r.total>=50?'var(--gold)':'var(--rose)')+'">'+r.total+'%</strong></td>';
       html+='<td><span class="bb '+cl+'">'+dlbl+'</span></td>';
       html+='</tr>';
     });
@@ -1652,16 +1636,16 @@ function loadTStats(){
     document.getElementById('t-stcnt').textContent=students;
     document.getElementById('t-testcnt').textContent=tNat.length;
     document.getElementById('t-avgcnt').textContent=avg+'%';
-    document.getElementById('t-top-tb').innerHTML=[].concat(tNat).sort(function(a,b){return b.foiz-a.foiz}).slice(0,10)
+    if(document.getElementById('t-top-tb'))document.getElementById('t-top-tb').innerHTML=[].concat(tNat).sort(function(a,b){return b.foiz-a.foiz}).slice(0,10)
       .map(function(n,i){return '<tr><td>'+(['&#127945;','&#129351;','&#129352;'][i]||i+1)+'</td><td><strong>'+n.ism+'</strong></td><td>'+n.sinf+'-sinf</td><td>'+n.test+'</td><td><strong>'+n.foiz+'%</strong></td><td><span class="bb '+bc(n.foiz)+'">'+bt(n.foiz)+'</span></td></tr>';}).join('');
     var sinflar=[].concat([]).concat(Array.from(new Set(tNat.map(function(n){return n.sinf})))).sort();
-    document.getElementById('tf-sinf').innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
+    if(document.getElementById('tf-sinf'))document.getElementById('tf-sinf').innerHTML='<option value="">Barcha sinflar</option>'+sinflar.map(function(s){return '<option value="'+s+'">'+s+'-sinf</option>';}).join('');
   });
   fbListen('topshiriqlar',function(d){
     tTop=Object.values(d).sort(function(a,b){return b.ts-a.ts});
-    document.getElementById('t-topcnt').textContent=tTop.length;
+    if(document.getElementById('t-topcnt'))document.getElementById('t-topcnt').textContent=tTop.length;
     var sts=Array.from(new Set(tTop.map(function(t){return t.ism})));
-    document.getElementById('tf-top-st').innerHTML='<option value="">Barcha o\'quvchilar</option>'+sts.map(function(s){return '<option>'+s+'</option>';}).join('');
+    if(document.getElementById('tf-top-st'))document.getElementById('tf-top-st').innerHTML='<option value="">Barcha o\'quvchilar</option>'+sts.map(function(s){return '<option>'+s+'</option>';}).join('');
     filterTTop();
   });
 }
@@ -1669,7 +1653,7 @@ function loadTStats(){
 function filterTN(){
   var fs=document.getElementById('tf-sinf').value;
   var d=fs?tNat.filter(function(n){return String(n.sinf)===fs}):tNat;
-  document.getElementById('t-nat-tb').innerHTML=d.length?
+  if(document.getElementById('t-nat-tb'))document.getElementById('t-nat-tb').innerHTML=d.length?
     d.map(function(n,i){return '<tr><td>'+(i+1)+'</td><td><strong>'+n.ism+'</strong></td><td>'+n.sinf+'-sinf</td><td>'+n.test+'</td><td>'+n.togri+'/'+n.jami+'</td><td><strong>'+n.foiz+'%</strong></td><td><span class="bb '+bc(n.foiz)+'">'+bt(n.foiz)+'</span></td><td style="font-size:11px;color:var(--fog)">'+n.sana+'</td></tr>';}).join(''):
     '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--fog)">Ma\'lumot yo\'q</td></tr>';
 }
@@ -1716,7 +1700,8 @@ function gradeTop(i,dataEnc){
   fbW('topshiriqlar/'+sKey,updatedTop);
   // Grades kolleksiyaga yozamiz - o'quvchi real-time ko'rsin
   fbW('grades/'+sKey,gData);
-  alert('&#9989; '+t.ism+'ga '+b+'/'+t.maxBall+' ball berildi!');
+  alert('Baholandi: '+t.ism+' '+b+'/'+t.maxBall+' ball');
+  setTimeout(function(){loadTTops();},600);
 }
 
 // SCHEDULE
