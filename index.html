@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MaktabAI — Aqlli ta'lim, yorqin kelajak</title>
+<title>MaktabEDU — Aqlli ta'lim, yorqin kelajak</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script type="module">
@@ -14,7 +14,7 @@
     authDomain:"infoquiz-d1784.firebaseapp.com",
     databaseURL:"https://infoquiz-d1784-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId:"infoquiz-d1784",
-    storageBucket:"infoquiz-d1784.firebasestorage.app",
+    storageBucket:"maktabedu-d1784.firebasestorage.app",
     messagingSenderId:"338647988212",
     appId:"1:338647988212:web:01de9015c5a53877236ba1"
   };
@@ -372,7 +372,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <div id="login" class="screen active">
   <div class="lw">
     <div class="brand">
-      <div class="brand-name">MaktabAI</div>
+      <div class="brand-name">MaktabEDU</div>
       <div class="brand-slogan">Aqlli ta'lim, yorqin kelajak</div>
     </div>
     <div class="lcard">
@@ -420,7 +420,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- O'QUVCHI -->
 <div id="st-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabAI</div>
+    <div class="nlogo">MaktabEDU</div>
     <button class="ntab active" id="sn1" onclick="showStTab('home-t',this)">Bosh sahifa</button>
     <button class="ntab" id="sn2" onclick="showStTab('fans-t',this)">Fanlar</button>
     <button class="ntab" id="sn3" onclick="showStTab('nat-t',this)">Natijalarim</button>
@@ -434,7 +434,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
     <div id="home-t">
       <div class="hero">
         <div class="hav">&#128100;</div>
-        <div><div class="hn" id="st-hname">Xush kelibsiz!</div><div class="hs" id="st-hsub">MaktabAI</div></div>
+        <div><div class="hn" id="st-hname">Xush kelibsiz!</div><div class="hs" id="st-hsub">MaktabEDU</div></div>
         <div class="hstats">
           <div class="hst"><div class="hstv" id="h-fans">0</div><div class="hstl">Fan</div></div>
           <div class="hst"><div class="hstv" id="h-tests">0</div><div class="hstl">Test</div></div>
@@ -464,7 +464,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- QUIZ -->
 <div id="quiz-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabAI</div>
+    <div class="nlogo">MaktabEDU</div>
     <div class="nr">
       <div class="nbadge nb-g" id="q-ball">&#11088; 0</div>
       <button class="outbtn" onclick="showScreen('st-sc');clearInterval(tiInt)">&#8592; Chiqish</button>
@@ -485,7 +485,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- O'QITUVCHI -->
 <div id="teacher-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabAI</div>
+    <div class="nlogo">MaktabEDU</div>
     <button class="ntab active" id="tb1" onclick="tTab(1)">Umumiy</button>
     <button class="ntab" id="tb2" onclick="tTab(2)">O'zlashtirish</button>
     <button class="ntab" id="tb3" onclick="tTab(3)">Natijalar</button>
@@ -601,7 +601,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- ADMIN -->
 <div id="admin-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabAI <span style="font-size:11px;color:var(--gold);font-weight:600">Admin</span></div>
+    <div class="nlogo">MaktabEDU <span style="font-size:11px;color:var(--gold);font-weight:600">Admin</span></div>
     <button class="ntab active" id="ab1" onclick="admTab(1)">Umumiy</button>
     <button class="ntab" id="ab2" onclick="admTab(2)">O'quvchilar</button>
     <button class="ntab" id="ab3" onclick="admTab(3)">O'qituvchilar</button>
@@ -749,7 +749,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <script>
 // ── CONFIG ───────────────────────────────────────────────────
 var ADMIN_PASS_KEY = 'mai_admin_pass';
-var DEFAULT_ADMIN_PASS = 'maktabai2025';
+var DEFAULT_ADMIN_PASS = 'maktabedu2025';
 var SK = 'mai_s4';
 var SM = 20;
 
@@ -925,7 +925,7 @@ function initStudent(){
     document.getElementById('st-nbadge').textContent=CU.ism;
     document.getElementById('st-sbadge').textContent=CU.sinf+'-sinf';
     document.getElementById('st-hname').textContent='Assalomu alaykum, '+CU.ism+'!';
-    document.getElementById('st-hsub').textContent=CU.sinf+'-sinf - MaktabAI';
+    document.getElementById('st-hsub').textContent=CU.sinf+'-sinf - MaktabEDU';
     showScreen('st-sc');
     showStTab('home-t');
     var fans=allCourses.filter(function(k){return String(k.kurs.sinf)===String(CU.sinf)});
@@ -1679,7 +1679,7 @@ function exportTOzl(){
   var ws=XLSX.utils.aoa_to_sheet(r);
   ws['!cols']=[{wch:24},{wch:10},{wch:22},{wch:28},{wch:10},{wch:14},{wch:12},{wch:14}];
   XLSX.utils.book_append_sheet(wb,ws,'Ozlashtirish');
-  XLSX.writeFile(wb,'MaktabAI_Ozlashtirish_'+today()+'.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Ozlashtirish_'+today()+'.xlsx');
 }
 
 
@@ -2228,7 +2228,7 @@ function exportTNat(){
   var ws=XLSX.utils.aoa_to_sheet(r);
   ws['!cols']=[{wch:22},{wch:10},{wch:20},{wch:22},{wch:10},{wch:10},{wch:10},{wch:16},{wch:20}];
   XLSX.utils.book_append_sheet(wb,ws,'Test natijalari');
-  XLSX.writeFile(wb,'MaktabAI_Test_Natijalari_'+today()+'.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Test_Natijalari_'+today()+'.xlsx');
 }
 function exportTTop(){
   var wb=XLSX.utils.book_new();
@@ -2237,7 +2237,7 @@ function exportTTop(){
   var ws=XLSX.utils.aoa_to_sheet(r);
   ws['!cols']=[{wch:22},{wch:10},{wch:20},{wch:26},{wch:40},{wch:10},{wch:8},{wch:14},{wch:20}];
   XLSX.utils.book_append_sheet(wb,ws,'Topshiriqlar');
-  XLSX.writeFile(wb,'MaktabAI_Topshiriqlar_'+today()+'.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Topshiriqlar_'+today()+'.xlsx');
 }
 
 // ── ADMIN ────────────────────────────────────────────────────
@@ -2387,7 +2387,7 @@ function dlTeacherTemplate(){
   var ws=XLSX.utils.aoa_to_sheet([['Ism Familiya','Fan nomi'],['Karimov Sarvar','Matematika'],['Yusupova Dilnoza','Fizika'],['Toshmatov Jamshid','Kimyo']]);
   ws['!cols']=[{wch:28},{wch:22}];
   XLSX.utils.book_append_sheet(wb,ws,'Oqituvchilar');
-  XLSX.writeFile(wb,'MaktabAI_Oqituvchilar_Shablon.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Oqituvchilar_Shablon.xlsx');
 }
 function importTeachers(input){
   var file=input.files[0];if(!file)return;
@@ -2416,11 +2416,11 @@ function exportLogins(){
     if(!list.length){alert('Hali o\'qituvchi yo\'q!');return;}
     var wb=XLSX.utils.book_new();
     var r=[['#','Ism Familiya','Fan','Login','Parol','Sayt','Sana']];
-    list.forEach(function(t,i){r.push([i+1,t.ism,t.fan||'-',t.login,t.pass,'maktabai.netlify.app',t.sana]);});
+    list.forEach(function(t,i){r.push([i+1,t.ism,t.fan||'-',t.login,t.pass,'maktabedu.netlify.app',t.sana]);});
     var ws=XLSX.utils.aoa_to_sheet(r);
     ws['!cols']=[{wch:4},{wch:26},{wch:20},{wch:22},{wch:14},{wch:32},{wch:20}];
     XLSX.utils.book_append_sheet(wb,ws,'Login va Parollar');
-    XLSX.writeFile(wb,'MaktabAI_Login_Parollar_'+today()+'.xlsx');
+    XLSX.writeFile(wb,'MaktabEDU_Login_Parollar_'+today()+'.xlsx');
   });
 }
 function renderTeachersList(){
@@ -2588,7 +2588,7 @@ function exportATop(){
   var ws=XLSX.utils.aoa_to_sheet(r);
   ws['!cols']=[{wch:22},{wch:10},{wch:20},{wch:26},{wch:40},{wch:10},{wch:8},{wch:14},{wch:20}];
   XLSX.utils.book_append_sheet(wb,ws,'Topshiriqlar');
-  XLSX.writeFile(wb,'MaktabAI_Topshiriqlar_'+today()+'.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Topshiriqlar_'+today()+'.xlsx');
 }
 
 
@@ -2631,7 +2631,7 @@ function exportAllNat(){
   var ws2=XLSX.utils.aoa_to_sheet(r2);
   ws2['!cols']=[{wch:4},{wch:22},{wch:10},{wch:12},{wch:13},{wch:13},{wch:16}];
   XLSX.utils.book_append_sheet(wb,ws2,'Oquvchilar statistika');
-  XLSX.writeFile(wb,'MaktabAI_Barcha_Natijalar_'+today()+'.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Barcha_Natijalar_'+today()+'.xlsx');
 }
 function exportStudents(){
   var wb=XLSX.utils.book_new();
@@ -2646,7 +2646,7 @@ function exportStudents(){
   });
   var ws=XLSX.utils.aoa_to_sheet(r);
   XLSX.utils.book_append_sheet(wb,ws,'Oquvchilar');
-  XLSX.writeFile(wb,'MaktabAI_Oquvchilar_'+today()+'.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Oquvchilar_'+today()+'.xlsx');
 }
 
 // ── KURS IMPORT (TEMPLATE + IMPORT) ──────────────────────────
@@ -2679,7 +2679,7 @@ function dlTemplate(){
     [2,'Topshiriq 2','Topshiriq tavsifi',20,7,'Loyiha'],
   ]);
   XLSX.utils.book_append_sheet(wb,ws4,'Topshiriqlar');
-  XLSX.writeFile(wb,'MaktabAI_Kurs_Shablon.xlsx');
+  XLSX.writeFile(wb,'MaktabEDU_Kurs_Shablon.xlsx');
 }
 
 function importXL(input){
