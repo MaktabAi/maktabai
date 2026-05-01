@@ -1465,15 +1465,19 @@ function loadTOzlashtirish(){
         // O'quvchilarni topish
         var studentMap={};
 
-        // Natijalardan: test nomi mavzu nomiga mos kelsa
+        // Natijalardan: test nomi mavzu nomiga aniq mos kelsa
         natArr.forEach(function(n){
           if(!n||!n.ism)return;
+          var tL=(n.test||'').toLowerCase().trim();
           var hasMatch=k.mavzular.some(function(m){
-            var mL=m.nom.toLowerCase();
-            var tL=(n.test||'').toLowerCase();
-            var words=mL.split(' ').filter(function(w){return w.length>3;});
-            if(!words.length)words=mL.split(' ').filter(function(w){return w.length>2;});
-            return words.length&&words.some(function(w){return tL.indexOf(w)>-1;});
+            var mL=m.nom.toLowerCase().trim();
+            if(tL.indexOf(mL)>-1)return true;
+            var mWords=mL.split(' ').filter(function(w){return w.length>3;});
+            if(mWords.length>=3){
+              var matched=mWords.filter(function(w){return tL.indexOf(w)>-1;});
+              return matched.length===mWords.length;
+            }
+            return false;
           });
           if(hasMatch){
             studentMap[n.ism]={ism:n.ism,sinf:String(n.sinf||'')};
@@ -1506,14 +1510,27 @@ function loadTOzlashtirish(){
           var ismSk=sk(ism);
 
           k.mavzular.forEach(function(m,mi){
-            // TEST foizi
-            var mNomL=m.nom.toLowerCase();
-            var mWords=mNomL.split(' ').filter(function(w){return w.length>3;});
-            if(!mWords.length)mWords=mNomL.split(' ').filter(function(w){return w.length>2;});
+            // TEST foizi - FAQAT aniq mavzuga tegishli test
+            var mNomL=m.nom.toLowerCase().trim();
             var myTests=natArr.filter(function(n){
               if(!n||n.ism!==ism)return false;
-              var tL=(n.test||'').toLowerCase();
-              return mWords.length&&mWords.some(function(w){return tL.indexOf(w)>-1;});
+              var tL=(n.test||'').toLowerCase().trim();
+              // Test nomidan " — Test", " - Test", " — asoslar - Test" kabi qo'shimchalarni olib tashlash
+              var tBase=tL
+                .replace(/\s*[–—\-]+\s*test\s*$/i,'')
+                .replace(/\s*[–—\-]+\s*asos(lar)?\s*[–—\-]?\s*test\s*$/i,'')
+                .replace(/\s*[–—\-]+\s*asos(lar)?\s*$/i,'')
+                .trim();
+              // Mavzu nomidan ham "asoslar" kabi qo'shimchalarni olib tashlash
+              var mBase=mNomL
+                .replace(/\s*[–—\-]+\s*asos(lar)?\s*$/i,'')
+                .trim();
+              // EXACT moslik (eng ishonchli)
+              if(tBase===mBase)return true;
+              if(tBase===mNomL)return true;
+              if(tL===mNomL+' - test')return true;
+              if(tL.startsWith(mNomL))return true;
+              return false;
             }).sort(function(a,b){return (b.ts||0)-(a.ts||0);});
             var testFoiz=myTests.length?myTests[0].foiz:null;
 
