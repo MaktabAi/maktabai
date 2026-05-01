@@ -930,6 +930,31 @@ function initStudent(){
     showStTab('home-t');
     var fans=allCourses.filter(function(k){return String(k.kurs.sinf)===String(CU.sinf)});
     document.getElementById('h-fans').textContent=fans.length;
+    // Firebase dan schedules ni yuklab localStorage ga saqlaymiz
+    loadSchedulesFromFirebase();
+  });
+}
+
+function loadSchedulesFromFirebase(){
+  fbR('schedules',function(data){
+    if(!data)return;
+    // Har bir schedule ni localStorage ga yozamiz
+    Object.values(data).forEach(function(sch){
+      if(!sch||sch.kId===undefined||sch.mi===undefined)return;
+      // O'qituvchilar o'z login bilan saqlaydi
+      // Key format: sch_kId_mi
+      var key='sch_'+sch.kId+'_'+sch.mi;
+      var existing=null;
+      try{existing=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
+      // Firebase dagi ma'lumot muhimroq - yangilaymiz
+      var schData={};
+      if(sch.locked)schData={locked:true,openNow:false};
+      else if(sch.openNow)schData={openNow:true,locked:false};
+      else if(sch.date)schData={date:sch.date,openNow:false,locked:false};
+      if(Object.keys(schData).length){
+        localStorage.setItem(key,JSON.stringify(schData));
+      }
+    });
   });
 }
 
@@ -1009,7 +1034,10 @@ function isMOpen(k,mi){
   try{sch=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
   if(!sch||sch.openNow)return true;
   if(sch.locked)return false;
-  if(sch.date)return Date.now()>=new Date(sch.date).getTime();
+  if(sch.date){
+    var schTime=new Date(sch.date).getTime();
+    return !isNaN(schTime)&&Date.now()>=schTime;
+  }
   return true;
 }
 
@@ -1049,6 +1077,19 @@ function ochFan(kId){
     '</div>'+
     '<div id="mavzu-cards"></div>';
   var mcEl=document.getElementById('mavzu-cards');
+  // Schedules ni Firebase dan yangilab olamiz, keyin render qilamiz
+  fbR('schedules',function(schData){
+    if(schData){
+      Object.values(schData).forEach(function(sch){
+        if(!sch||sch.kId===undefined||sch.mi===undefined)return;
+        var skey='sch_'+sch.kId+'_'+sch.mi;
+        var sd={};
+        if(sch.locked)sd={locked:true,openNow:false};
+        else if(sch.openNow)sd={openNow:true,locked:false};
+        else if(sch.date)sd={date:sch.date,openNow:false,locked:false};
+        if(Object.keys(sd).length)localStorage.setItem(skey,JSON.stringify(sd));
+      });
+    }
   mcEl.innerHTML=k.mavzular.map(function(m,mi){
     var open=isMOpen(k,mi);
     var openDate=getMOpenDate(k,mi);
@@ -1083,6 +1124,7 @@ function ochFan(kId){
       '<div class="mc-prog"><div class="mc-progf" style="width:'+(open?pct:0)+'%"></div></div>'+
       '</div>';
   }).join('');
+  }); // fbR end
 }
 
 function ochMavzu(kId,mi){
@@ -1767,23 +1809,26 @@ function saveSchedule(kId,mi){
   var inp=document.getElementById('dt-'+kId+'-'+mi);
   if(!inp||!inp.value){alert('Vaqtni belgilang!');return;}
   var key='sch_'+kId+'_'+mi;
-  var val={date:inp.value.replace('T',' '),openNow:false,locked:false};
+  var dateVal=inp.value; // ISO format: 2026-01-15T10:00
+  var val={date:dateVal,openNow:false,locked:false};
   localStorage.setItem(key,JSON.stringify(val));
-  fbW('schedules/'+sk(CU.login||'t')+'_'+kId+'_'+mi,Object.assign({kId:kId,mi:mi},val));
+  // Firebase da kId va mi saqlanadi - o'quvchi o'qiy olsin
+  var fbKey='sch_'+kId+'_'+mi;
+  fbW('schedules/'+fbKey,Object.assign({kId:kId,mi:mi},val));
   buildSchedule();
   alert('&#9989; '+new Date(inp.value).toLocaleString('uz-UZ')+' da ochiladi');
 }
 function openNow(kId,mi){
   var key='sch_'+kId+'_'+mi;
   localStorage.setItem(key,JSON.stringify({openNow:true,locked:false}));
-  fbW('schedules/'+sk(CU.login||'t')+'_'+kId+'_'+mi,{kId:kId,mi:mi,openNow:true});
+  fbW('schedules/'+key,{kId:kId,mi:mi,openNow:true,locked:false,date:null});
   buildSchedule();
 }
 function lockM(kId,mi){
   if(!confirm('Bu mavzuni qulflaysizmi?'))return;
   var key='sch_'+kId+'_'+mi;
   localStorage.setItem(key,JSON.stringify({locked:true,openNow:false}));
-  fbW('schedules/'+sk(CU.login||'t')+'_'+kId+'_'+mi,{kId:kId,mi:mi,locked:true});
+  fbW('schedules/sch_'+kId+'_'+mi,{kId:kId,mi:mi,locked:true,openNow:false,date:null});
   buildSchedule();
 }
 
