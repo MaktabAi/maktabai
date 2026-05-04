@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MaktabEDU — Aqlli ta'lim, yorqin kelajak</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231B4FD8'/%3E%3Cstop offset='100%25' stop-color='%2300C8E0'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FCD34D'/%3E%3Cstop offset='100%25' stop-color='%23F59E0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z' fill='url(%23a)' opacity='.95'/%3E%3Cpath d='M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z' fill='url(%23a)' opacity='.65'/%3E%3Crect x='93' y='42' width='14' height='128' rx='5' fill='url(%23a)'/%3E%3Ccircle cx='100' cy='30' r='20' fill='url(%23b)' opacity='.95'/%3E%3Ctext x='100' y='36' font-family='Arial Black' font-size='20' font-weight='900' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231B4FD8'/%3E%3Cstop offset='100%25' stop-color='%2300C8E0'/%3E%3C/linearGradient%3E%3ClinearGradient id='g2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FCD34D'/%3E%3Cstop offset='100%25' stop-color='%23F59E0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z' fill='url(%23g1)' opacity='0.95'/%3E%3Cpath d='M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z' fill='url(%23g1)' opacity='0.65'/%3E%3Crect x='93' y='42' width='14' height='128' rx='5' fill='url(%23g1)'/%3E%3Ccircle cx='100' cy='30' r='20' fill='url(%23g2)' opacity='0.95'/%3E%3Ctext x='100' y='36' font-family='Arial Black' font-size='20' font-weight='900' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script type="module">
@@ -165,6 +167,17 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 .gbtn-item.gno{background:#fef2f2;border-color:var(--rose);color:var(--rose)}
 .gbtn-item.gmatched{background:var(--sage2);border-color:var(--sage);color:#065f46;cursor:default;opacity:.85}
 .game-msg{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;margin:8px 0;text-align:center}
+.igame-wrap{background:var(--wh);border:1.5px solid var(--mist);border-radius:12px;padding:14px;margin-top:10px}
+.igame-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;background:var(--snow);border-radius:9px;padding:8px 10px;border:1px solid var(--mist)}
+.igame-inp{flex:1;border:1px solid var(--mist);border-radius:7px;padding:7px 10px;font-family:'Outfit',sans-serif;font-size:12px;outline:none;background:var(--wh);color:var(--ink)}
+.igame-inp:focus{border-color:var(--sky)}
+.igame-lbl{font-size:10px;font-weight:700;color:var(--fog);min-width:32px;text-align:right}
+.igame-del{background:none;border:none;color:var(--rose);font-size:16px;cursor:pointer;padding:2px 6px;border-radius:5px;line-height:1}
+.igame-del:hover{background:#fef2f2}
+.igame-add{width:100%;padding:8px;border:1.5px dashed var(--mist);border-radius:9px;background:none;color:var(--fog);font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;margin-top:4px;transition:all .2s}
+.igame-add:hover{border-color:var(--sky);color:var(--sky2);background:var(--sky3)}
+.igame-preview-btn{padding:8px 14px;background:var(--violet);color:#fff;border:none;border-radius:9px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px}
+.igame-save-btn{padding:8px 14px;background:var(--sage);color:#fff;border:none;border-radius:9px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;margin-left:6px}
 .fill-inp-g{width:100%;padding:8px 11px;border:1.5px solid var(--mist);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:var(--wh);box-sizing:border-box;margin:5px 0;outline:none}
 .fill-inp-g:focus{border-color:var(--sky)}
 .a-letter{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;font-size:14px;font-weight:700;border:1.5px solid var(--mist);border-radius:8px;background:var(--wh);color:var(--ink);cursor:pointer;margin:2px;font-family:'Outfit',sans-serif;transition:all .15s}
@@ -406,7 +419,34 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <div id="login" class="screen active">
   <div class="lw">
     <div class="brand">
-      <div class="brand-name">MaktabEDU</div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:120px;height:auto;display:block;margin:0 auto 8px">
+        <defs>
+          <linearGradient id="ll1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="ll2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#ll1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#ll1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#ll1)"/>
+        <rect x="36" y="72" width="46" height="5" rx="2.5" fill="white" opacity="0.55"/>
+        <rect x="36" y="85" width="46" height="5" rx="2.5" fill="white" opacity="0.38"/>
+        <rect x="36" y="98" width="46" height="5" rx="2.5" fill="white" opacity="0.55"/>
+        <rect x="36" y="111" width="32" height="5" rx="2.5" fill="white" opacity="0.32"/>
+        <rect x="36" y="124" width="46" height="5" rx="2.5" fill="white" opacity="0.55"/>
+        <rect x="116" y="72" width="46" height="5" rx="2.5" fill="white" opacity="0.42"/>
+        <rect x="116" y="85" width="46" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="98" width="46" height="5" rx="2.5" fill="white" opacity="0.42"/>
+        <rect x="116" y="111" width="30" height="5" rx="2.5" fill="white" opacity="0.22"/>
+        <rect x="116" y="124" width="46" height="5" rx="2.5" fill="white" opacity="0.42"/>
+        <circle cx="100" cy="30" r="20" fill="url(#ll2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="133" y1="24" x2="140" y2="20" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+        <line x1="67" y1="24" x2="60" y2="20" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+        <text x="100" y="192" font-family="Arial Black,Arial,sans-serif" font-size="24" font-weight="900" fill="url(#ll1)" text-anchor="middle" letter-spacing="5">EDU</text>
+        <text x="100" y="210" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">maktabedu.uz</text>
+      </svg>
       <div class="brand-slogan">Aqlli ta'lim, yorqin kelajak</div>
     </div>
     <div class="lcard">
@@ -454,7 +494,29 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- O'QUVCHI -->
 <div id="st-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU</div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="nl1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="nl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#nl1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#nl1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#nl1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="120" width="30" height="5" rx="2.5" fill="white" opacity="0.3"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#nl2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU</div>
     <button class="ntab active" id="sn1" onclick="showStTab('home-t',this)">Bosh sahifa</button>
     <button class="ntab" id="sn2" onclick="showStTab('fans-t',this)">Fanlar</button>
     <button class="ntab" id="sn3" onclick="showStTab('nat-t',this)">Natijalarim</button>
@@ -498,7 +560,29 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- QUIZ -->
 <div id="quiz-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU</div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="nl1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="nl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#nl1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#nl1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#nl1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="120" width="30" height="5" rx="2.5" fill="white" opacity="0.3"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#nl2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU</div>
     <div class="nr">
       <div class="nbadge nb-g" id="q-ball">&#11088; 0</div>
       <button class="outbtn" onclick="showScreen('st-sc');clearInterval(tiInt)">&#8592; Chiqish</button>
@@ -519,7 +603,29 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- O'QITUVCHI -->
 <div id="teacher-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU</div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="nl1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="nl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#nl1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#nl1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#nl1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="120" width="30" height="5" rx="2.5" fill="white" opacity="0.3"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#nl2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU</div>
     <button class="ntab active" id="tb1" onclick="tTab(1)">Umumiy</button>
     <button class="ntab" id="tb2" onclick="tTab(2)">O'zlashtirish</button>
     <button class="ntab" id="tb3" onclick="tTab(3)">Natijalar</button>
@@ -635,7 +741,28 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- ADMIN -->
 <div id="admin-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU <span style="font-size:11px;color:var(--gold);font-weight:600">Admin</span></div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="al1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="al2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#al1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#al1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#al1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#al2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU <span style="font-size:11px;color:var(--gold);font-weight:600">Admin</span></div>
     <button class="ntab active" id="ab1" onclick="admTab(1)">Umumiy</button>
     <button class="ntab" id="ab2" onclick="admTab(2)">O'quvchilar</button>
     <button class="ntab" id="ab3" onclick="admTab(3)">O'qituvchilar</button>
@@ -2658,10 +2785,13 @@ function renderEditTop(k,el){
         '<div class="edit-field"><label class="edit-label">Max ball</label><input class="edit-inp" id="ep-ball-'+i+'" type="number" value="'+t.maxBall+'"></div>'+
         '<div class="edit-field"><label class="edit-label">Muddat (kun)</label><input class="edit-inp" id="ep-mud-'+i+'" type="number" value="'+t.muddat+'"></div>'+
         '<div class="edit-field"><label class="edit-label">Tur</label>'+
-        '<select class="edit-sel" id="ep-tur-'+i+'">'+
-        ['Amaliy','Yozma','Loyiha','Interaktiv'].map(function(x){return '<option'+(t.tur===x?' selected':'')+'>'+x+'</option>';}).join('')+
+        '<select class="edit-sel" id="ep-tur-'+i+'" onchange="onTurChange('+i+')">'+
+        ['Amaliy','Yozma','Loyiha','Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'].map(function(x){return '<option'+(t.tur===x?' selected':'')+'>'+x+'</option>';}).join('')+
         '</select></div></div>'+
-        '<div class="edit-field" style="margin-bottom:10px"><label class="edit-label">&#128279; Interaktiv link (LearningApps / WordWall)</label><input class="edit-inp" id="ep-link-'+i+'" value="'+(t.link||'')+'"></div>'+
+        '<div id="ep-link-wrap-'+i+'" style="display:'+(['Interaktiv'].includes(t.tur)?'block':'none')+'">'+
+        '<div class="edit-field" style="margin-bottom:10px"><label class="edit-label">&#128279; Tashqi link (LearningApps / WordWall)</label><input class="edit-inp" id="ep-link-'+i+'" value="'+(t.link||'')+'"></div>'+
+        '</div>'+
+        '<div id="ep-game-'+i+'" style="display:'+(['Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'].includes(t.tur)?'block':'none')+'"></div>'+
         '<button class="save-btn" onclick="saveTop('+i+')">&#9989; Saqlash</button>'+
         '</div></div>';
     });
@@ -2670,6 +2800,214 @@ function renderEditTop(k,el){
   });
   html+='<div id="edit-top-msg" style="display:none;margin-top:8px"></div>';
   el.innerHTML=html;
+}
+
+
+// ══════════════════════════════════════════════════════
+// INTERAKTIV O'YIN YARATISH INTERFEYSI
+// ══════════════════════════════════════════════════════
+
+function onTurChange(i){
+  var tur=document.getElementById('ep-tur-'+i).value;
+  var linkWrap=document.getElementById('ep-link-wrap-'+i);
+  var gameWrap=document.getElementById('ep-game-'+i);
+  if(linkWrap)linkWrap.style.display=(tur==='Interaktiv')?'block':'none';
+  if(gameWrap){
+    if(['Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'].includes(tur)){
+      gameWrap.style.display='block';
+      renderGameBuilder(i,tur);
+    } else {
+      gameWrap.style.display='none';
+    }
+  }
+}
+
+function renderGameBuilder(i,tur){
+  var el=document.getElementById('ep-game-'+i);
+  if(!el)return;
+  var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
+  var t=k&&k.topshiriqlar?k.topshiriqlar[i]:{};
+  var existing=[];
+  try{existing=JSON.parse(t.data||'[]');}catch(e){}
+
+  var html='<div class="igame-wrap">';
+  html+='<div style="font-size:12px;font-weight:800;color:var(--ink);margin-bottom:10px">&#127918; '+tur+' oyini yaratish</div>';
+
+  if(tur==='Juftlashtirish'){
+    html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px"><div style="font-size:10px;font-weight:700;color:var(--fog)">ATAMA (chap)</div><div style="font-size:10px;font-weight:700;color:var(--fog)">JAVOB (ong)</div></div>';
+    var pairs=existing.length?existing:[{l:'',r:''},{l:'',r:''}];
+    pairs.forEach(function(p,pi){
+      html+='<div class="igame-row" id="gb-row-'+i+'_'+pi+'">'+
+        '<input class="igame-inp" id="gb-l-'+i+'_'+pi+'" placeholder="Atama..." value="'+((p.l||'').replace(/"/g,"'"))+'">'+
+        '<span style="color:var(--fog);font-size:14px">&#8596;</span>'+
+        '<input class="igame-inp" id="gb-r-'+i+'_'+pi+'" placeholder="Javob..." value="'+((p.r||'').replace(/"/g,"'"))+'">'+
+        '<button class="igame-del" onclick="gbDelRow('+i+','+pi+',\'match\')">&#10005;</button>'+
+        '</div>';
+    });
+    html+='<button class="igame-add" onclick="gbAddRow('+i+',\'match\')">&#10133; Juft qoshish</button>';
+
+  } else if(tur==='Boshliq'){
+    var qs=existing.length?existing:[{q:'',a:'',hint:''}];
+    qs.forEach(function(q,qi){
+      html+='<div class="igame-row" style="flex-direction:column;align-items:stretch" id="gb-row-'+i+'_'+qi+'">'+
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">'+
+        '<span class="igame-lbl">'+(qi+1)+'.</span>'+
+        '<input class="igame-inp" id="gb-q-'+i+'_'+qi+'" placeholder="Savol matni (___ bosh joy)" value="'+((q.q||'').replace(/"/g,"'"))+'">'+
+        '<button class="igame-del" onclick="gbDelRow('+i+','+qi+',\'fill\')">&#10005;</button>'+
+        '</div>'+
+        '<div style="display:flex;gap:6px">'+
+        '<input class="igame-inp" id="gb-a-'+i+'_'+qi+'" placeholder="Togri javob" value="'+((q.a||'').replace(/"/g,"'"))+'" style="flex:1">'+
+        '<input class="igame-inp" id="gb-h-'+i+'_'+qi+'" placeholder="Maslahat (ixtiyoriy)" value="'+((q.hint||'').replace(/"/g,"'"))+'" style="flex:1">'+
+        '</div></div>';
+    });
+    html+='<button class="igame-add" onclick="gbAddRow('+i+',\'fill\')">&#10133; Savol qoshish</button>';
+
+  } else if(tur==='Anagram'){
+    var ws=existing.length?existing:[{word:'',hint:''}];
+    ws.forEach(function(w,wi){
+      html+='<div class="igame-row" id="gb-row-'+i+'_'+wi+'">'+
+        '<input class="igame-inp" id="gb-w-'+i+'_'+wi+'" placeholder="SOZ (katta harf)" value="'+((w.word||'').toUpperCase())+'" style="text-transform:uppercase">'+
+        '<input class="igame-inp" id="gb-wh-'+i+'_'+wi+'" placeholder="Izoh / maslahat" value="'+((w.hint||'').replace(/"/g,"'"))+'">'+
+        '<button class="igame-del" onclick="gbDelRow('+i+','+wi+',\'anagram\')">&#10005;</button>'+
+        '</div>';
+    });
+    html+='<button class="igame-add" onclick="gbAddRow('+i+',\'anagram\')">&#10133; Soz qoshish</button>';
+
+  } else if(tur==='Soz qidirish'){
+    var wlist=existing.length?existing:['','',''];
+    html+='<div style="font-size:11px;color:var(--fog);margin-bottom:8px">Qidirilishi kerak bolgan sozlar (katta harf bilan):</div>';
+    wlist.forEach(function(w,wi){
+      html+='<div class="igame-row" id="gb-row-'+i+'_'+wi+'">'+
+        '<input class="igame-inp" id="gb-sw-'+i+'_'+wi+'" placeholder="SOZ" value="'+(w||'').toUpperCase()+'" style="text-transform:uppercase">'+
+        '<button class="igame-del" onclick="gbDelRow('+i+','+wi+',\'wordsearch\')">&#10005;</button>'+
+        '</div>';
+    });
+    html+='<button class="igame-add" onclick="gbAddRow('+i+',\'wordsearch\')">&#10133; Soz qoshish</button>';
+
+  } else if(tur==='Tartibga solish'){
+    var tasks=existing.length?existing:[{task:'',items:['','',''],correct:['','']}];
+    tasks.forEach(function(task,ti){
+      html+='<div style="background:var(--snow);border-radius:9px;padding:10px;margin-bottom:8px;border:1px solid var(--mist)" id="gb-row-'+i+'_'+ti+'">'+
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">'+
+        '<input class="igame-inp" id="gb-st-'+i+'_'+ti+'" placeholder="Topshiriq matni (masalan: Kichikdan kattaga)" value="'+((task.task||'').replace(/"/g,"'"))+'">'+
+        '<button class="igame-del" onclick="gbDelRow('+i+','+ti+',\'sorting\')">&#10005;</button>'+
+        '</div>'+
+        '<div style="font-size:10px;font-weight:700;color:var(--fog);margin-bottom:5px">TOGRI TARTIB (yuqoridan pastga):</div>';
+      var items=task.correct||task.items||['',''];
+      items.forEach(function(item,ii){
+        html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'+
+          '<span class="igame-lbl">'+( ii+1)+'.</span>'+
+          '<input class="igame-inp" id="gb-si-'+i+'_'+ti+'_'+ii+'" placeholder="Element..." value="'+((item||'').replace(/"/g,"'"))+'">'+
+          '</div>';
+      });
+      html+='<button class="igame-add" style="margin-top:5px" onclick="gbAddSortItem('+i+','+ti+')">&#10133; Element qoshish</button>'+
+      '</div>';
+    });
+    html+='<button class="igame-add" onclick="gbAddRow('+i+',\'sorting\')">&#10133; Topshiriq qoshish</button>';
+  }
+
+  html+='<div style="display:flex;gap:6px;margin-top:10px">'+
+    '<button class="igame-save-btn" onclick="gbSaveData('+i+')">&#9989; Saqlash</button>'+
+    '</div>';
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+// Qator qoshish
+var _gbCounts={};
+function gbAddRow(i,type){
+  var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
+  var t=k.topshiriqlar[i];
+  var data=[];
+  try{data=JSON.parse(t.data||'[]');}catch(e){}
+  if(type==='match')data.push({l:'',r:''});
+  else if(type==='fill')data.push({q:'',a:'',hint:''});
+  else if(type==='anagram')data.push({word:'',hint:''});
+  else if(type==='wordsearch')data.push('');
+  else if(type==='sorting')data.push({task:'',items:['',''],correct:['','']});
+  t.data=JSON.stringify(data);
+  renderGameBuilder(i,t.tur);
+}
+
+function gbAddSortItem(i,ti){
+  var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
+  var t=k.topshiriqlar[i];
+  var data=[];
+  try{data=JSON.parse(t.data||'[]');}catch(e){}
+  if(data[ti]){data[ti].correct=data[ti].correct||[];data[ti].correct.push('');}
+  t.data=JSON.stringify(data);
+  renderGameBuilder(i,t.tur);
+}
+
+function gbDelRow(i,ri,type){
+  var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
+  var t=k.topshiriqlar[i];
+  var data=[];
+  try{data=JSON.parse(t.data||'[]');}catch(e){}
+  data.splice(ri,1);
+  t.data=JSON.stringify(data);
+  renderGameBuilder(i,t.tur);
+}
+
+function gbSaveData(i){
+  var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
+  var t=k.topshiriqlar[i];
+  var tur=t.tur;
+  var data=[];
+
+  if(tur==='Juftlashtirish'){
+    var pi=0;
+    while(document.getElementById('gb-l-'+i+'_'+pi)){
+      var l=document.getElementById('gb-l-'+i+'_'+pi).value.trim();
+      var r=document.getElementById('gb-r-'+i+'_'+pi).value.trim();
+      if(l&&r)data.push({l:l,r:r});
+      pi++;
+    }
+  } else if(tur==='Boshliq'){
+    var qi=0;
+    while(document.getElementById('gb-q-'+i+'_'+qi)){
+      var q=document.getElementById('gb-q-'+i+'_'+qi).value.trim();
+      var a=document.getElementById('gb-a-'+i+'_'+qi).value.trim();
+      var h=document.getElementById('gb-h-'+i+'_'+qi).value.trim();
+      if(q&&a)data.push({q:q,a:a,hint:h});
+      qi++;
+    }
+  } else if(tur==='Anagram'){
+    var wi=0;
+    while(document.getElementById('gb-w-'+i+'_'+wi)){
+      var w=document.getElementById('gb-w-'+i+'_'+wi).value.trim().toUpperCase();
+      var wh=document.getElementById('gb-wh-'+i+'_'+wi).value.trim();
+      if(w)data.push({word:w,hint:wh});
+      wi++;
+    }
+  } else if(tur==="Soz qidirish"){
+    var si=0;
+    while(document.getElementById('gb-sw-'+i+'_'+si)){
+      var sw=document.getElementById('gb-sw-'+i+'_'+si).value.trim().toUpperCase();
+      if(sw)data.push(sw);
+      si++;
+    }
+  } else if(tur==='Tartibga solish'){
+    var sti=0;
+    while(document.getElementById('gb-st-'+i+'_'+sti)){
+      var stask=document.getElementById('gb-st-'+i+'_'+sti).value.trim();
+      var sitems=[];
+      var sii=0;
+      while(document.getElementById('gb-si-'+i+'_'+sti+'_'+sii)){
+        var sv=document.getElementById('gb-si-'+i+'_'+sti+'_'+sii).value.trim();
+        if(sv)sitems.push(sv);
+        sii++;
+      }
+      if(stask&&sitems.length)data.push({task:stask,items:sitems.slice().sort(function(){return Math.random()-.5;}),correct:sitems});
+      sti++;
+    }
+  }
+
+  if(!data.length){alert('Kamida bitta malumot kiriting!');return;}
+  t.data=JSON.stringify(data);
+  var fkey=k._fbKey||k.id;
+  fbW('kurslar/'+fkey,k);
+  showMsg2('edit-top-msg','&#9989; Oyun saqlandi! ('+data.length+' ta element)','success');
 }
 
 function saveTop(i){
