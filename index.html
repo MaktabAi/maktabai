@@ -2262,6 +2262,7 @@ function tTab(n){
   if(n===5)buildSchedule();
   if(n===6)loadTCourses();
   if(n===7)buildTPassInfo();
+  if(n===8)igInitTab();
 }
 // ── O'ZLASHTIRISH (TEST + TOPSHIRIQ O'RTACHA) ────────────────
 var tOzlData=[];
@@ -2922,10 +2923,6 @@ function renderEditTop(k,el){
 // ══════════════════════════════════════════════════════
 var _igKId=null, _igMi=null, _igTur=null;
 
-function tTab(n){
-  // Interaktiv tab ochilganda kurslarni yuklaylik
-  if(n===8)igInitTab();
-}
 
 function igInitTab(){
   var sel=document.getElementById('ig-kurs');
