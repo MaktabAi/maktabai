@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MaktabEDU — Aqlli ta'lim, yorqin kelajak</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231B4FD8'/%3E%3Cstop offset='100%25' stop-color='%2300C8E0'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FCD34D'/%3E%3Cstop offset='100%25' stop-color='%23F59E0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z' fill='url(%23a)' opacity='.95'/%3E%3Cpath d='M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z' fill='url(%23a)' opacity='.65'/%3E%3Crect x='93' y='42' width='14' height='128' rx='5' fill='url(%23a)'/%3E%3Ccircle cx='100' cy='30' r='20' fill='url(%23b)' opacity='.95'/%3E%3Ctext x='100' y='36' font-family='Arial Black' font-size='20' font-weight='900' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231B4FD8'/%3E%3Cstop offset='100%25' stop-color='%2300C8E0'/%3E%3C/linearGradient%3E%3ClinearGradient id='g2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FCD34D'/%3E%3Cstop offset='100%25' stop-color='%23F59E0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z' fill='url(%23g1)' opacity='0.95'/%3E%3Cpath d='M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z' fill='url(%23g1)' opacity='0.65'/%3E%3Crect x='93' y='42' width='14' height='128' rx='5' fill='url(%23g1)'/%3E%3Ccircle cx='100' cy='30' r='20' fill='url(%23g2)' opacity='0.95'/%3E%3Ctext x='100' y='36' font-family='Arial Black' font-size='20' font-weight='900' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script type="module">
@@ -150,6 +152,40 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 
 /* TOPSHIRIQ */
 .top-card{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:10px;overflow:hidden;border-left:4px solid var(--gold)}
+.game-wrap{padding:14px;background:var(--snow);border-radius:10px;margin-top:10px;border:1.5px solid var(--mist)}
+.game-wrap.match-up{border-color:var(--sky)}
+.game-wrap.fill-in{border-color:var(--violet)}
+.game-wrap.anagram-game{border-color:var(--gold)}
+.game-wrap.wordsearch{border-color:var(--sage)}
+.game-wrap.sorting{border-color:var(--rose)}
+.game-title{font-size:13px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.game-score{font-size:12px;background:var(--snow);border:1px solid var(--mist);border-radius:7px;padding:3px 10px;font-weight:700;margin-left:auto}
+.gbtn-item{padding:9px 13px;font-size:12px;font-weight:600;border:1.5px solid var(--mist);border-radius:9px;background:var(--wh);color:var(--ink);cursor:pointer;text-align:left;width:100%;margin-bottom:5px;transition:all .15s;font-family:'Outfit',sans-serif}
+.gbtn-item:hover{background:var(--snow)}
+.gbtn-item.gsel{background:var(--sky3);border-color:var(--sky);color:var(--sky2)}
+.gbtn-item.gok{background:var(--sage2);border-color:var(--sage);color:#065f46;cursor:default}
+.gbtn-item.gno{background:#fef2f2;border-color:var(--rose);color:var(--rose)}
+.gbtn-item.gmatched{background:var(--sage2);border-color:var(--sage);color:#065f46;cursor:default;opacity:.85}
+.game-msg{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;margin:8px 0;text-align:center}
+.fill-inp-g{width:100%;padding:8px 11px;border:1.5px solid var(--mist);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:var(--wh);box-sizing:border-box;margin:5px 0;outline:none}
+.fill-inp-g:focus{border-color:var(--sky)}
+.a-letter{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;font-size:14px;font-weight:700;border:1.5px solid var(--mist);border-radius:8px;background:var(--wh);color:var(--ink);cursor:pointer;margin:2px;font-family:'Outfit',sans-serif;transition:all .15s}
+.a-letter:hover{background:var(--snow)}
+.a-letter.asel{background:var(--sky3);border-color:var(--sky);color:var(--sky2)}
+.ws-cell-g{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;font-size:12px;font-weight:600;cursor:pointer;border:0.5px solid var(--mist);border-radius:3px;user-select:none;color:var(--ink);background:var(--wh);font-family:'Outfit',sans-serif;transition:background .1s}
+.ws-cell-g:hover{background:var(--snow)}
+.ws-cell-g.wssel{background:var(--sage2);color:#065f46}
+.ws-cell-g.wsfound{background:var(--sage);color:#fff;border-color:var(--sage)}
+.wbadge{display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;border-radius:7px;border:1px solid var(--mist);background:var(--snow);color:var(--fog);margin:2px;font-family:'Outfit',sans-serif}
+.wbadge.wbfound{background:var(--sage2);color:#065f46;border-color:var(--sage);text-decoration:line-through}
+.sort-item-g{padding:9px 13px;font-size:12px;font-weight:600;border:1.5px solid var(--mist);border-radius:9px;background:var(--wh);color:var(--ink);cursor:grab;margin-bottom:5px;display:flex;align-items:center;gap:8px;font-family:'Outfit',sans-serif;transition:all .15s}
+.sort-item-g.sdrag{opacity:.4}
+.sort-item-g.sok{background:var(--sage2);border-color:var(--sage);color:#065f46;cursor:default}
+.sort-item-g.sno{background:#fef2f2;border-color:var(--rose);color:var(--rose)}
+.game-btn{padding:8px 16px;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
+.game-btn.primary{background:var(--sky);color:#fff}
+.game-btn.success{background:var(--sage);color:#fff}
+.game-btn.reset{background:var(--snow);color:var(--ink);border:1px solid var(--mist)}
 .top-h{padding:13px 16px;display:flex;align-items:center;gap:12px}
 .top-ico{font-size:24px}
 .top-n{font-size:14px;font-weight:700;margin-bottom:2px}
@@ -372,7 +408,34 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <div id="login" class="screen active">
   <div class="lw">
     <div class="brand">
-      <div class="brand-name">MaktabEDU</div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:120px;height:auto;display:block;margin:0 auto 8px">
+        <defs>
+          <linearGradient id="ll1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="ll2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#ll1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#ll1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#ll1)"/>
+        <rect x="36" y="72" width="46" height="5" rx="2.5" fill="white" opacity="0.55"/>
+        <rect x="36" y="85" width="46" height="5" rx="2.5" fill="white" opacity="0.38"/>
+        <rect x="36" y="98" width="46" height="5" rx="2.5" fill="white" opacity="0.55"/>
+        <rect x="36" y="111" width="32" height="5" rx="2.5" fill="white" opacity="0.32"/>
+        <rect x="36" y="124" width="46" height="5" rx="2.5" fill="white" opacity="0.55"/>
+        <rect x="116" y="72" width="46" height="5" rx="2.5" fill="white" opacity="0.42"/>
+        <rect x="116" y="85" width="46" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="98" width="46" height="5" rx="2.5" fill="white" opacity="0.42"/>
+        <rect x="116" y="111" width="30" height="5" rx="2.5" fill="white" opacity="0.22"/>
+        <rect x="116" y="124" width="46" height="5" rx="2.5" fill="white" opacity="0.42"/>
+        <circle cx="100" cy="30" r="20" fill="url(#ll2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="133" y1="24" x2="140" y2="20" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+        <line x1="67" y1="24" x2="60" y2="20" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+        <text x="100" y="192" font-family="Arial Black,Arial,sans-serif" font-size="24" font-weight="900" fill="url(#ll1)" text-anchor="middle" letter-spacing="5">EDU</text>
+        <text x="100" y="210" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">maktabedu.uz</text>
+      </svg>
       <div class="brand-slogan">Aqlli ta'lim, yorqin kelajak</div>
     </div>
     <div class="lcard">
@@ -420,7 +483,29 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- O'QUVCHI -->
 <div id="st-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU</div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="nl1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="nl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#nl1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#nl1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#nl1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="120" width="30" height="5" rx="2.5" fill="white" opacity="0.3"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#nl2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU</div>
     <button class="ntab active" id="sn1" onclick="showStTab('home-t',this)">Bosh sahifa</button>
     <button class="ntab" id="sn2" onclick="showStTab('fans-t',this)">Fanlar</button>
     <button class="ntab" id="sn3" onclick="showStTab('nat-t',this)">Natijalarim</button>
@@ -464,7 +549,29 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- QUIZ -->
 <div id="quiz-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU</div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="nl1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="nl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#nl1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#nl1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#nl1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="120" width="30" height="5" rx="2.5" fill="white" opacity="0.3"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#nl2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU</div>
     <div class="nr">
       <div class="nbadge nb-g" id="q-ball">&#11088; 0</div>
       <button class="outbtn" onclick="showScreen('st-sc');clearInterval(tiInt)">&#8592; Chiqish</button>
@@ -485,7 +592,29 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- O'QITUVCHI -->
 <div id="teacher-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU</div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="nl1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="nl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#nl1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#nl1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#nl1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="120" width="30" height="5" rx="2.5" fill="white" opacity="0.3"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#nl2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU</div>
     <button class="ntab active" id="tb1" onclick="tTab(1)">Umumiy</button>
     <button class="ntab" id="tb2" onclick="tTab(2)">O'zlashtirish</button>
     <button class="ntab" id="tb3" onclick="tTab(3)">Natijalar</button>
@@ -522,7 +651,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
         <select class="fsel" id="tf-sinf" onchange="filterTN()"><option value="">Barcha sinflar</option></select>
         <button class="xbtn" onclick="exportTNat()">&#128229; Excel</button>
       </div>
-      <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>To'g'ri</th><th>%</th><th>Baho</th><th>Sana</th></tr></thead><tbody id="t-nat-tb"></tbody></table></div>
+      <div class="twrap"><table class="tbl"><thead><tr><th>#</th><th>Ism</th><th>Sinf</th><th>Test</th><th>Togri</th><th>%</th><th>Baho</th><th>Sana</th></tr></thead><tbody id="t-nat-tb"></tbody></table></div>
     </div>
     <div id="tt4" style="display:none">
       <div class="sh"><div class="st">&#128221; Topshiriqlarni baholash</div></div>
@@ -601,7 +730,28 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 <!-- ADMIN -->
 <div id="admin-sc" class="screen">
   <nav class="nav">
-    <div class="nlogo">MaktabEDU <span style="font-size:11px;color:var(--gold);font-weight:600">Admin</span></div>
+    <div class="nlogo" style="display:flex;align-items:center;gap:6px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="width:28px;height:auto;flex-shrink:0">
+        <defs>
+          <linearGradient id="al1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1B4FD8"/><stop offset="100%" stop-color="#00C8E0"/></linearGradient>
+          <linearGradient id="al2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+        </defs>
+        <path d="M24,158 L24,54 Q24,46 32,46 L96,46 L96,158 Q96,166 88,166 L32,166 Q24,166 24,158 Z" fill="url(#al1)" opacity="0.95"/>
+        <path d="M104,46 L168,46 Q176,46 176,54 L176,158 Q176,166 168,166 L112,166 Q104,166 104,158 Z" fill="url(#al1)" opacity="0.65"/>
+        <rect x="93" y="42" width="14" height="128" rx="5" fill="url(#al1)"/>
+        <rect x="36" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="36" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.35"/>
+        <rect x="36" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.5"/>
+        <rect x="116" y="75" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <rect x="116" y="90" width="44" height="5" rx="2.5" fill="white" opacity="0.28"/>
+        <rect x="116" y="105" width="44" height="5" rx="2.5" fill="white" opacity="0.4"/>
+        <circle cx="100" cy="30" r="20" fill="url(#al2)" opacity="0.95"/>
+        <line x1="100" y1="5" x2="100" y2="0" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+        <line x1="120" y1="11" x2="126" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="80" y1="11" x2="74" y2="6" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <text x="100" y="36" font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="white" text-anchor="middle">M</text>
+      </svg>
+      MaktabEDU <span style="font-size:11px;color:var(--gold);font-weight:600">Admin</span></div>
     <button class="ntab active" id="ab1" onclick="admTab(1)">Umumiy</button>
     <button class="ntab" id="ab2" onclick="admTab(2)">O'quvchilar</button>
     <button class="ntab" id="ab3" onclick="admTab(3)">O'qituvchilar</button>
@@ -659,7 +809,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
         <button class="rbtn" onclick="admDelSelectedNat()">&#128465; Tanlanganlarni o'chir</button>
         <button style="padding:7px 12px;background:var(--rose);color:#fff;border:none;border-radius:8px;font-family:Outfit,sans-serif;font-size:12px;font-weight:700;cursor:pointer" onclick="admDelAllNat()">&#9888; Barchasini tozala</button>
       </div>
-      <div class="twrap"><table class="tbl"><thead><tr><th><input type="checkbox" id="nat-chk-all" onchange="toggleAllNatChk(this)" style="cursor:pointer"></th><th>#</th><th>Ism</th><th>Sinf</th><th>Fan</th><th>Test</th><th>To'g'ri</th><th>%</th><th>Baho</th><th>Sana</th></tr></thead><tbody id="a-nat-tb"></tbody></table></div>
+      <div class="twrap"><table class="tbl"><thead><tr><th><input type="checkbox" id="nat-chk-all" onchange="toggleAllNatChk(this)" style="cursor:pointer"></th><th>#</th><th>Ism</th><th>Sinf</th><th>Fan</th><th>Test</th><th>Togri</th><th>%</th><th>Baho</th><th>Sana</th></tr></thead><tbody id="a-nat-tb"></tbody></table></div>
     </div>
     <div id="at5" style="display:none">
       <div class="sh"><div class="st">&#128221; Barcha topshiriqlar</div><div class="ss">Ko'rish, baholash va o'chirish</div></div>
@@ -1274,8 +1424,22 @@ function renderTops(kId,mi){
             '<div style="display:flex;gap:8px;flex-wrap:wrap">'+openBtn+doneBtn+'</div>'+
             '</div>';
         }else{
-          bottom='<textarea class="toparea" id="ta-'+kId+'-'+mi+'-'+ti+'" placeholder="Bu yerga javobingizni yozing..."></textarea>'+
-            '<button class="subtn" onclick="submitTop(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#128228; Topshiriqni yuborish</button>';
+          // Tur bo'yicha interaktiv oyun
+          var gameId='game_'+kId+'_'+mi+'_'+ti;
+          if(t.tur==='Juftlashtirish'||t.tur==='Match up'){
+            bottom=renderMatchUp(t,gameId,kId,mi,ti);
+          }else if(t.tur==='Boshliiq'||t.tur==="Boshliq"){
+            bottom=renderFillIn(t,gameId,kId,mi,ti);
+          }else if(t.tur==='Anagram'){
+            bottom=renderAnagramGame(t,gameId,kId,mi,ti);
+          }else if(t.tur==='Sozqidirish'||t.tur==="Soz qidirish"){
+            bottom=renderWordSearch(t,gameId,kId,mi,ti);
+          }else if(t.tur==='Tartibga solish'||t.tur==='Sorting'){
+            bottom=renderSortingGame(t,gameId,kId,mi,ti);
+          }else{
+            bottom='<textarea class="toparea" id="ta-'+kId+'-'+mi+'-'+ti+'" placeholder="Bu yerga javobingizni yozing..."></textarea>'+
+              '<button class="subtn" onclick="submitTop(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#128228; Topshiriqni yuborish</button>';
+          }
         }
       }
       return '<div class="top-card">'+
@@ -1308,6 +1472,476 @@ function submitTopLink(kId,mi,ti,nomEnc,maxBall){
   fbW('topshiriqlar/'+sKey,data);
   setTimeout(function(){renderTops(kId,mi);},400);
 }
+
+// ══════════════════════════════════════════════════════════════
+// INTERAKTIV O'YINLAR
+// ══════════════════════════════════════════════════════════════
+
+// Natijani Firebase ga saqlash
+function saveGameResult(kId,mi,nomEnc,maxBall,score,total){
+  var nom=decodeURIComponent(nomEnc);
+  var k=allCourses.find(function(c){return c.id===kId});
+  if(!k)return;
+  var sKey=sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(nom);
+  var foiz=Math.round((score/total)*100);
+  var data={ism:CU.ism,sinf:CU.sinf,fan:k.kurs.nom,kId:kId,mi:parseInt(mi),nom:nom,
+    javob:'[Oyun: '+score+'/'+total+' = '+foiz+'%]',
+    maxBall:maxBall,ball:Math.round((score/total)*maxBall),
+    sana:now(),ts:Date.now(),holat:'baholangan',tur:'interaktiv'};
+  localStorage.setItem('top_'+sKey,'1');
+  fbW('topshiriqlar/'+sKey,data);
+  fbW('grades/'+sKey,{ism:CU.ism,kId:kId,mi:parseInt(mi),nom:nom,
+    ball:Math.round((score/total)*maxBall),maxBall:maxBall,izoh:'Oyun: '+foiz+'%',sana:now()});
+}
+
+// ── 1. JUFTLASHTIRISH (MATCH UP) ─────────────────────────────
+function renderMatchUp(t,gid,kId,mi,ti){
+  var pairs=[];
+  try{pairs=JSON.parse(t.data||'[]');}catch(e){}
+  if(!pairs.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Juftlar kiritilmagan</div>';
+  var rights=pairs.slice().sort(function(){return Math.random()-.5;});
+    var lHTML=pairs.map(function(p,i){return '<button class="gbtn-item" id="'+gid+'_L'+i+'" data-gid="'+gid+'" data-side="L" data-idx="'+i+'" onclick="matchClickHandler(this)">'+p.l+'</button>';}).join('');
+  var rHTML=rights.map(function(p){var oi=pairs.indexOf(p);return '<button class="gbtn-item" id="'+gid+'_R'+oi+'" data-gid="'+gid+'" data-side="R" data-idx="'+oi+'" onclick="matchClickHandler(this)">'+p.r+'</button>';}).join('');;
+  return '<div class="game-wrap match-up" id="'+gid+'" data-kId="'+kId+'" data-mi="'+mi+'" data-nom="'+encodeURIComponent(t.nom)+'" data-max="'+t.maxBall+'">'+
+    '<div class="game-title">&#128279; Juftlashtirish <span class="game-score" id="'+gid+'_sc">0/'+pairs.length+'</span></div>'+
+    '<div id="'+gid+'_msg"></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
+    '<div><div style="font-size:11px;font-weight:700;color:var(--fog);margin-bottom:6px">ATAMALAR</div>'+lHTML+'</div>'+
+    '<div><div style="font-size:11px;font-weight:700;color:var(--fog);margin-bottom:6px">JAVOBLAR</div>'+rHTML+'</div>'+
+    '</div>'+
+    '<div style="margin-top:10px;font-size:11px;color:var(--fog)">Ball: Max '+t.maxBall+'</div>'+
+    '</div>';
+}
+
+var _matchSel={},_matchMatched={};
+function matchClickHandler(btn){
+  var gid=btn.getAttribute('data-gid');
+  var side=btn.getAttribute('data-side');
+  var idx=parseInt(btn.getAttribute('data-idx'));
+  matchClick(btn,side,idx,gid);
+}
+function matchClick(btn,side,idx,gid){
+  if(btn.disabled)return;
+  if(!_matchSel[gid]){_matchSel[gid]=null;}
+  if(!_matchMatched[gid])_matchMatched[gid]=[];
+  if(!_matchSel[gid]){_matchSel[gid]={btn:btn,side:side,idx:idx};btn.classList.add('gsel');return;}
+  if(_matchSel[gid].btn===btn){_matchSel[gid].btn.classList.remove('gsel');_matchSel[gid]=null;return;}
+  if(_matchSel[gid].side===side){_matchSel[gid].btn.classList.remove('gsel');_matchSel[gid]={btn:btn,side:side,idx:idx};btn.classList.add('gsel');return;}
+  var lIdx=_matchSel[gid].side==='L'?_matchSel[gid].idx:idx;
+  var rIdx=_matchSel[gid].side==='R'?_matchSel[gid].idx:idx;
+  if(lIdx===rIdx){
+    var lb=document.getElementById(gid+'_L'+lIdx),rb=document.getElementById(gid+'_R'+rIdx);
+    [lb,rb].forEach(function(b){b.classList.remove('gsel');b.classList.add('gmatched');b.disabled=true;});
+    _matchMatched[gid].push(lIdx);
+    var sc=document.getElementById(gid+'_sc');
+    var pairsLen=_matchMatched[gid].length+1;
+    if(sc){var t2=sc.textContent.split('/');sc.textContent=_matchMatched[gid].length+'/'+t2[1];}
+    gameMsg(gid+'_msg','Togri!','sage');
+    // Hammasi togri bo'lsa saqlash
+    var total=parseInt((document.getElementById(gid+'_sc').textContent||'0/1').split('/')[1]);
+    if(_matchMatched[gid].length===total){
+      var wrap=document.getElementById(gid);
+      if(wrap){
+        var kIdL=wrap.getAttribute('data-kid')||'';
+        gameMsg(gid+'_msg','Barakalla! Hammasi togri!','sage');
+      }
+    }
+  }else{
+    var lb2=_matchSel[gid].side==='L'?_matchSel[gid].btn:btn;
+    var rb2=_matchSel[gid].side==='R'?_matchSel[gid].btn:btn;
+    [lb2,rb2].forEach(function(b){b.classList.add('gno');});
+    gameMsg(gid+'_msg','Xato!','rose');
+    setTimeout(function(){[lb2,rb2].forEach(function(b){b.classList.remove('gno');});document.getElementById(gid+'_msg').innerHTML='';},700);
+  }
+  _matchSel[gid]=null;
+}
+
+// ── 2. BO'SHLIQ TO'LDIRISH (FILL IN) ─────────────────────────
+function renderFillIn(t,gid,kId,mi,ti){
+  var questions=[];
+  try{questions=JSON.parse(t.data||'[]');}catch(e){}
+  if(!questions.length)return '<div style="padding:10px;color:var(--fog);font-size:12px">Savollar kiritilmagan</div>';
+  var qHTML=questions.map(function(q,i){
+    return '<div style="margin-bottom:12px;padding:10px;border:1px solid var(--mist);border-radius:9px;background:var(--wh)">'+
+      '<div style="font-size:13px;color:var(--ink);margin-bottom:6px">'+(i+1)+'. '+q.q+'</div>'+
+      (q.hint?'<div style="font-size:11px;color:var(--fog);margin-bottom:4px">Maslahat: '+q.hint+'</div>':'')+
+      '<input class="fill-inp-g" id="'+gid+'_f'+i+'" placeholder="Javobingizni yozing...">'+
+      '</div>';
+  }).join('');
+  return '<div class="game-wrap fill-in" id="'+gid+'" data-kId="'+kId+'" data-mi="'+mi+'" data-nom="'+encodeURIComponent(t.nom)+'" data-max="'+t.maxBall+'" data-q="'+encodeURIComponent(JSON.stringify(questions))+'">'+
+    '<div class="game-title">&#9997; Boshliq toldirish <span class="game-score" id="'+gid+'_sc">0/'+questions.length+'</span></div>'+
+    '<div id="'+gid+'_msg"></div>'+
+    qHTML+
+    '<div style="display:flex;gap:8px;margin-top:8px">'+
+    '<button class="game-btn primary" data-fn="fill-check" data-gid="'+gid+'">Tekshirish</button>'+
+    '<button class="game-btn reset" data-fn="fill-reset" data-gid="'+gid+'" data-n="'+questions.length+'">Tozalash</button>'+
+    '</div></div>';
+}
+function checkFillInById(gid){
+  var wrap=document.getElementById(gid);
+  if(!wrap)return;
+  var qEnc=wrap.getAttribute('data-q');
+  var kId=wrap.getAttribute('data-kId');
+  var mi=wrap.getAttribute('data-mi');
+  var nomEnc=wrap.getAttribute('data-nom');
+  var maxBall=parseInt(wrap.getAttribute('data-max')||10);
+  checkFillIn(gid,qEnc,kId,mi,nomEnc,maxBall);
+}
+
+function checkFillIn(gid,qEnc,kId,mi,nomEnc,maxBall){
+  var questions=JSON.parse(decodeURIComponent(qEnc));
+  var score=0;
+  questions.forEach(function(q,i){
+    var inp=document.getElementById(gid+'_f'+i);
+    if(!inp)return;
+    var val=inp.value.trim().toLowerCase();
+    var correct=val===(q.a||'').toLowerCase();
+    inp.style.borderColor=correct?'var(--sage)':'var(--rose)';
+    inp.style.color=correct?'#065f46':'var(--rose)';
+    if(correct)score++;
+  });
+  var sc=document.getElementById(gid+'_sc');
+  if(sc)sc.textContent=score+'/'+questions.length;
+  var ok=score===questions.length;
+  gameMsg(gid+'_msg',ok?'Barakalla! Hammasi togri!':score+'/'+questions.length+' togri',ok?'sage':'gold');
+  if(ok)saveGameResult(kId,mi,nomEnc,maxBall,score,questions.length);
+}
+
+function resetFillIn(gid,n){
+  for(var i=0;i<n;i++){var inp=document.getElementById(gid+'_f'+i);if(inp){inp.value='';inp.style.borderColor='';inp.style.color='';}}
+  document.getElementById(gid+'_sc').textContent='0/'+n;
+  document.getElementById(gid+'_msg').innerHTML='';
+}
+
+// ── 3. ANAGRAM ───────────────────────────────────────────────
+function renderAnagramGame(t,gid,kId,mi,ti){
+  var words=[];
+  try{words=JSON.parse(t.data||'[]');}catch(e){}
+  if(!words.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Sozlar kiritilmagan</div>';
+  var w=words[0];
+  return '<div class="game-wrap anagram-game" id="'+gid+'" data-words="'+encodeURIComponent(JSON.stringify(words))+'" data-cur="0" data-kId="'+kId+'" data-mi="'+mi+'" data-nom="'+encodeURIComponent(t.nom)+'" data-max="'+t.maxBall+'">'+
+    '<div class="game-title">&#128290; Anagram <span class="game-score" id="'+gid+'_sc">1/'+words.length+'</span></div>'+
+    '<div id="'+gid+'_msg"></div>'+
+    '<div style="background:var(--snow);border-radius:8px;padding:10px;margin-bottom:10px">'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:4px">Izoh:</div>'+
+    '<div id="'+gid+'_hint" style="font-size:13px;font-weight:700;color:var(--ink)">'+w.hint+'</div>'+
+    '</div>'+
+    '<div style="margin-bottom:10px">'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:4px">Javobingiz:</div>'+
+    '<div id="'+gid+'_ans" style="min-height:44px;display:flex;flex-wrap:wrap;align-items:center;border-bottom:2px solid var(--mist);padding-bottom:6px;margin-bottom:8px"></div>'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:4px">Harflar:</div>'+
+    '<div id="'+gid+'_lets" style="display:flex;flex-wrap:wrap"></div>'+
+    '</div>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+    '<button class="game-btn primary" data-fn="anagram-check" data-gid="'+gid+'">Tekshirish</button>'+
+    '<button class="game-btn reset" data-fn="anagram-clear" data-gid="'+gid+'">Tozalash</button>'+
+    '<button class="game-btn reset" data-fn="anagram-next" data-gid="'+gid+'">Keyingi</button>'+
+    '</div></div>';
+}
+
+var _aLetters={},_aSelected={};
+function initAnagramLetters(gid){
+  var wrap=document.getElementById(gid);
+  if(!wrap)return;
+  var words=JSON.parse(decodeURIComponent(wrap.getAttribute('data-words')));
+  var cur=parseInt(wrap.getAttribute('data-cur')||0);
+  var w=words[cur];
+  _aLetters[gid]=w.word.split('').sort(function(){return Math.random()-.5;}).map(function(c,i){return {c:c,i:i,used:false};});
+  _aSelected[gid]=[];
+  renderAnagramLetters(gid);
+  document.getElementById(gid+'_ans').innerHTML='';
+  document.getElementById(gid+'_hint').textContent=w.hint;
+  document.getElementById(gid+'_msg').innerHTML='';
+  var sc=document.getElementById(gid+'_sc');
+  if(sc)sc.textContent=(cur+1)+'/'+words.length;
+}
+
+function renderAnagramLetters(gid){
+  var el=document.getElementById(gid+'_lets');if(!el)return;
+  el.innerHTML=_aLetters[gid].map(function(l,i){
+    if(l.used)return '<span style="display:inline-flex;width:36px;height:36px;margin:2px"></span>';
+    return '<span class="a-letter" data-fn="pick-letter" data-gid="'+gid+'" data-li="'+i+'">'+l.c+'</span>';
+  }).join('');
+}
+
+function pickAnagramLetter(gid,i){
+  if(_aLetters[gid][i].used)return;
+  _aLetters[gid][i].used=true;
+  _aSelected[gid].push({c:_aLetters[gid][i].c,i:i});
+  var ans=document.getElementById(gid+'_ans');
+  var span=document.createElement('span');
+  span.className='a-letter asel';
+  span.textContent=_aLetters[gid][i].c;
+  span.onclick=function(){removeAnagramLetter(gid,i,span);};
+  ans.appendChild(span);
+  renderAnagramLetters(gid);
+}
+
+function removeAnagramLetter(gid,i,span){
+  _aLetters[gid][i].used=false;
+  _aSelected[gid]=_aSelected[gid].filter(function(s){return s.i!==i;});
+  span.remove();
+  renderAnagramLetters(gid);
+}
+
+function clearAnagramGame(gid){
+  _aLetters[gid].forEach(function(l){l.used=false;});
+  _aSelected[gid]=[];
+  document.getElementById(gid+'_ans').innerHTML='';
+  renderAnagramLetters(gid);
+}
+
+function checkAnagramGame(gid){
+  var wrap=document.getElementById(gid);
+  var words=JSON.parse(decodeURIComponent(wrap.getAttribute('data-words')));
+  var cur=parseInt(wrap.getAttribute('data-cur')||0);
+  var ans=(_aSelected[gid]||[]).map(function(s){return s.c;}).join('');
+  var correct=ans===words[cur].word;
+  gameMsg(gid+'_msg',correct?'Togri! Zor!':'Xato! Togri: '+words[cur].word,correct?'sage':'rose');
+  if(correct&&cur===words.length-1){
+    var kId=wrap.getAttribute('data-kId');
+    var mi=wrap.getAttribute('data-mi');
+    var nom=wrap.getAttribute('data-nom');
+    var max=parseInt(wrap.getAttribute('data-max')||10);
+    saveGameResult(kId,mi,nom,max,words.length,words.length);
+  }
+  if(correct&&cur<words.length-1)setTimeout(function(){nextAnagramGame(gid);},800);
+}
+
+function nextAnagramGame(gid){
+  var wrap=document.getElementById(gid);
+  var words=JSON.parse(decodeURIComponent(wrap.getAttribute('data-words')));
+  var cur=parseInt(wrap.getAttribute('data-cur')||0);
+  cur=(cur+1)%words.length;
+  wrap.setAttribute('data-cur',cur);
+  _aSelected[gid]=[];
+  var w=words[cur];
+  _aLetters[gid]=w.word.split('').sort(function(){return Math.random()-.5;}).map(function(c,i){return {c:c,i:i,used:false};});
+  renderAnagramLetters(gid);
+  document.getElementById(gid+'_ans').innerHTML='';
+  document.getElementById(gid+'_hint').textContent=w.hint;
+  document.getElementById(gid+'_msg').innerHTML='';
+  document.getElementById(gid+'_sc').textContent=(cur+1)+'/'+words.length;
+}
+
+// ── 4. SO'Z QIDIRISH (WORD SEARCH) ───────────────────────────
+function renderWordSearch(t,gid,kId,mi,ti){
+  var words=[];
+  try{words=JSON.parse(t.data||'[]');}catch(e){}
+  if(!words.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Sozlar kiritilmagan</div>';
+  var size=10;
+  var grid=buildWSGrid(words,size);
+  var badgesHTML=words.map(function(w,i){return '<span class="wbadge" id="'+gid+'_wb'+i+'">'+w+'</span>';}).join('');
+  var gridHTML='';
+  for(var r=0;r<size;r++){
+    for(var c=0;c<size;c++){
+      gridHTML+='<span class="ws-cell-g" id="'+gid+'_'+r+'_'+c+'" data-gid="'+gid+'" data-r="'+r+'" data-c="'+c+'" onmousedown="wsGDownH(event,this)" onmouseover="wsGOverH(event,this)" onmouseup="wsGUpH(event,this)">'+grid[r][c]+'</span>';
+    }
+    gridHTML+='<br>';
+  }
+  return '<div class="game-wrap wordsearch" id="'+gid+'" data-words="'+encodeURIComponent(JSON.stringify(words))+'" data-size="'+size+'" data-grid="'+encodeURIComponent(JSON.stringify(grid))+'" data-kId="'+kId+'" data-mi="'+mi+'" data-nom="'+encodeURIComponent(t.nom)+'" data-max="'+t.maxBall+'">'+
+    '<div class="game-title">&#128269; Soz qidirish <span class="game-score" id="'+gid+'_sc">0/'+words.length+'</span></div>'+
+    '<div id="'+gid+'_msg"></div>'+
+    '<div style="margin-bottom:8px;display:flex;flex-wrap:wrap">'+badgesHTML+'</div>'+
+    '<div style="line-height:0;user-select:none">'+gridHTML+'</div>'+
+    '</div>';
+}
+
+function buildWSGrid(words,size){
+  var grid=[];
+  for(var r=0;r<size;r++){grid.push([]);for(var c=0;c<size;c++)grid[r].push('');}
+  words.forEach(function(word){
+    var dirs=[[0,1],[1,0],[1,1],[0,-1]];
+    for(var att=0;att<300;att++){
+      var dir=dirs[Math.floor(Math.random()*dirs.length)];
+      var r=Math.floor(Math.random()*size),c=Math.floor(Math.random()*size);
+      var ok=true;
+      for(var i=0;i<word.length;i++){
+        var nr=r+dir[0]*i,nc=c+dir[1]*i;
+        if(nr<0||nr>=size||nc<0||nc>=size){ok=false;break;}
+        if(grid[nr][nc]&&grid[nr][nc]!==word[i]){ok=false;break;}
+      }
+      if(ok){for(var i=0;i<word.length;i++)grid[r+dir[0]*i][c+dir[1]*i]=word[i];break;}
+    }
+  });
+  var alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(var r=0;r<size;r++)for(var c=0;c<size;c++)if(!grid[r][c])grid[r][c]=alpha[Math.floor(Math.random()*26)];
+  return grid;
+}
+
+var _wsSelecting={},_wsStart={},_wsLine={},_wsFound={};
+function wsGDownH(e,el){var gid=el.getAttribute('data-gid'),r=parseInt(el.getAttribute('data-r')),c=parseInt(el.getAttribute('data-c'));wsGDown(e,gid,r,c);}
+function wsGOverH(e,el){var gid=el.getAttribute('data-gid'),r=parseInt(el.getAttribute('data-r')),c=parseInt(el.getAttribute('data-c'));wsGOver(e,gid,r,c);}
+function wsGUpH(e,el){var gid=el.getAttribute('data-gid'),r=parseInt(el.getAttribute('data-r')),c=parseInt(el.getAttribute('data-c'));wsGUp(e,gid,r,c);}
+
+function wsGDown(e,gid,r,c){e.preventDefault();_wsSelecting[gid]=true;_wsStart[gid]={r:r,c:c};_wsLine[gid]=[{r:r,c:c}];wsHighlight(gid);}
+function wsGOver(e,gid,r,c){
+  if(!_wsSelecting[gid])return;
+  var s=_wsStart[gid];
+  var dr=Math.sign(r-s.r),dc=Math.sign(c-s.c);
+  _wsLine[gid]=[];
+  var cr=s.r,cc=s.c;
+  var maxSteps=20,steps=0;
+  while((cr!==r||cc!==c)&&steps<maxSteps){_wsLine[gid].push({r:cr,c:cc});cr+=dr;cc+=dc;steps++;}
+  _wsLine[gid].push({r:r,c:c});
+  wsHighlight(gid);
+}
+function wsGUp(e,gid,r,c){
+  if(!_wsSelecting[gid])return;
+  _wsSelecting[gid]=false;
+  var wrap=document.getElementById(gid);
+  var grid=JSON.parse(decodeURIComponent(wrap.getAttribute('data-grid')));
+  var words=JSON.parse(decodeURIComponent(wrap.getAttribute('data-words')));
+  var word=(_wsLine[gid]||[]).map(function(p){return grid[p.r][p.c];}).join('');
+  var rword=word.split('').reverse().join('');
+  if(!_wsFound[gid])_wsFound[gid]=[];
+  var found=words.indexOf(word)>-1?word:words.indexOf(rword)>-1?rword:null;
+  if(found&&_wsFound[gid].indexOf(found)===-1){
+    _wsFound[gid].push(found);
+    (_wsLine[gid]||[]).forEach(function(p){var el=document.getElementById(gid+'_'+p.r+'_'+p.c);if(el)el.classList.add('wsfound');});
+    var wi=words.indexOf(found);
+    var wb=document.getElementById(gid+'_wb'+wi);
+    if(wb)wb.classList.add('wbfound');
+    var sc=document.getElementById(gid+'_sc');
+    if(sc)sc.textContent=_wsFound[gid].length+'/'+words.length;
+    gameMsg(gid+'_msg',_wsFound[gid].length===words.length?'Barakalla! Hammasi topildi!':'Togri! '+found+' topildi','sage');
+    if(_wsFound[gid].length===words.length){
+      saveGameResult(wrap.getAttribute('data-kId'),wrap.getAttribute('data-mi'),wrap.getAttribute('data-nom'),parseInt(wrap.getAttribute('data-max')||10),words.length,words.length);
+    }
+  } else {
+    wsClearHighlight(gid);
+  }
+  _wsLine[gid]=[];
+}
+function wsHighlight(gid){
+  var wrap=document.getElementById(gid);
+  var size=parseInt(wrap.getAttribute('data-size')||10);
+  for(var r=0;r<size;r++)for(var c=0;c<size;c++){var el=document.getElementById(gid+'_'+r+'_'+c);if(el&&!el.classList.contains('wsfound'))el.classList.remove('wssel');}
+  (_wsLine[gid]||[]).forEach(function(p){var el=document.getElementById(gid+'_'+p.r+'_'+p.c);if(el&&!el.classList.contains('wsfound'))el.classList.add('wssel');});
+}
+function wsClearHighlight(gid){
+  var wrap=document.getElementById(gid);
+  var size=parseInt(wrap.getAttribute('data-size')||10);
+  for(var r=0;r<size;r++)for(var c=0;c<size;c++){var el=document.getElementById(gid+'_'+r+'_'+c);if(el&&!el.classList.contains('wsfound'))el.classList.remove('wssel');}
+}
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('[data-fn]');
+  if(!btn)return;
+  var fn=btn.getAttribute('data-fn');
+  var gid=btn.getAttribute('data-gid');
+  if(fn==='fill-check')checkFillInById(gid);
+  if(fn==='fill-reset'){var n=parseInt(btn.getAttribute('data-n')||0);resetFillIn(gid,n);}
+  if(fn==='sort-check')checkSortGame(gid);
+  if(fn==='sort-next')nextSortGame(gid);
+  if(fn==='anagram-check')checkAnagramGame(gid);
+  if(fn==='anagram-clear')clearAnagramGame(gid);
+  if(fn==='anagram-next')nextAnagramGame(gid);
+  if(fn==='ws-none')return;
+  if(fn==='pick-letter'){
+    var li=parseInt(btn.getAttribute('data-li'));
+    pickAnagramLetter(gid,li);
+  }
+});
+
+document.addEventListener('mouseup',function(){Object.keys(_wsSelecting).forEach(function(gid){if(_wsSelecting[gid]){_wsSelecting[gid]=false;wsClearHighlight(gid);_wsLine[gid]=[];}});});
+
+// ── 5. TARTIBGA SOLISH (SORTING) ─────────────────────────────
+function renderSortingGame(t,gid,kId,mi,ti){
+  var tasks=[];
+  try{tasks=JSON.parse(t.data||'[]');}catch(e){}
+  if(!tasks.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Topshiriqlar kiritilmagan</div>';
+  var task=tasks[0];
+  var shuffled=task.items.slice().sort(function(){return Math.random()-.5;});
+  var itemsHTML=shuffled.map(function(item,i){
+    return '<div class="sort-item-g" id="'+gid+'_si'+i+'" data-gid="'+gid+'" data-i="'+i+'" draggable="true" ondragstart="sortDragStartH(event,this)" ondragover="sortDragOver(event)" ondrop="sortDropH(event,this)">'+
+      '<span style="color:var(--fog);font-size:14px">&#8597;</span>'+item+'</div>';
+  }).join('');;
+  return '<div class="game-wrap sorting" id="'+gid+'" data-tasks="'+encodeURIComponent(JSON.stringify(tasks))+'" data-cur="0" data-order="'+encodeURIComponent(JSON.stringify(shuffled))+'" data-kId="'+kId+'" data-mi="'+mi+'" data-nom="'+encodeURIComponent(t.nom)+'" data-max="'+t.maxBall+'">'+
+    '<div class="game-title">&#8645; Tartibga solish <span class="game-score" id="'+gid+'_sc">1/'+tasks.length+'</span></div>'+
+    '<div id="'+gid+'_msg"></div>'+
+    '<div style="background:var(--snow);border-radius:8px;padding:10px;margin-bottom:10px">'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:4px">Topshiriq:</div>'+
+    '<div id="'+gid+'_task" style="font-size:13px;font-weight:700;color:var(--ink)">'+task.task+'</div>'+
+    '</div>'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:6px">Sudrab tartibga soling:</div>'+
+    '<div id="'+gid+'_list">'+itemsHTML+'</div>'+
+    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+
+    '<button class="game-btn primary" data-fn="sort-check" data-gid="'+gid+'">Tekshirish</button>'+
+    '<button class="game-btn reset" data-fn="sort-next" data-gid="'+gid+'">Keyingi</button>'+
+    '</div></div>';
+}
+
+var _sortDragging={};
+function sortDragStartH(e,el){var gid=el.getAttribute('data-gid'),i=parseInt(el.getAttribute('data-i'));sortDragStart(gid,i);}
+function sortDropH(e,el){var gid=el.getAttribute('data-gid'),i=parseInt(el.getAttribute('data-i'));sortDrop(e,gid,i);}
+
+function sortDragStart(gid,i){_sortDragging[gid]=i;setTimeout(function(){var el=document.getElementById(gid+'_si'+i);if(el)el.classList.add('sdrag');},0);}
+function sortDragOver(e){e.preventDefault();}
+function sortDrop(e,gid,i){
+  e.preventDefault();
+  if(_sortDragging[gid]===undefined||_sortDragging[gid]===i)return;
+  var wrap=document.getElementById(gid);
+  var order=JSON.parse(decodeURIComponent(wrap.getAttribute('data-order')));
+  var tmp=order[_sortDragging[gid]];order[_sortDragging[gid]]=order[i];order[i]=tmp;
+  wrap.setAttribute('data-order',encodeURIComponent(JSON.stringify(order)));
+  var itemsHTML=order.map(function(item,j){
+    return '<div class="sort-item-g" id="'+gid+'_si'+j+'" data-gid="'+gid+'" data-i="'+j+'" draggable="true" ondragstart="sortDragStartH(event,this)" ondragover="sortDragOver(event)" ondrop="sortDropH(event,this)">'+
+      '<span style="color:var(--fog);font-size:14px">&#8597;</span>'+item+'</div>';
+  }).join('');;
+  document.getElementById(gid+'_list').innerHTML=itemsHTML;
+  _sortDragging[gid]=undefined;
+}
+
+function checkSortGame(gid){
+  var wrap=document.getElementById(gid);
+  var tasks=JSON.parse(decodeURIComponent(wrap.getAttribute('data-tasks')));
+  var cur=parseInt(wrap.getAttribute('data-cur')||0);
+  var order=JSON.parse(decodeURIComponent(wrap.getAttribute('data-order')));
+  var correct=tasks[cur].correct;
+  var allOk=true;
+  order.forEach(function(item,i){
+    var el=document.getElementById(gid+'_si'+i);
+    var ok=item===correct[i];
+    if(!ok)allOk=false;
+    if(el){el.classList.toggle('sok',ok);el.classList.toggle('sno',!ok);el.draggable=false;}
+  });
+  gameMsg(gid+'_msg',allOk?'Barakalla! Togri tartib!':'Xato! Togri: '+correct.join('-'),allOk?'sage':'rose');
+  if(allOk&&cur===tasks.length-1){
+    saveGameResult(wrap.getAttribute('data-kId'),wrap.getAttribute('data-mi'),wrap.getAttribute('data-nom'),parseInt(wrap.getAttribute('data-max')||10),tasks.length,tasks.length);
+  }
+}
+
+function nextSortGame(gid){
+  var wrap=document.getElementById(gid);
+  var tasks=JSON.parse(decodeURIComponent(wrap.getAttribute('data-tasks')));
+  var cur=(parseInt(wrap.getAttribute('data-cur')||0)+1)%tasks.length;
+  wrap.setAttribute('data-cur',cur);
+  var task=tasks[cur];
+  var shuffled=task.items.slice().sort(function(){return Math.random()-.5;});
+  wrap.setAttribute('data-order',encodeURIComponent(JSON.stringify(shuffled)));
+  document.getElementById(gid+'_task').textContent=task.task;
+  document.getElementById(gid+'_sc').textContent=(cur+1)+'/'+tasks.length;
+  document.getElementById(gid+'_msg').innerHTML='';
+  var itemsHTML=shuffled.map(function(item,j){
+    return '<div class="sort-item-g" id="'+gid+'_si'+j+'" data-gid="'+gid+'" data-i="'+j+'" draggable="true" ondragstart="sortDragStartH(event,this)" ondragover="sortDragOver(event)" ondrop="sortDropH(event,this)">'+
+      '<span style="color:var(--fog);font-size:14px">&#8597;</span>'+item+'</div>';
+  }).join('');;
+  document.getElementById(gid+'_list').innerHTML=itemsHTML;
+}
+
+// Yordamchi
+function gameMsg(id,text,col){
+  var el=document.getElementById(id);if(!el)return;
+  var colors={sage:'var(--sage2)',rose:'#fef2f2',gold:'#fffbeb',sky:'var(--sky3)'};
+  var textColors={sage:'#065f46',rose:'var(--rose)',gold:'#92400e',sky:'var(--sky2)'};
+  el.innerHTML='<div class="game-msg" style="background:'+(colors[col]||colors.sage)+';color:'+(textColors[col]||textColors.sage)+'">'+text+'</div>';
+}
+
+// Anagram boshlanganda harflarni yuklash
+document.addEventListener('click',function(e){
+  var wrap=e.target.closest('.anagram-game');
+  if(wrap&&!_aLetters[wrap.id]){initAnagramLetters(wrap.id);}
+});
 
 function submitTop(kId,mi,ti,nomEnc,maxBall){
   var nom=decodeURIComponent(nomEnc);
@@ -2205,7 +2839,7 @@ function buildTPassInfo(){
     '</div>'+
     '<div style="margin-bottom:5px;font-size:12px;color:var(--fog)">Login: <code style="background:var(--snow);padding:2px 7px;border-radius:5px;font-size:12px;color:var(--ink)">'+CU.login+'</code></div>'+
     '<div style="font-size:11px;color:var(--fog)">Quyida ism, login yoki parolni ozgartirishingiz mumkin</div>';
-  // Inputlarni joriy qiymatlar bilan to'ldirish
+  // Inputlarni joriy qiymatlar bilan toldirish
   var ismInp=document.getElementById('t-new-ism');
   if(ismInp)ismInp.value=CU.ism;
   var loginInp=document.getElementById('t-new-login');
@@ -2506,7 +3140,7 @@ function changeAPass(){
 function loadAKurslar(){
   fbR('kurslar',function(d){
     allCourses=Object.entries(d||{}).map(function(e){var k=e[1];if(k)k._fbKey=e[0];return k;}).filter(function(k){return k&&k.kurs&&k.mavzular});
-    // Sinf filter to'ldirish
+    // Sinf filter toldirish
     var sinflar=Array.from(new Set(allCourses.map(function(k){return String(k.kurs.sinf)}))).sort(function(a,b){return a-b;});
     var sel=document.getElementById('af-kurs-sinf');
     if(sel){
