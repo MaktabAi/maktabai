@@ -168,6 +168,16 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 .gbtn-item.gmatched{background:var(--sage2);border-color:var(--sage);color:#065f46;cursor:default;opacity:.85}
 .game-msg{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;margin:8px 0;text-align:center}
 .igame-wrap{background:var(--wh);border:1.5px solid var(--mist);border-radius:12px;padding:14px;margin-top:10px}
+.ig-tur-card:hover{border-color:var(--sky)!important;background:var(--sky3);}
+.ig-tur-card.active{border-color:var(--sky)!important;background:var(--sky3);box-shadow:0 0 0 3px rgba(0,200,224,.15);}
+.ig-top-card{background:var(--wh);border:1.5px solid var(--mist);border-radius:12px;padding:14px;margin-bottom:10px;transition:all .2s}
+.ig-top-card:hover{border-color:var(--sky);box-shadow:var(--sh)}
+.ig-badge{display:inline-block;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700;margin-right:4px}
+.ig-badge.match{background:var(--sky3);color:var(--sky2)}
+.ig-badge.fill{background:var(--violet2);color:var(--violet)}
+.ig-badge.anagram{background:#fffbeb;color:#92400e}
+.ig-badge.sort{background:#fef2f2;color:var(--rose)}
+.ig-badge.word{background:var(--sage2);color:#065f46}
 .igame-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;background:var(--snow);border-radius:9px;padding:8px 10px;border:1px solid var(--mist)}
 .igame-inp{flex:1;border:1px solid var(--mist);border-radius:7px;padding:7px 10px;font-family:'Outfit',sans-serif;font-size:12px;outline:none;background:var(--wh);color:var(--ink)}
 .igame-inp:focus{border-color:var(--sky)}
@@ -633,6 +643,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
     <button class="ntab" id="tb5" onclick="tTab(5)">Vaqt sozlash</button>
     <button class="ntab" id="tb6" onclick="tTab(6)">Kurs import</button>
     <button class="ntab" id="tb7" onclick="tTab(7)">Parol</button>
+    <button class="ntab" id="tb8" onclick="tTab(8)" style="background:linear-gradient(135deg,var(--sky),var(--lime2));color:#fff;font-weight:800">&#127918; Interaktiv</button>
     <div class="nr"><div class="nbadge nb-v" id="t-nbadge"></div><button class="outbtn" onclick="logout()">Chiqish</button></div>
   </nav>
   <div class="main">
@@ -699,12 +710,96 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       <div class="sh" style="margin-top:16px"><div class="st">&#128218; Kiritilgan kurslar</div></div>
       <div id="t-courses"></div>
     </div>
+    <div id="tt8" style="display:none">
+      <div class="sh"><div class="st">&#127918; Interaktiv topshiriqlar</div><div class="ss">O'quvchilar uchun interaktiv o'yin topshiriqlari yarating</div></div>
+
+      <!-- Kurs va mavzu tanlash -->
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--ink)">&#128218; Kurs va mavzu tanlang</div>
+        <div class="frow" style="flex-wrap:wrap;gap:10px">
+          <select class="fsel" id="ig-kurs" onchange="igLoadMavzular()" style="flex:1;min-width:200px">
+            <option value="">— Kurs tanlang —</option>
+          </select>
+          <select class="fsel" id="ig-mavzu" onchange="igLoadTops()" style="flex:1;min-width:200px">
+            <option value="">— Mavzu tanlang —</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Mavjud topshiriqlar ro'yxati -->
+      <div id="ig-list" style="margin-bottom:20px"></div>
+
+      <!-- Yangi topshiriq yaratish -->
+      <div class="card" id="ig-creator" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:14px;font-weight:800;color:var(--ink)">&#10133; Yangi interaktiv topshiriq</div>
+          <button onclick="igHideCreator()" style="padding:6px 14px;background:none;border:1px solid var(--mist);border-radius:8px;font-family:Outfit,sans-serif;font-size:12px;cursor:pointer">&#10005; Yopish</button>
+        </div>
+
+        <!-- Tur tanlash -->
+        <div class="fgrp" style="margin-bottom:14px">
+          <label class="flbl">&#127918; O'yin turi</label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px" id="ig-tur-grid">
+            <div class="ig-tur-card" onclick="igSelectTur('Juftlashtirish')" data-tur="Juftlashtirish" style="padding:12px;border:2px solid var(--mist);border-radius:12px;cursor:pointer;text-align:center;transition:all .2s">
+              <div style="font-size:24px;margin-bottom:4px">&#128279;</div>
+              <div style="font-size:11px;font-weight:700">Juftlashtirish</div>
+            </div>
+            <div class="ig-tur-card" onclick="igSelectTur('Boshliq')" data-tur="Boshliq" style="padding:12px;border:2px solid var(--mist);border-radius:12px;cursor:pointer;text-align:center;transition:all .2s">
+              <div style="font-size:24px;margin-bottom:4px">&#9997;</div>
+              <div style="font-size:11px;font-weight:700">Bo'shliq</div>
+            </div>
+            <div class="ig-tur-card" onclick="igSelectTur('Anagram')" data-tur="Anagram" style="padding:12px;border:2px solid var(--mist);border-radius:12px;cursor:pointer;text-align:center;transition:all .2s">
+              <div style="font-size:24px;margin-bottom:4px">&#128290;</div>
+              <div style="font-size:11px;font-weight:700">Anagram</div>
+            </div>
+            <div class="ig-tur-card" onclick="igSelectTur('Soz qidirish')" data-tur="Soz qidirish" style="padding:12px;border:2px solid var(--mist);border-radius:12px;cursor:pointer;text-align:center;transition:all .2s">
+              <div style="font-size:24px;margin-bottom:4px">&#128269;</div>
+              <div style="font-size:11px;font-weight:700">So'z qidirish</div>
+            </div>
+            <div class="ig-tur-card" onclick="igSelectTur('Tartibga solish')" data-tur="Tartibga solish" style="padding:12px;border:2px solid var(--mist);border-radius:12px;cursor:pointer;text-align:center;transition:all .2s">
+              <div style="font-size:24px;margin-bottom:4px">&#8645;</div>
+              <div style="font-size:11px;font-weight:700">Tartibga solish</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Umumiy malumotlar -->
+        <div id="ig-meta" style="display:none">
+          <div class="edit-g3" style="margin-bottom:12px">
+            <div class="fgrp"><label class="flbl">Topshiriq nomi</label><input class="finp" id="ig-nom" placeholder="Topshiriq nomi..."></div>
+            <div class="fgrp"><label class="flbl">Max ball</label><input class="finp" id="ig-ball" type="number" value="10" min="1" max="100"></div>
+            <div class="fgrp"><label class="flbl">Muddat (kun)</label><input class="finp" id="ig-mud" type="number" value="3" min="1"></div>
+          </div>
+          <div class="fgrp" style="margin-bottom:14px"><label class="flbl">Tavsif (ixtiyoriy)</label><input class="finp" id="ig-tavsif" placeholder="Topshiriq tavsifi..."></div>
+
+          <!-- O'yin malumotlari -->
+          <div id="ig-data-wrap"></div>
+
+          <!-- Saqlash -->
+          <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+            <button onclick="igSave()" style="padding:11px 24px;background:var(--sage);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer">&#9989; Saqlash</button>
+            <button onclick="igPreview()" style="padding:11px 18px;background:var(--sky);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer">&#128065; Oldindan ko'rish</button>
+          </div>
+          <div id="ig-msg" style="display:none;margin-top:10px"></div>
+        </div>
+      </div>
+
+      <!-- Preview modal -->
+      <div id="ig-preview-wrap" style="display:none;margin-top:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700">&#128065; Ko'rinishi (o'quvchi ko'radi):</div>
+          <button onclick="document.getElementById('ig-preview-wrap').style.display='none'" style="padding:5px 12px;background:none;border:1px solid var(--mist);border-radius:8px;font-size:12px;cursor:pointer">Yopish</button>
+        </div>
+        <div id="ig-preview-content" class="card"></div>
+      </div>
+    </div>
+
     <div id="tt7" style="display:none">
       <div class="sh"><div class="st">&#128273; Sozlamalar</div><div class="ss">Login, ism va parolni o'zgartirish</div></div>
 
-      <!-- Ma'lumotlarim -->
+      <!-- Malumotlarim -->
       <div class="card" style="max-width:460px;margin-bottom:12px;border-left:4px solid var(--sky)">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--sky)">&#128100; Joriy ma'lumotlarim</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--sky)">&#128100; Joriy malumotlarim</div>
         <div id="t-my-info" style="font-size:13px;color:var(--ink3)"></div>
       </div>
 
@@ -852,7 +947,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
       </div>
 
       <!-- PLATFORMANI TOZALASH -->
-      <div class="sh" style="margin-top:20px"><div class="st" style="color:var(--rose)">&#9888; Platformani tozalash</div><div class="ss">Barcha ma'lumotlarni Firebase dan o'chirish</div></div>
+      <div class="sh" style="margin-top:20px"><div class="st" style="color:var(--rose)">&#9888; Platformani tozalash</div><div class="ss">Barcha malumotlarni Firebase dan o'chirish</div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:600px">
         <div style="background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:14px;border-left:4px solid var(--rose)">
           <div style="font-size:13px;font-weight:700;margin-bottom:5px">&#128203; Test natijalari</div>
@@ -897,7 +992,7 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
         <button class="modal-close" onclick="closeModal()">&#10005;</button>
       </div>
       <div class="modal-tabs" id="edit-modal-tabs" style="display:none">
-        <button class="modal-tab active" id="etab-info" onclick="showETab('info')">&#128218; Ma'lumot</button>
+        <button class="modal-tab active" id="etab-info" onclick="showETab('info')">&#128218; Malumot</button>
         <button class="modal-tab" id="etab-mavzu" onclick="showETab('mavzu')">&#128214; Mavzular</button>
         <button class="modal-tab" id="etab-test" onclick="showETab('test')">&#9889; Testlar</button>
         <button class="modal-tab" id="etab-top" onclick="showETab('top')">&#128221; Topshiriqlar</button>
@@ -1107,7 +1202,7 @@ function loadSchedulesFromFirebase(){
       var key='sch_'+sch.kId+'_'+sch.mi;
       var existing=null;
       try{existing=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
-      // Firebase dagi ma'lumot muhimroq - yangilaymiz
+      // Firebase dagi malumot muhimroq - yangilaymiz
       var schData={};
       if(sch.locked)schData={locked:true,openNow:false};
       else if(sch.openNow)schData={openNow:true,locked:false};
@@ -1154,7 +1249,7 @@ function buildFanlar(){
   document.getElementById('fans-list-wrap').style.display='block';
   document.getElementById('fan-mavzu-wrap').style.display='none';
   document.getElementById('mavzu-detail-wrap').style.display='none';
-  // Firebase dan YANGI ma'lumot olib render qilish (real-time)
+  // Firebase dan YANGI malumot olib render qilish (real-time)
   fbR('kurslar',function(d){
     allCourses=Object.entries(d||{}).map(function(e){var k=e[1];if(k)k._fbKey=e[0];return k;}).filter(function(k){return k&&k.kurs&&k.mavzular});
     renderFanlar();
@@ -1848,6 +1943,25 @@ document.addEventListener('click',function(e){
   if(fn==='anagram-clear')clearAnagramGame(gid);
   if(fn==='anagram-next')nextAnagramGame(gid);
   if(fn==='ws-none')return;
+  if(fn==='ig-edit'){
+    var ki=parseInt(btn.getAttribute('data-ki'));
+    var enc=btn.getAttribute('data-enc');
+    igEdit(ki,enc);
+  }
+  if(fn==='ig-add-pair')igAddPair();
+  if(fn==='ig-add-question')igAddQuestion();
+  if(fn==='ig-add-word')igAddWord();
+  if(fn==='ig-add-swword')igAddSwWord();
+  if(fn==='ig-add-sort')igAddSortRow();
+  if(fn==='ig-remove'){
+    var rid=btn.getAttribute('data-rid');
+    igRemoveRow(rid);
+  }
+  if(fn==='ig-del'){
+    var kid=btn.getAttribute('data-kid');
+    var nom=btn.getAttribute('data-nom');
+    igDelete(kid,nom);
+  }
   if(fn==='pick-letter'){
     var li=parseInt(btn.getAttribute('data-li'));
     pickAnagramLetter(gid,li);
@@ -2135,7 +2249,7 @@ function initTeacher(){
 }
 
 function tTab(n){
-  for(var i=1;i<=7;i++){
+  for(var i=1;i<=8;i++){
     var el=document.getElementById('tt'+i);
     var bt=document.getElementById('tb'+i);
     if(el)el.style.display=i===n?'block':'none';
@@ -2171,7 +2285,7 @@ function loadTOzlashtirish(){
     var mf=document.getElementById('tf-ozl-mavzu');
     if(mf)mf.innerHTML='<option value="">Barcha mavzular</option>'+mavzuNoms.map(function(m){return '<option>'+m+'</option>';}).join('');
 
-    // Firebase dan ma'lumotlar
+    // Firebase dan malumotlar
     fbR('natijalar',function(natijalar){
     fbR('grades',function(grades){
     fbR('topshiriqlar',function(topshiriqlar){
@@ -2804,6 +2918,450 @@ function renderEditTop(k,el){
 
 
 // ══════════════════════════════════════════════════════
+// INTERAKTIV TAB — ig* funksiyalari
+// ══════════════════════════════════════════════════════
+var _igKId=null, _igMi=null, _igTur=null;
+
+function tTab(n){
+  // Interaktiv tab ochilganda kurslarni yuklaylik
+  if(n===8)igInitTab();
+}
+
+function igInitTab(){
+  var sel=document.getElementById('ig-kurs');
+  if(!sel)return;
+  loadAllCourses(function(){
+    var myCourses=allCourses.filter(function(k){return k.teacherLogin===CU.login||k.teacherId===CU.id;});
+    sel.innerHTML='<option value="">— Kurs tanlang —</option>'+
+      myCourses.map(function(k){return '<option value="'+k.id+'">'+k.kurs.nom+' ('+k.kurs.sinf+'-sinf)</option>';}).join('');
+    document.getElementById('ig-list').innerHTML='<div class="empty"><div class="empty-ico">&#127918;</div><p>Kurs va mavzu tanlang</p></div>';
+  });
+}
+
+function igLoadMavzular(){
+  var kId=document.getElementById('ig-kurs').value;
+  _igKId=kId;
+  _igMi=null;
+  var msel=document.getElementById('ig-mavzu');
+  if(!kId){msel.innerHTML='<option value="">— Mavzu tanlang —</option>';return;}
+  var k=allCourses.find(function(c){return c.id===kId;});
+  if(!k)return;
+  msel.innerHTML='<option value="">— Mavzu tanlang —</option>'+
+    k.mavzular.map(function(m,i){return '<option value="'+i+'">'+m.num+'. '+m.nom+'</option>';}).join('');
+  document.getElementById('ig-list').innerHTML='<div class="empty"><div class="empty-ico">&#127918;</div><p>Mavzu tanlang</p></div>';
+  document.getElementById('ig-creator').style.display='none';
+}
+
+function igLoadTops(){
+  var mi=document.getElementById('ig-mavzu').value;
+  if(mi===''){return;}
+  _igMi=parseInt(mi);
+  var k=allCourses.find(function(c){return c.id===_igKId;});
+  if(!k)return;
+  var m=k.mavzular[_igMi];
+  var tops=(k.topshiriqlar||[]).filter(function(t){
+    return String(t.mavzuNum)===String(m.num)&&
+      ['Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'].indexOf(t.tur)>-1;
+  });
+  var el=document.getElementById('ig-list');
+  var TUR_BADGE={'Juftlashtirish':'match','Boshliq':'fill','Anagram':'anagram','Soz qidirish':'word','Tartibga solish':'sort'};
+  var TUR_ICON={'Juftlashtirish':'&#128279;','Boshliq':'&#9997;','Anagram':'&#128290;','Soz qidirish':'&#128269;','Tartibga solish':'&#8645;'};
+  if(!tops.length){
+    el.innerHTML='<div class="empty"><div class="empty-ico">&#127918;</div><p>Bu mavzuda hali interaktiv topshiriq yoq</p></div>';
+  } else {
+    el.innerHTML='<div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--ink)">&#127918; Mavjud interaktiv topshiriqlar ('+tops.length+' ta)</div>'+
+      tops.map(function(t,i){
+        var data=[];try{data=JSON.parse(t.data||'[]');}catch(e){}
+        var bc=TUR_BADGE[t.tur]||'match';
+        var ico=TUR_ICON[t.tur]||'&#127918;';
+        return '<div class="ig-top-card">'+
+          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+
+          '<span style="font-size:20px">'+ico+'</span>'+
+          '<div style="flex:1"><div style="font-size:13px;font-weight:700">'+t.nom+'</div>'+
+          '<div style="font-size:11px;color:var(--fog);margin-top:2px">'+t.tavsif+'</div></div>'+
+          '<span class="ig-badge '+bc+'">'+t.tur+'</span>'+
+          '<span style="font-size:11px;color:var(--fog)">'+t.maxBall+' ball</span>'+
+          '<span style="font-size:11px;font-weight:700;color:var(--sage)">'+data.length+' ta element</span>'+
+          '<button data-fn="ig-edit" data-ki="'+allCourses.indexOf(k)+'" data-enc="'+encodeURIComponent(JSON.stringify(t))+'" style="padding:5px 12px;background:var(--sky3);color:var(--sky2);border:1px solid var(--sky);border-radius:8px;font-size:11px;font-weight:700;cursor:pointer">&#9998; Tahrirlash</button>'+
+          '<button data-fn="ig-del" data-kid="'+k.id+'" data-nom="'+encodeURIComponent(t.nom)+'" style="padding:5px 10px;background:#fef2f2;color:var(--rose);border:1px solid var(--rose);border-radius:8px;font-size:11px;cursor:pointer">&#128465;</button>'+
+          '</div></div>';
+      }).join('');
+  }
+  // Yangi qoshish tugmasi
+  el.innerHTML+='<button onclick="igShowCreator()" style="width:100%;padding:12px;border:2px dashed var(--sky);border-radius:12px;background:var(--sky3);color:var(--sky2);font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px">&#10133; Yangi interaktiv topshiriq yaratish</button>';
+}
+
+function igShowCreator(){
+  document.getElementById('ig-creator').style.display='block';
+  document.getElementById('ig-meta').style.display='none';
+  document.getElementById('ig-preview-wrap').style.display='none';
+  _igTur=null;
+  // Tur kartalarini reset
+  document.querySelectorAll('.ig-tur-card').forEach(function(c){c.classList.remove('active');});
+  document.getElementById('ig-nom').value='';
+  document.getElementById('ig-ball').value='10';
+  document.getElementById('ig-mud').value='3';
+  document.getElementById('ig-tavsif').value='';
+  document.getElementById('ig-data-wrap').innerHTML='';
+  document.getElementById('ig-msg').style.display='none';
+  // Scroll
+  document.getElementById('ig-creator').scrollIntoView({behavior:'smooth'});
+}
+
+function igHideCreator(){
+  document.getElementById('ig-creator').style.display='none';
+  document.getElementById('ig-preview-wrap').style.display='none';
+}
+
+function igSelectTur(tur){
+  _igTur=tur;
+  document.querySelectorAll('.ig-tur-card').forEach(function(c){
+    c.classList.toggle('active', c.getAttribute('data-tur')===tur);
+  });
+  document.getElementById('ig-meta').style.display='block';
+  // Nom avtomatik
+  if(!document.getElementById('ig-nom').value){
+    document.getElementById('ig-nom').value=tur+' topshirighi';
+  }
+  igRenderDataForm(tur);
+}
+
+function igRenderDataForm(tur){
+  var el=document.getElementById('ig-data-wrap');
+  var html='<div style="background:var(--snow);border-radius:12px;padding:14px;border:1.5px solid var(--mist)">';
+  html+='<div style="font-size:12px;font-weight:800;color:var(--ink);margin-bottom:12px">&#127918; '+tur+' malumotlarini kiriting</div>';
+
+  if(tur==='Juftlashtirish'){
+    html+='<div style="display:grid;grid-template-columns:1fr auto 1fr auto;gap:6px;align-items:center;margin-bottom:8px">'+
+      '<div style="font-size:10px;font-weight:700;color:var(--fog);padding:0 4px">ATAMA (chap)</div><div></div>'+
+      '<div style="font-size:10px;font-weight:700;color:var(--fog);padding:0 4px">JAVOB (ong)</div><div></div></div>';
+    html+='<div id="ig-pairs">';
+    for(var i=0;i<3;i++){
+      html+=igPairRow(i);
+    }
+    html+='</div>';
+    html+='<button data-fn="ig-add-pair" class="igame-add">&#10133; Juft qoshish</button>';
+
+  } else if(tur==='Boshliq'){
+    html+='<div style="font-size:11px;color:var(--fog);margin-bottom:10px">___ belgilar boshliq joyi</div>';
+    html+='<div id="ig-questions">';
+    for(var i=0;i<2;i++){
+      html+=igQuestionRow(i);
+    }
+    html+='</div>';
+    html+='<button data-fn="ig-add-question" class="igame-add">&#10133; Savol qoshish</button>';
+
+  } else if(tur==='Anagram'){
+    html+='<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Sozlar katta harf bilan yozilsin</div>';
+    html+='<div id="ig-words">';
+    for(var i=0;i<3;i++){
+      html+=igWordRow(i);
+    }
+    html+='</div>';
+    html+='<button data-fn="ig-add-word" class="igame-add">&#10133; Soz qoshish</button>';
+
+  } else if(tur==='Soz qidirish'){
+    html+='<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Har bir soz katta harf bilan (minimum 4 ta)</div>';
+    html+='<div id="ig-swwords" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">';
+    for(var i=0;i<5;i++){
+      html+='<input class="igame-inp" id="ig-sw'+i+'" placeholder="SOZ" style="width:120px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">';
+    }
+    html+='</div>';
+    html+='<button data-fn="ig-add-swword" class="igame-add">&#10133; Soz qoshish</button>';
+
+  } else if(tur==='Tartibga solish'){
+    html+='<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Togri tartibda kiriting — oquvchida aralashtirib beriladi</div>';
+    html+='<div style="margin-bottom:10px"><input class="finp" id="ig-st-task" placeholder="Topshiriq matni (masalan: Kichikdan kattaga tartibla)"></div>';
+    html+='<div id="ig-sitems">';
+    for(var i=0;i<4;i++){
+      html+=igSortRow(i);
+    }
+    html+='</div>';
+    html+='<button data-fn="ig-add-sort" class="igame-add">&#10133; Element qoshish</button>';
+  }
+
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function igPairRow(i){
+  return '<div style="display:grid;grid-template-columns:1fr auto 1fr auto;gap:6px;align-items:center;margin-bottom:6px" id="ig-pr'+i+'">'+
+    '<input class="igame-inp" id="ig-pl'+i+'" placeholder="Atama...">'+
+    '<span style="color:var(--fog);font-size:16px;padding:0 4px">&#8596;</span>'+
+    '<input class="igame-inp" id="ig-pr_r'+i+'" placeholder="Javob...">'+
+    '<button data-fn="ig-remove" data-rid="ig-pr'+i+'" class="igame-del">&#10005;</button>'+
+    '</div>';
+}
+
+function igQuestionRow(i){
+  return '<div style="background:var(--wh);border:1px solid var(--mist);border-radius:9px;padding:10px;margin-bottom:8px" id="ig-qr'+i+'">'+
+    '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px">'+
+    '<span style="font-size:11px;font-weight:700;color:var(--fog);min-width:20px">'+(i+1)+'.</span>'+
+    '<input class="igame-inp" id="ig-qq'+i+'" placeholder="Savol matni (___ bosh joy)..." style="flex:1">'+
+    '<button data-fn="ig-remove" data-rid="ig-qr'+i+'" class="igame-del">&#10005;</button></div>'+
+    '<div style="display:flex;gap:6px">'+
+    '<input class="igame-inp" id="ig-qa'+i+'" placeholder="Togri javob" style="flex:1">'+
+    '<input class="igame-inp" id="ig-qh'+i+'" placeholder="Maslahat (ixtiyoriy)" style="flex:1">'+
+    '</div></div>';
+}
+
+function igWordRow(i){
+  return '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px" id="ig-wr'+i+'">'+
+    '<span style="font-size:11px;font-weight:700;color:var(--fog);min-width:20px">'+(i+1)+'.</span>'+
+    '<input class="igame-inp" id="ig-ww'+i+'" placeholder="SOZ" style="text-transform:uppercase;flex:1" oninput="this.value=this.value.toUpperCase()">'+
+    '<input class="igame-inp" id="ig-wh'+i+'" placeholder="Izoh / maslahat" style="flex:2">'+
+    '<button data-fn="ig-remove" data-rid="ig-wr'+i+'" class="igame-del">&#10005;</button>'+
+    '</div>';
+}
+
+function igSortRow(i){
+  return '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px" id="ig-sr'+i+'">'+
+    '<span style="font-size:11px;font-weight:700;color:var(--fog);min-width:20px">'+(i+1)+'.</span>'+
+    '<input class="igame-inp" id="ig-si'+i+'" placeholder="Element..." style="flex:1">'+
+    '<button data-fn="ig-remove" data-rid="ig-sr'+i+'" class="igame-del">&#10005;</button>'+
+    '</div>';
+}
+
+var _igPairCount=3, _igQCount=2, _igWCount=3, _igSwCount=5, _igSCount=4;
+
+function igAddPair(){
+  var el=document.getElementById('ig-pairs');
+  el.insertAdjacentHTML('beforeend', igPairRow(_igPairCount));
+  _igPairCount++;
+}
+
+function igAddQuestion(){
+  var el=document.getElementById('ig-questions');
+  el.insertAdjacentHTML('beforeend', igQuestionRow(_igQCount));
+  _igQCount++;
+}
+
+function igAddWord(){
+  var el=document.getElementById('ig-words');
+  el.insertAdjacentHTML('beforeend', igWordRow(_igWCount));
+  _igWCount++;
+}
+
+function igAddSwWord(){
+  var el=document.getElementById('ig-swwords');
+  var inp=document.createElement('input');
+  inp.className='igame-inp';
+  inp.id='ig-sw'+_igSwCount;
+  inp.placeholder='SOZ';
+  inp.style.cssText='width:120px;text-transform:uppercase';
+  inp.oninput=function(){this.value=this.value.toUpperCase();};
+  el.appendChild(inp);
+  _igSwCount++;
+}
+
+function igAddSortRow(){
+  var el=document.getElementById('ig-sitems');
+  el.insertAdjacentHTML('beforeend', igSortRow(_igSCount));
+  _igSCount++;
+}
+
+function igRemoveRow(id){
+  var el=document.getElementById(id);
+  if(el)el.remove();
+}
+
+function igCollectData(){
+  if(!_igTur)return null;
+  var data=[];
+
+  if(_igTur==='Juftlashtirish'){
+    document.querySelectorAll('#ig-pairs > div').forEach(function(row){
+      var id=row.id.replace('ig-pr','');
+      var l=(document.getElementById('ig-pl'+id)||{}).value||'';
+      var r=(document.getElementById('ig-pr_r'+id)||{}).value||'';
+      if(l.trim()&&r.trim())data.push({l:l.trim(),r:r.trim()});
+    });
+
+  } else if(_igTur==='Boshliq'){
+    document.querySelectorAll('#ig-questions > div').forEach(function(row){
+      var id=row.id.replace('ig-qr','');
+      var q=(document.getElementById('ig-qq'+id)||{}).value||'';
+      var a=(document.getElementById('ig-qa'+id)||{}).value||'';
+      var h=(document.getElementById('ig-qh'+id)||{}).value||'';
+      if(q.trim()&&a.trim())data.push({q:q.trim(),a:a.trim(),hint:h.trim()});
+    });
+
+  } else if(_igTur==='Anagram'){
+    document.querySelectorAll('#ig-words > div').forEach(function(row){
+      var id=row.id.replace('ig-wr','');
+      var w=(document.getElementById('ig-ww'+id)||{}).value||'';
+      var h=(document.getElementById('ig-wh'+id)||{}).value||'';
+      if(w.trim())data.push({word:w.trim().toUpperCase(),hint:h.trim()});
+    });
+
+  } else if(_igTur==='Soz qidirish'){
+    var i=0;
+    while(true){
+      var inp=document.getElementById('ig-sw'+i);
+      if(!inp)break;
+      if(inp.value.trim())data.push(inp.value.trim().toUpperCase());
+      i++;
+    }
+
+  } else if(_igTur==='Tartibga solish'){
+    var task=(document.getElementById('ig-st-task')||{}).value||'';
+    var items=[];
+    document.querySelectorAll('#ig-sitems > div').forEach(function(row){
+      var id=row.id.replace('ig-sr','');
+      var v=(document.getElementById('ig-si'+id)||{}).value||'';
+      if(v.trim())items.push(v.trim());
+    });
+    if(task.trim()&&items.length>=2){
+      var shuffled=items.slice().sort(function(){return Math.random()-.5;});
+      data.push({task:task.trim(),items:shuffled,correct:items});
+    }
+  }
+  return data;
+}
+
+function igPreview(){
+  var data=igCollectData();
+  if(!data||!data.length){alert('Kamida bitta malumot kiriting!');return;}
+  var nom=document.getElementById('ig-nom').value||_igTur;
+  var ball=parseInt(document.getElementById('ig-ball').value)||10;
+  var mud=parseInt(document.getElementById('ig-mud').value)||3;
+  var tavsif=document.getElementById('ig-tavsif').value||'';
+  var fakeTop={nom:nom,tur:_igTur,maxBall:ball,muddat:mud,tavsif:tavsif,data:JSON.stringify(data)};
+  var gid='preview_'+Date.now();
+  var previewHtml='<div style="padding:4px">';
+  previewHtml+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">'+nom+'</div>';
+  if(tavsif)previewHtml+='<div style="font-size:12px;color:var(--fog);margin-bottom:10px">'+tavsif+'</div>';
+  if(_igTur==='Juftlashtirish')previewHtml+=renderMatchUp(fakeTop,gid,'','',0);
+  else if(_igTur==='Boshliq')previewHtml+=renderFillIn(fakeTop,gid,'','',0);
+  else if(_igTur==='Anagram')previewHtml+=renderAnagramGame(fakeTop,gid,'','',0);
+  else if(_igTur==='Soz qidirish')previewHtml+=renderWordSearch(fakeTop,gid,'','',0);
+  else if(_igTur==='Tartibga solish')previewHtml+=renderSortingGame(fakeTop,gid,'','',0);
+  previewHtml+='</div>';
+  document.getElementById('ig-preview-content').innerHTML=previewHtml;
+  document.getElementById('ig-preview-wrap').style.display='block';
+  document.getElementById('ig-preview-wrap').scrollIntoView({behavior:'smooth'});
+  // Anagram uchun harflarni yuklash
+  if(_igTur==='Anagram')setTimeout(function(){initAnagramLetters(gid);},100);
+}
+
+function igSave(){
+  if(!_igKId||_igMi===null){alert('Kurs va mavzu tanlang!');return;}
+  if(!_igTur){alert('Oyun turini tanlang!');return;}
+  var data=igCollectData();
+  if(!data||!data.length){alert('Kamida bitta malumot kiriting!');return;}
+  var nom=document.getElementById('ig-nom').value.trim()||_igTur;
+  var ball=parseInt(document.getElementById('ig-ball').value)||10;
+  var mud=parseInt(document.getElementById('ig-mud').value)||3;
+  var tavsif=document.getElementById('ig-tavsif').value.trim()||'';
+  var k=allCourses.find(function(c){return c.id===_igKId;});
+  if(!k){alert('Kurs topilmadi!');return;}
+  var mavzu=k.mavzular[_igMi];
+  k.topshiriqlar=k.topshiriqlar||[];
+  k.topshiriqlar.push({
+    mavzuNum:mavzu.num,
+    nom:nom,
+    tavsif:tavsif,
+    maxBall:ball,
+    muddat:mud,
+    tur:_igTur,
+    link:'',
+    data:JSON.stringify(data)
+  });
+  var fkey=k._fbKey||k.id;
+  fbW('kurslar/'+fkey,k);
+  showMsg2('ig-msg','&#9989; Saqlandi! Oquvchilar kora oladi.','success');
+  // Ro'yxatni yangilash
+  setTimeout(function(){igLoadTops();igHideCreator();},800);
+}
+
+function igDelete(kId,nomEnc){
+  if(!confirm('Bu topshiriqni ochirasizmi?'))return;
+  var nom=decodeURIComponent(nomEnc);
+  var k=allCourses.find(function(c){return c.id===kId;});
+  if(!k)return;
+  var idx=k.topshiriqlar.findIndex(function(t){return t.nom===nom;});
+  if(idx>-1){
+    k.topshiriqlar.splice(idx,1);
+    fbW('kurslar/'+(k._fbKey||k.id),k);
+    setTimeout(function(){igLoadTops();},600);
+  }
+}
+
+function igEdit(ki,dataEnc){
+  var t=JSON.parse(decodeURIComponent(dataEnc));
+  igShowCreator();
+  setTimeout(function(){
+    igSelectTur(t.tur);
+    document.getElementById('ig-nom').value=t.nom;
+    document.getElementById('ig-ball').value=t.maxBall;
+    document.getElementById('ig-mud').value=t.muddat;
+    document.getElementById('ig-tavsif').value=t.tavsif||'';
+    // Malumotlarni forma ga to'ldirish
+    var data=[];try{data=JSON.parse(t.data||'[]');}catch(e){}
+    setTimeout(function(){igFillForm(t.tur,data);},100);
+  },50);
+}
+
+function igFillForm(tur,data){
+  if(!data.length)return;
+  if(tur==='Juftlashtirish'){
+    var el=document.getElementById('ig-pairs');
+    if(!el)return;
+    el.innerHTML='';
+    _igPairCount=0;
+    data.forEach(function(p){
+      el.insertAdjacentHTML('beforeend',igPairRow(_igPairCount));
+      document.getElementById('ig-pl'+_igPairCount).value=p.l||'';
+      document.getElementById('ig-pr_r'+_igPairCount).value=p.r||'';
+      _igPairCount++;
+    });
+  } else if(tur==='Boshliq'){
+    var el=document.getElementById('ig-questions');
+    if(!el)return;
+    el.innerHTML='';
+    _igQCount=0;
+    data.forEach(function(q){
+      el.insertAdjacentHTML('beforeend',igQuestionRow(_igQCount));
+      document.getElementById('ig-qq'+_igQCount).value=q.q||'';
+      document.getElementById('ig-qa'+_igQCount).value=q.a||'';
+      document.getElementById('ig-qh'+_igQCount).value=q.hint||'';
+      _igQCount++;
+    });
+  } else if(tur==='Anagram'){
+    var el=document.getElementById('ig-words');
+    if(!el)return;
+    el.innerHTML='';
+    _igWCount=0;
+    data.forEach(function(w){
+      el.insertAdjacentHTML('beforeend',igWordRow(_igWCount));
+      document.getElementById('ig-ww'+_igWCount).value=w.word||'';
+      document.getElementById('ig-wh'+_igWCount).value=w.hint||'';
+      _igWCount++;
+    });
+  } else if(tur==='Soz qidirish'){
+    var i=0;
+    data.forEach(function(w){
+      var inp=document.getElementById('ig-sw'+i);
+      if(inp)inp.value=w;
+      i++;
+    });
+  } else if(tur==='Tartibga solish'&&data[0]){
+    var t=data[0];
+    var taskEl=document.getElementById('ig-st-task');
+    if(taskEl)taskEl.value=t.task||'';
+    var el=document.getElementById('ig-sitems');
+    if(!el)return;
+    el.innerHTML='';
+    _igSCount=0;
+    (t.correct||t.items||[]).forEach(function(item){
+      el.insertAdjacentHTML('beforeend',igSortRow(_igSCount));
+      document.getElementById('ig-si'+_igSCount).value=item;
+      _igSCount++;
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════
 // INTERAKTIV O'YIN YARATISH INTERFEYSI
 // ══════════════════════════════════════════════════════
 
@@ -2815,7 +3373,7 @@ function onTurChange(i){
   var gameWrap=document.getElementById('ep-game-'+i);
   // Interaktiv link (tashqi)
   if(linkWrap)linkWrap.style.display=(tur==='Interaktiv')?'block':'none';
-  // O'yin builder
+  // Oyun builder
   if(gameWrap){
     if(GAME_TURS.indexOf(tur)>-1){
       gameWrap.style.display='block';
