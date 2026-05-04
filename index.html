@@ -2130,8 +2130,9 @@ function renderEditTop(k,el){
         '<div class="edit-field"><label class="edit-label">Muddat (kun)</label><input class="edit-inp" id="ep-mud-'+i+'" type="number" value="'+t.muddat+'"></div>'+
         '<div class="edit-field"><label class="edit-label">Tur</label>'+
         '<select class="edit-sel" id="ep-tur-'+i+'">'+
-        ['Amaliy','Yozma','Loyiha'].map(function(x){return '<option'+(t.tur===x?' selected':'')+'>'+x+'</option>';}).join('')+
+        ['Amaliy','Yozma','Loyiha','Interaktiv'].map(function(x){return '<option'+(t.tur===x?' selected':'')+'>'+x+'</option>';}).join('')+
         '</select></div></div>'+
+        '<div class="edit-field" style="margin-bottom:10px"><label class="edit-label">&#128279; Interaktiv link (LearningApps / WordWall)</label><input class="edit-inp" id="ep-link-'+i+'" value="'+(t.link||'')+'"></div>'+
         '<button class="save-btn" onclick="saveTop('+i+')">&#9989; Saqlash</button>'+
         '</div></div>';
     });
@@ -2150,6 +2151,8 @@ function saveTop(i){
   t.maxBall=parseInt(document.getElementById('ep-ball-'+i).value)||t.maxBall;
   t.muddat=parseInt(document.getElementById('ep-mud-'+i).value)||t.muddat;
   t.tur=document.getElementById('ep-tur-'+i).value;
+  var linkEl=document.getElementById('ep-link-'+i);
+  if(linkEl)t.link=linkEl.value.trim();
   var fkey=k._fbKey||k.id;
   fbW('kurslar/'+fkey,k);
   showMsg2('edit-top-msg','&#9989; Topshiriq saqlandi!','success');
@@ -2167,7 +2170,7 @@ function delTop(i){
 function addTop(mavzuNum){
   var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
   k.topshiriqlar=k.topshiriqlar||[];
-  k.topshiriqlar.push({mavzuNum:mavzuNum,nom:'Yangi topshiriq',tavsif:'',maxBall:10,muddat:3,tur:'Amaliy'});
+  k.topshiriqlar.push({mavzuNum:mavzuNum,nom:'Yangi topshiriq',tavsif:'',maxBall:10,muddat:3,tur:'Amaliy',link:''});
   var fkey=k._fbKey||k.id;
   fbW('kurslar/'+fkey,k);
   setTimeout(function(){showETab('top');},500);
@@ -2720,7 +2723,7 @@ function importXL(input){
       var kurs={nom:String((kR[1]||[])[1]||'Nomsiz'),sinf:String((kR[2]||[])[1]||'7'),soat:((kR[3]||[])[1])||0,tavsif:String((kR[4]||[])[1]||'')};
       var mavzular=mR.map(function(r){return {num:parseInt(r[0]),nom:String(r[1]||''),soat:r[2]||0,tavsif:String(r[3]||''),youtube:String(r[4]||''),pdf:String(r[5]||'')};});
       var testlar=tR.map(function(r){return {mavzuNum:parseInt(r[0]),savol:String(r[1]||''),a:String(r[2]||''),b:String(r[3]||''),c:String(r[4]||''),d:String(r[5]||''),togri:String(r[6]||'A').toUpperCase().trim(),iz:String(r[7]||'')};});
-      var topshiriqlar=pR.map(function(r){return {mavzuNum:parseInt(r[0]),nom:String(r[1]||''),tavsif:String(r[2]||''),maxBall:parseInt(r[3])||10,muddat:parseInt(r[4])||3,tur:String(r[5]||'Amaliy')};});
+      var topshiriqlar=pR.map(function(r){return {mavzuNum:parseInt(r[0]),nom:String(r[1]||''),tavsif:String(r[2]||''),maxBall:parseInt(r[3])||10,muddat:parseInt(r[4])||3,tur:String(r[5]||'Amaliy'),link:String(r[6]||'').trim()};});
       window._importData={kurs:kurs,mavzular:mavzular,testlar:testlar,topshiriqlar:topshiriqlar,teacherLogin:CU.login,teacherId:CU.id,ts:Date.now(),id:'k_'+Date.now()};
       showPreview(window._importData);
       showMsg2('imp-status','&#9989; Fayl muvaffaqiyatli oqildi!','success');
