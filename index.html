@@ -2807,17 +2807,22 @@ function renderEditTop(k,el){
 // INTERAKTIV O'YIN YARATISH INTERFEYSI
 // ══════════════════════════════════════════════════════
 
+var GAME_TURS=['Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'];
+
 function onTurChange(i){
   var tur=document.getElementById('ep-tur-'+i).value;
   var linkWrap=document.getElementById('ep-link-wrap-'+i);
   var gameWrap=document.getElementById('ep-game-'+i);
+  // Interaktiv link (tashqi)
   if(linkWrap)linkWrap.style.display=(tur==='Interaktiv')?'block':'none';
+  // O'yin builder
   if(gameWrap){
-    if(['Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'].includes(tur)){
+    if(GAME_TURS.indexOf(tur)>-1){
       gameWrap.style.display='block';
       renderGameBuilder(i,tur);
     } else {
       gameWrap.style.display='none';
+      gameWrap.innerHTML='';
     }
   }
 }
@@ -3035,12 +3040,22 @@ function delTop(i){
 }
 
 function addTop(mavzuNum){
+  // Tur tanlash
+  var turOpts=['Amaliy','Yozma','Loyiha','Juftlashtirish','Boshliq','Anagram','Soz qidirish','Tartibga solish'];
+  var msg='Topshiriq turini tanlang:\n';
+  turOpts.forEach(function(t,i){msg+=(i+1)+'. '+t+'\n';});
+  var choice=prompt(msg,'1');
+  if(!choice)return;
+  var idx=parseInt(choice)-1;
+  var tur=(idx>=0&&idx<turOpts.length)?turOpts[idx]:'Amaliy';
+  var nom=prompt('Topshiriq nomi:','Yangi topshiriq');
+  if(!nom)return;
   var k=allCourses.find(function(c){return (c._fbKey||c.id)===_editKId||c.id===_editKId});
   k.topshiriqlar=k.topshiriqlar||[];
-  k.topshiriqlar.push({mavzuNum:mavzuNum,nom:'Yangi topshiriq',tavsif:'',maxBall:10,muddat:3,tur:'Amaliy',link:''});
+  k.topshiriqlar.push({mavzuNum:mavzuNum,nom:nom,tavsif:'',maxBall:10,muddat:3,tur:tur,link:'',data:'[]'});
   var fkey=k._fbKey||k.id;
   fbW('kurslar/'+fkey,k);
-  setTimeout(function(){showETab('top');},500);
+  setTimeout(function(){showETab('top');},600);
 }
 
 function closeModal(){
