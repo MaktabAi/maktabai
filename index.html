@@ -1260,15 +1260,19 @@ function renderTops(kId,mi){
         bottom='<div class="submitted-box">&#8987; Topshiriq yuborildi, baholanish kutilmoqda</div>';
       }else{
         // Interaktiv topshiriq (LearningApps, WordWall link bo'lsa)
-        if(t.link&&t.link.trim()){
-          bottom='<div style="margin-top:10px">'+
-            '<div style="font-size:12px;color:var(--fog);margin-bottom:8px">&#128279; Interaktiv topshiriqni bajaring:</div>'+
-            '<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;border:2px solid var(--sky);margin-bottom:10px">'+
-            '<iframe src="'+t.link+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allowfullscreen></iframe>'+
-            '</div>'+
-            '<a href="'+t.link+'" target="_blank" style="font-size:12px;color:var(--sky);font-weight:700">&#128279; Yangi tabda ochish</a>'+
-            '</div>'+
-            '<button class="subtn" style="margin-top:10px" onclick="submitTopLink(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#9989; Bajardim!</button>';
+                if(t.link&&t.link.trim()){
+          var linkEnc=encodeURIComponent(t.link);
+          var sKeyChk=sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
+          var alreadyDone=submitted;
+          var openBtn='<button onclick="openTopLink(\''+linkEnc+'\')" style="padding:10px 18px;background:var(--sky);color:#fff;border:none;border-radius:9px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer">&#128279; Topshiriqni ochish</button>';
+          var doneBtn=alreadyDone
+            ?'<div style="background:var(--sage2);color:#065f46;padding:10px 14px;border-radius:9px;font-weight:700;font-size:13px">&#9989; Yuborilgan - baholanish kutilmoqda</div>'
+            :'<button onclick="submitTopLink(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')" style="padding:10px 18px;background:var(--sage);color:#fff;border:none;border-radius:9px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer">&#9989; Bajardim!</button>';
+          bottom='<div style="margin-top:12px;background:var(--sky3);border:1.5px solid var(--sky);border-radius:12px;padding:14px">'+
+            '<div style="font-size:13px;font-weight:700;color:var(--sky2);margin-bottom:8px">&#128279; Interaktiv topshiriq</div>'+
+            '<div style="font-size:12px;color:var(--fog);margin-bottom:12px">Topshiriqni bajaring, so\u2019ngra \"Bajardim\" ni bosing</div>'+
+            '<div style="display:flex;gap:8px;flex-wrap:wrap">'+openBtn+doneBtn+'</div>'+
+            '</div>';
         }else{
           bottom='<textarea class="toparea" id="ta-'+kId+'-'+mi+'-'+ti+'" placeholder="Bu yerga javobingizni yozing..."></textarea>'+
             '<button class="subtn" onclick="submitTop(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#128228; Topshiriqni yuborish</button>';
@@ -1286,16 +1290,23 @@ function renderTops(kId,mi){
   });
 }
 
+function openTopLink(linkEnc){
+  var url=decodeURIComponent(linkEnc);
+  var w=window.open(url,'_blank','width=1000,height=700,scrollbars=yes,resizable=yes');
+  if(!w)window.open(url,'_blank');
+}
+
 function submitTopLink(kId,mi,ti,nomEnc,maxBall){
   var nom=decodeURIComponent(nomEnc);
   var k=allCourses.find(function(c){return c.id===kId});
+  if(!k){alert('Kurs topilmadi!');return;}
   var sKey=sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(nom);
-  var data={ism:CU.ism,sinf:CU.sinf,fan:k.kurs.nom,kId:kId,mi:mi,nom:nom,
+  var data={ism:CU.ism,sinf:CU.sinf,fan:k.kurs.nom,kId:kId,mi:parseInt(mi),nom:nom,
     javob:'[Interaktiv topshiriq bajarildi]',maxBall:maxBall,
     sana:now(),ts:Date.now(),holat:'yuborilgan',tur:'interaktiv'};
   localStorage.setItem('top_'+sKey,'1');
   fbW('topshiriqlar/'+sKey,data);
-  renderTops(kId,mi);
+  setTimeout(function(){renderTops(kId,mi);},400);
 }
 
 function submitTop(kId,mi,ti,nomEnc,maxBall){
