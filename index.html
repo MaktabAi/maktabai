@@ -1259,8 +1259,20 @@ function renderTops(kId,mi){
       }else if(submitted){
         bottom='<div class="submitted-box">&#8987; Topshiriq yuborildi, baholanish kutilmoqda</div>';
       }else{
-        bottom='<textarea class="toparea" id="ta-'+kId+'-'+mi+'-'+ti+'" placeholder="Bu yerga javobingizni yozing..."></textarea>'+
-          '<button class="subtn" onclick="submitTop(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#128228; Topshiriqni yuborish</button>';
+        // Interaktiv topshiriq (LearningApps, WordWall link bo'lsa)
+        if(t.link&&t.link.trim()){
+          bottom='<div style="margin-top:10px">'+
+            '<div style="font-size:12px;color:var(--fog);margin-bottom:8px">&#128279; Interaktiv topshiriqni bajaring:</div>'+
+            '<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;border:2px solid var(--sky);margin-bottom:10px">'+
+            '<iframe src="'+t.link+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allowfullscreen></iframe>'+
+            '</div>'+
+            '<a href="'+t.link+'" target="_blank" style="font-size:12px;color:var(--sky);font-weight:700">&#128279; Yangi tabda ochish</a>'+
+            '</div>'+
+            '<button class="subtn" style="margin-top:10px" onclick="submitTopLink(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#9989; Bajardim!</button>';
+        }else{
+          bottom='<textarea class="toparea" id="ta-'+kId+'-'+mi+'-'+ti+'" placeholder="Bu yerga javobingizni yozing..."></textarea>'+
+            '<button class="subtn" onclick="submitTop(\''+kId+'\','+mi+','+ti+',\''+encodeURIComponent(t.nom)+'\','+t.maxBall+')">&#128228; Topshiriqni yuborish</button>';
+        }
       }
       return '<div class="top-card">'+
         '<div class="top-h"><div class="top-ico">'+ico+'</div>'+
@@ -1272,6 +1284,18 @@ function renderTops(kId,mi){
         bottom+'</div></div>';
     }).join('');
   });
+}
+
+function submitTopLink(kId,mi,ti,nomEnc,maxBall){
+  var nom=decodeURIComponent(nomEnc);
+  var k=allCourses.find(function(c){return c.id===kId});
+  var sKey=sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(nom);
+  var data={ism:CU.ism,sinf:CU.sinf,fan:k.kurs.nom,kId:kId,mi:mi,nom:nom,
+    javob:'[Interaktiv topshiriq bajarildi]',maxBall:maxBall,
+    sana:now(),ts:Date.now(),holat:'yuborilgan',tur:'interaktiv'};
+  localStorage.setItem('top_'+sKey,'1');
+  fbW('topshiriqlar/'+sKey,data);
+  renderTops(kId,mi);
 }
 
 function submitTop(kId,mi,ti,nomEnc,maxBall){
@@ -2674,9 +2698,10 @@ function dlTemplate(){
   ]);
   XLSX.utils.book_append_sheet(wb,ws3,'Testlar');
   var ws4=XLSX.utils.aoa_to_sheet([
-    ['Mavzu#','Topshiriq nomi','Tavsif','Max ball','Muddat (kun)','Tur (Yozma/Amaliy/Loyiha)'],
-    [1,'Topshiriq 1','Topshiriq tavsifi',10,3,'Amaliy'],
-    [2,'Topshiriq 2','Topshiriq tavsifi',20,7,'Loyiha'],
+    ['Mavzu#','Topshiriq nomi','Tavsif','Max ball','Muddat (kun)','Tur','Link (ixtiyoriy)'],
+    [1,'Matnli topshiriq','Topshiriq tavsifi',10,3,'Amaliy',''],
+    [1,'Interaktiv topshiriq','LearningApps yoki WordWall topshirig\u2019i','Interaktiv',10,5,'https://learningapps.org/...'],
+    [2,'Loyiha','Topshiriq tavsifi',20,7,'Loyiha',''],
   ]);
   XLSX.utils.book_append_sheet(wb,ws4,'Topshiriqlar');
   XLSX.writeFile(wb,'MaktabEDU_Kurs_Shablon.xlsx');
