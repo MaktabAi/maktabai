@@ -1015,6 +1015,13 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
 </div>
 
 <script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  SOZLAMALAR (CONFIG)                                         ║
+// ║  Bu yerda platformaning asosiy sozlamalari joylashgan:       ║
+// ║  - Admin parol kaliti                                        ║
+// ║  - Sessiya muddati (necha daqiqada chiqib ketadi)            ║
+// ║  O'zgartirish: SM = 30 → 60 (30 daqiqa o'rniga 60)         ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── CONFIG ───────────────────────────────────────────────────
 var ADMIN_PASS_KEY = 'mai_admin_pass';
 var DEFAULT_ADMIN_PASS = 'maktabedu2025';
@@ -1043,6 +1050,13 @@ function loadS(){
 }
 function clearS(){localStorage.removeItem(SK)}
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  FIREBASE ULANISH FUNKSIYALARI                               ║
+// ║  fbR(path, callback) — ma'lumot o'qish                       ║
+// ║  fbW(path, data)     — ma'lumot yozish                       ║
+// ║  fbD(path)           — ma'lumot o'chirish                    ║
+// ║  fbListen(path, cb)  — real-vaqt kuzatish                   ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── FIREBASE ─────────────────────────────────────────────────
 function fbW(path,data){if(!window._fbReady)return;window._set(window._ref(window._db,path),data).catch(function(e){console.error(e);})}
 function fbP(path,data){if(!window._fbReady)return;return window._push(window._ref(window._db,path),data);}
@@ -1051,6 +1065,13 @@ function fbListen(path,cb){if(!window._fbReady)return;window._onValue(window._re
 function fbL(path,cb){fbListen(path,cb);}
 function fbDel(path){if(!window._fbReady)return;window._remove(window._ref(window._db,path));}
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  KIRISH TIZIMI (LOGIN)                                       ║
+// ║  3 ta rol mavjud:                                            ║
+// ║  1. O'QUVCHI  — ism + sinf bilan kiradi                     ║
+// ║  2. O'QITUVCHI — login + parol bilan kiradi                 ║
+// ║  3. ADMIN     — maxsus parol bilan kiradi                    ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── LOGIN ────────────────────────────────────────────────────
 function swTab(tab,btn){
   document.querySelectorAll('.rtab').forEach(function(t){t.classList.remove('active')});
@@ -1169,6 +1190,15 @@ function admLogin(){
 function logout(){CU=null;clearS();showScreen('login');}
 function setErr(m){document.getElementById('lerr').textContent=m}
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  EKRANLAR VA O'QUVCHI PANELI                                 ║
+// ║  showScreen(id) — sahifani ko'rsatish                        ║
+// ║  showStTab(id)  — o'quvchi tab almashtirish                  ║
+// ║  buildFanlar()  — fanlar ro'yxatini yasash                   ║
+// ║  ochMavzu()     — mavzu sahifasini ochish                    ║
+// ║  renderTest()   — test bo'limini ko'rsatish                  ║
+// ║  renderTops()   — topshiriqlar bo'limini ko'rsatish          ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── SCREENS ──────────────────────────────────────────────────
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
@@ -2267,6 +2297,14 @@ function submitTop(kId,mi,ti,nomEnc,maxBall){
   renderTops(kId,mi);
 }
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  TEST (QUIZ) TIZIMI                                          ║
+// ║  startMTest() — testni boshlash                              ║
+// ║  showQ()      — savolni ko'rsatish                           ║
+// ║  javobTanla() — javob tanlash va tekshirish                  ║
+// ║  nextQ()      — keyingi savolga o'tish                       ║
+// ║  showNatija() — natijani ko'rsatish va saqlash               ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── QUIZ ─────────────────────────────────────────────────────
 function showQ(){
   var sv=joriyTest.savollar[qIdx];
@@ -2450,6 +2488,9 @@ function tTab(n){
   if(n===7)buildTPassInfo();
   if(n===8)igInitTab();
 }
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  O'ZLASHTIRISH HISOBI — Test(50%) + Topshiriq(50%)          ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── O'ZLASHTIRISH (TEST + TOPSHIRIQ O'RTACHA) ────────────────
 var tOzlData=[];
 
@@ -2752,6 +2793,9 @@ function gradeTop(i){
   setTimeout(function(){loadTTops();},600);
 }
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  VAQT SOZLASH — mavzu ochilish sanasi                        ║
+// ╚══════════════════════════════════════════════════════════════╝
 // SCHEDULE
 function buildSchedule(){
   loadAllCourses(function(){
@@ -2846,6 +2890,14 @@ function delCourse(kId){
   loadAllCourses(function(){loadTCourses();});
 }
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  KURS TAHRIRLASH (O'QITUVCHI)                                ║
+// ║  loadTCourses()    — kurslar ro'yxatini yuklash              ║
+// ║  openEditModal()   — tahrirlash oynasini ochish              ║
+// ║  saveMavzu()       — mavzuni saqlash                         ║
+// ║  saveTop()         — topshiriqni saqlash                     ║
+// ║  saveTest()        — testni saqlash                          ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── KURS TAHRIRLASH ─────────────────────────────────────────
 var _editKId=null;
 
@@ -3903,6 +3955,14 @@ function exportTTop(){
   XLSX.writeFile(wb,'MaktabEDU_Topshiriqlar_'+today()+'.xlsx');
 }
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ADMIN PANELI                                                ║
+// ║  loadAdminStats()  — umumiy statistika                       ║
+// ║  loadAStudents()   — o'quvchilar ro'yxati                    ║
+// ║  loadATeachers()   — o'qituvchilar boshqaruvi               ║
+// ║  filterAN()        — natijalar jadvali                       ║
+// ║  admDelSelectedNat() — tanlangan natijalarni o'chirish        ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── ADMIN ────────────────────────────────────────────────────
 function initAdmin(){
   showScreen('admin-sc');
@@ -4312,6 +4372,9 @@ function exportStudents(){
   XLSX.writeFile(wb,'MaktabEDU_Oquvchilar_'+today()+'.xlsx');
 }
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  EXCEL ORQALI KURS IMPORT                                    ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── KURS IMPORT (TEMPLATE + IMPORT) ──────────────────────────
 function dlTemplate(){
   var wb=XLSX.utils.book_new();
@@ -4407,6 +4470,12 @@ function saveImport(){
   loadAllCourses(function(){loadTCourses();});
 }
 
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  YORDAMCHI FUNKSIYALAR (UTILS)                               ║
+// ║  sk(str)   — string ni kalit formatga o'tkazish              ║
+// ║  now()     — hozirgi vaqt (string)                           ║
+// ║  showMsg2() — xabar ko'rsatish                               ║
+// ╚══════════════════════════════════════════════════════════════╝
 // ── UTILS ────────────────────────────────────────────────────
 function sk(s){return String(s||'').replace(/[.#$\[\]/\s]/g,'_')}
 function bc(f){return f>=90?'bb5':f>=74?'bb4':f>=53?'bb3':'bb2'}
