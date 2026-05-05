@@ -1628,38 +1628,89 @@ function matchClickHandler(btn){
 }
 function matchClick(btn,side,idx,gid){
   if(btn.disabled)return;
+  // Allaqachon juftlashgan tugmani qayta tanlash mumkin emas
+  if(btn.classList.contains('gmatched'))return;
   if(!_matchSel[gid]){_matchSel[gid]=null;}
   if(!_matchMatched[gid])_matchMatched[gid]=[];
-  if(!_matchSel[gid]){_matchSel[gid]={btn:btn,side:side,idx:idx};btn.classList.add('gsel');return;}
-  if(_matchSel[gid].btn===btn){_matchSel[gid].btn.classList.remove('gsel');_matchSel[gid]=null;return;}
-  if(_matchSel[gid].side===side){_matchSel[gid].btn.classList.remove('gsel');_matchSel[gid]={btn:btn,side:side,idx:idx};btn.classList.add('gsel');return;}
+
+  // Birinchi tanlov
+  if(!_matchSel[gid]){
+    _matchSel[gid]={btn:btn,side:side,idx:idx};
+    btn.classList.add('gsel');
+    return;
+  }
+  // Xuddi shu tugma qayta bosilsa — bekor qilish
+  if(_matchSel[gid].btn===btn){
+    _matchSel[gid].btn.classList.remove('gsel');
+    _matchSel[gid]=null;
+    return;
+  }
+  // Bir tomondagi tugma bosilsa — o'zgartirish (eski selection ni bekor qil)
+  if(_matchSel[gid].side===side){
+    _matchSel[gid].btn.classList.remove('gsel');
+    _matchSel[gid]={btn:btn,side:side,idx:idx};
+    btn.classList.add('gsel');
+    return;
+  }
+
   var lIdx=_matchSel[gid].side==='L'?_matchSel[gid].idx:idx;
   var rIdx=_matchSel[gid].side==='R'?_matchSel[gid].idx:idx;
+  var lb=document.getElementById(gid+'_L'+lIdx);
+  var rb=document.getElementById(gid+'_R'+rIdx);
+
   if(lIdx===rIdx){
-    var lb=document.getElementById(gid+'_L'+lIdx),rb=document.getElementById(gid+'_R'+rIdx);
-    [lb,rb].forEach(function(b){b.classList.remove('gsel');b.classList.add('gmatched');b.disabled=true;});
+    // ✅ Togri juft
+    [lb,rb].forEach(function(b){
+      if(b){b.classList.remove('gsel');b.classList.add('gmatched');b.disabled=true;}
+    });
     _matchMatched[gid].push(lIdx);
     var sc=document.getElementById(gid+'_sc');
-    var pairsLen=_matchMatched[gid].length+1;
     if(sc){var t2=sc.textContent.split('/');sc.textContent=_matchMatched[gid].length+'/'+t2[1];}
-    gameMsg(gid+'_msg','Togri!','sage');
-    // Hammasi togri bo'lsa saqlash
-    var total=parseInt((document.getElementById(gid+'_sc').textContent||'0/1').split('/')[1]);
-    if(_matchMatched[gid].length===total){
+    var total=parseInt((sc?sc.textContent:'0/1').split('/')[1])||0;
+    if(_matchMatched[gid].length>=total&&total>0){
+      // Hammasi tugadi — o'zlashtirish saqlash
       var wrap=document.getElementById(gid);
       if(wrap){
-        var kIdL=wrap.getAttribute('data-kid')||'';
-        gameMsg(gid+'_msg','Barakalla! Hammasi togri!','sage');
+        var kId=wrap.getAttribute('data-kId')||wrap.getAttribute('data-kid')||'';
+        var mi=wrap.getAttribute('data-mi')||0;
+        var nom=wrap.getAttribute('data-nom')||'';
+        var maxB=parseInt(wrap.getAttribute('data-max')||10);
+        saveGameResult(kId,mi,nom,maxB,total,total);
+        // O'zlashtirish ballini ko'rsat
+        showGameFinish(gid,total,total,maxB);
       }
+      gameMsg(gid+'_msg','Barakalla! Hammasi togri! Ball: '+maxB+'/'+maxB,'sage');
+    } else {
+      gameMsg(gid+'_msg','Togri! '+_matchMatched[gid].length+'/'+total,'sage');
     }
   }else{
-    var lb2=_matchSel[gid].side==='L'?_matchSel[gid].btn:btn;
-    var rb2=_matchSel[gid].side==='R'?_matchSel[gid].btn:btn;
-    [lb2,rb2].forEach(function(b){b.classList.add('gno');});
-    gameMsg(gid+'_msg','Xato!','rose');
-    setTimeout(function(){[lb2,rb2].forEach(function(b){b.classList.remove('gno');});document.getElementById(gid+'_msg').innerHTML='';},700);
+    // ❌ Xato juft — qizil ko'rsat, keyin qaytarish
+    var wrongBtns=[_matchSel[gid].side==='L'?_matchSel[gid].btn:btn,
+                   _matchSel[gid].side==='R'?_matchSel[gid].btn:btn];
+    wrongBtns.forEach(function(b){if(b)b.classList.add('gno');});
+    gameMsg(gid+'_msg','Xato! Qayta urining','rose');
+    setTimeout(function(){
+      wrongBtns.forEach(function(b){if(b)b.classList.remove('gno','gsel');});
+      var msgEl=document.getElementById(gid+'_msg');
+      if(msgEl)msgEl.innerHTML='';
+    },800);
   }
   _matchSel[gid]=null;
+}
+
+// O'yin tugaganda o'zlashtirish ko'rsatkich
+function showGameFinish(gid,score,total,maxBall){
+  var pct=Math.round((score/total)*100);
+  var color=pct>=80?'sage':pct>=50?'gold':'rose';
+  var label=pct>=80?"A'lo":pct>=60?'Yaxshi':pct>=40?'Qoniqarli':'Zaif';
+  var html='<div style="margin-top:14px;background:var(--snow);border-radius:12px;padding:16px;border:1.5px solid var(--sage);text-align:center">'+
+    '<div style="font-size:28px;font-weight:900;color:var(--sage)">'+pct+'%</div>'+
+    '<div style="font-size:13px;font-weight:700;color:var(--ink);margin-top:4px">'+label+'</div>'+
+    '<div style="font-size:11px;color:var(--fog);margin-top:4px">Ball: '+Math.round((score/total)*maxBall)+'/'+maxBall+'</div>'+
+    '<div style="font-size:11px;color:var(--fog);margin-top:2px">Natija saqlandi ✅</div>'+
+    '</div>';
+  var wrap=document.getElementById(gid);
+  if(wrap)wrap.insertAdjacentHTML('beforeend',html);
 }
 
 // ── 2. BO'SHLIQ TO'LDIRISH (FILL IN) ─────────────────────────
@@ -1709,8 +1760,11 @@ function checkFillIn(gid,qEnc,kId,mi,nomEnc,maxBall){
   var sc=document.getElementById(gid+'_sc');
   if(sc)sc.textContent=score+'/'+questions.length;
   var ok=score===questions.length;
-  gameMsg(gid+'_msg',ok?'Barakalla! Hammasi togri!':score+'/'+questions.length+' togri',ok?'sage':'gold');
-  if(ok)saveGameResult(kId,mi,nomEnc,maxBall,score,questions.length);
+  gameMsg(gid+'_msg',ok?'Barakalla! Hammasi togri!':score+'/'+questions.length+' togri. Qayta urining.',ok?'sage':'gold');
+  if(score>0){
+    saveGameResult(kId,mi,nomEnc,maxBall,score,questions.length);
+    if(ok)showGameFinish(gid,score,questions.length,maxBall);
+  }
 }
 
 function resetFillIn(gid,n){
@@ -1810,6 +1864,7 @@ function checkAnagramGame(gid){
     var nom=wrap.getAttribute('data-nom');
     var max=parseInt(wrap.getAttribute('data-max')||10);
     saveGameResult(kId,mi,nom,max,words.length,words.length);
+    showGameFinish(gid,words.length,words.length,max);
   }
   if(correct&&cur<words.length-1)setTimeout(function(){nextAnagramGame(gid);},800);
 }
@@ -1912,7 +1967,9 @@ function wsGUp(e,gid,r,c){
     if(sc)sc.textContent=_wsFound[gid].length+'/'+words.length;
     gameMsg(gid+'_msg',_wsFound[gid].length===words.length?'Barakalla! Hammasi topildi!':'Togri! '+found+' topildi','sage');
     if(_wsFound[gid].length===words.length){
-      saveGameResult(wrap.getAttribute('data-kId'),wrap.getAttribute('data-mi'),wrap.getAttribute('data-nom'),parseInt(wrap.getAttribute('data-max')||10),words.length,words.length);
+      var maxW=parseInt(wrap.getAttribute('data-max')||10);
+      saveGameResult(wrap.getAttribute('data-kId'),wrap.getAttribute('data-mi'),wrap.getAttribute('data-nom'),maxW,words.length,words.length);
+      showGameFinish(gid,words.length,words.length,maxW);
     }
   } else {
     wsClearHighlight(gid);
@@ -2032,7 +2089,9 @@ function checkSortGame(gid){
   });
   gameMsg(gid+'_msg',allOk?'Barakalla! Togri tartib!':'Xato! Togri: '+correct.join('-'),allOk?'sage':'rose');
   if(allOk&&cur===tasks.length-1){
-    saveGameResult(wrap.getAttribute('data-kId'),wrap.getAttribute('data-mi'),wrap.getAttribute('data-nom'),parseInt(wrap.getAttribute('data-max')||10),tasks.length,tasks.length);
+    var maxS=parseInt(wrap.getAttribute('data-max')||10);
+    saveGameResult(wrap.getAttribute('data-kId'),wrap.getAttribute('data-mi'),wrap.getAttribute('data-nom'),maxS,tasks.length,tasks.length);
+    showGameFinish(gid,tasks.length,tasks.length,maxS);
   }
 }
 
