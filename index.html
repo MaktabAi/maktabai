@@ -1646,6 +1646,84 @@ function renderMatchUp(t,gid,kId,mi,ti){
     '</div>';
 }
 
+// ── JUFTLASHTIRISH TIZIMI ──────────────────────────────────
+var _matchSel={};   // Hozir tanlangan tugma
+var _matchSel2={};  // O'quvchining barcha juftlari {L0:2, R2:0, ...}
+
+function matchClickHandler(btn){
+  var gid=btn.getAttribute('data-gid');
+  var side=btn.getAttribute('data-side');
+  var idx=parseInt(btn.getAttribute('data-idx'));
+
+  if(!_matchSel[gid])_matchSel[gid]=null;
+  if(!_matchSel2[gid])_matchSel2[gid]={};
+
+  // Tekshirilgan tugmalar ishlamaydi
+  if(btn.disabled)return;
+
+  if(!_matchSel[gid]){
+    // 1-tanlov
+    _matchSel[gid]={btn:btn,side:side,idx:idx};
+    btn.classList.add('gsel');
+    return;
+  }
+  if(_matchSel[gid].btn===btn){
+    // Xuddi shu tugma — bekor qilish
+    btn.classList.remove('gsel');
+    _matchSel[gid]=null;
+    return;
+  }
+  if(_matchSel[gid].side===side){
+    // Bir tomondagi boshqa — almashtirish
+    _matchSel[gid].btn.classList.remove('gsel');
+    _matchSel[gid]={btn:btn,side:side,idx:idx};
+    btn.classList.add('gsel');
+    return;
+  }
+
+  // Ikki tomondan tanlandi — juftlashtirish
+  var lIdx=_matchSel[gid].side==='L'?_matchSel[gid].idx:idx;
+  var rIdx=_matchSel[gid].side==='R'?_matchSel[gid].idx:idx;
+  var lBtn=document.getElementById(gid+'_L'+lIdx);
+  var rBtn=document.getElementById(gid+'_R'+rIdx);
+
+  // Eski juftlarni bekor qilish
+  var oldR=_matchSel2[gid]['L'+lIdx];
+  if(oldR!==undefined){
+    var oldRBtn=document.getElementById(gid+'_R'+oldR);
+    if(oldRBtn){oldRBtn.style.background='';oldRBtn.style.borderColor='';oldRBtn.classList.remove('gsel');}
+    delete _matchSel2[gid]['R'+oldR];
+  }
+  var oldL=_matchSel2[gid]['R'+rIdx];
+  if(oldL!==undefined){
+    var oldLBtn=document.getElementById(gid+'_L'+oldL);
+    if(oldLBtn){oldLBtn.style.background='';oldLBtn.style.borderColor='';oldLBtn.classList.remove('gsel');}
+    delete _matchSel2[gid]['L'+oldL];
+  }
+
+  // Yangi juft saqlash
+  _matchSel2[gid]['L'+lIdx]=rIdx;
+  _matchSel2[gid]['R'+rIdx]=lIdx;
+
+  // Ko'k rang — hali tekshirilmagan
+  [lBtn,rBtn].forEach(function(b){
+    if(b){
+      b.classList.remove('gsel','gno');
+      b.style.background='var(--sky3)';
+      b.style.borderColor='var(--sky)';
+      b.style.color='var(--sky2)';
+    }
+  });
+
+  // Hisoblagich
+  var matched=Object.keys(_matchSel2[gid]).filter(function(k){return k[0]==='L';}).length;
+  var sc=document.getElementById(gid+'_sc');
+  var wrap=document.getElementById(gid);
+  var total=wrap?parseInt(wrap.getAttribute('data-total'))||0:0;
+  if(sc)sc.textContent=matched+'/'+total;
+  _matchSel[gid]=null;
+}
+
 // Juftlashtirish — tekshirish va saqlash
 function matchCheck(gid){
   var wrap=document.getElementById(gid);
