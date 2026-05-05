@@ -1480,13 +1480,22 @@ function renderTest(kId,mi){
   if(!tests.length){el.innerHTML='<div class="empty"><div class="empty-ico">&#9889;</div><p>Bu mavzu uchun test yo\'q</p></div>';return;}
   // Urinish soni tekshirish
   var testUrKey='test_urinish_'+sk(CU.ism)+'_'+kId+'_'+mi;
-  var maxTestUr=parseInt(k.testUrinish&&k.testUrinish[mi]!==undefined?k.testUrinish[mi]:0)||0;
+  var maxTestUr=0;
+  if(k.testUrinish){
+    var urVal=k.testUrinish[mi]!==undefined?k.testUrinish[mi]:k.testUrinish[String(mi)];
+    maxTestUr=parseInt(urVal)||0;
+  }
   var curTestUr=parseInt(localStorage.getItem(testUrKey)||0);
   var testBlocked=maxTestUr>0&&curTestUr>=maxTestUr;
 
-  var urInfo=maxTestUr>0
-    ?'<div style="font-size:12px;color:var(--sky2);font-weight:700;margin-bottom:10px">&#128260; Urinish: '+curTestUr+'/'+maxTestUr+'</div>'
-    :'';
+  var urInfo='<div style="display:inline-flex;align-items:center;gap:6px;background:var(--sky3);border:1px solid var(--sky);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--sky2);margin-bottom:12px">';
+  if(maxTestUr===0){
+    urInfo+='&#8734; Cheksiz urinish';
+  } else {
+    var left=maxTestUr-curTestUr;
+    urInfo+='&#128260; Urinish: '+(curTestUr+1)+'/'+maxTestUr+(left<=1?' &mdash; <span style="color:var(--rose)">Oxirgi urinish!</span>':'');
+  }
+  urInfo+='</div>';
   var btnLabel=curTestUr>0?'&#128260; Qayta yechish':'&#9654; Boshlash';
   var startBtn=testBlocked
     ?'<div class="submitted-box" style="justify-content:center">&#128683; Urinish tugadi ('+curTestUr+'/'+maxTestUr+')</div>'
@@ -1550,10 +1559,15 @@ function renderTops(kId,mi){
                 if(t.link&&t.link.trim()){
           var linkEnc=encodeURIComponent(t.link);
           var sKeyChk=sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
-          var maxUr=parseInt(t.urinish||1);
+          var maxUr=parseInt(t.urinish||0)||0;
           var urKey='urinish_'+sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
           var urCnt=parseInt(localStorage.getItem(urKey)||0);
           var alreadyDone=submitted||(maxUr>0&&urCnt>=maxUr);
+          // Urinish info badge
+          var urBadge='<span style="display:inline-flex;align-items:center;gap:4px;background:var(--sky3);border:1px solid var(--sky);border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--sky2);margin-left:6px">';
+          if(maxUr===0){urBadge+='&#8734; Cheksiz';}
+          else{var left2=maxUr-urCnt;urBadge+='&#128260; '+(urCnt+1)+'/'+maxUr+(left2<=1?' &bull; <span style="color:var(--rose)">Oxirgi!</span>':'');}
+          urBadge+='</span>';
           var openBtn='<button onclick="openTopLink(\''+linkEnc+'\')" style="padding:10px 18px;background:var(--sky);color:#fff;border:none;border-radius:9px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer">&#128279; Topshiriqni ochish</button>';
           var doneBtn=alreadyDone
             ?'<div style="background:var(--sage2);color:#065f46;padding:10px 14px;border-radius:9px;font-weight:700;font-size:13px">&#9989; Yuborilgan - baholanish kutilmoqda</div>'
@@ -2700,6 +2714,7 @@ function filterTTop(){
     return '<div class="tj-card">'+
       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">'+
       '<strong style="font-size:14px">'+t.nom+'</strong>'+
+      (alreadyDone?'':''+urBadge)+
       '<span class="nbadge nb-b">'+t.ism+'</span>'+
       '<span class="nbadge nb-g">'+t.sinf+'-sinf</span>'+
       (t.fan?'<span class="nbadge nb-v">'+t.fan+'</span>':'')+
