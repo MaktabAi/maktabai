@@ -769,6 +769,15 @@ body{font-family:'Outfit',sans-serif;background:var(--snow);color:var(--ink);min
             <div class="fgrp"><label class="flbl">Topshiriq nomi</label><input class="finp" id="ig-nom" placeholder="Topshiriq nomi..."></div>
             <div class="fgrp"><label class="flbl">Max ball</label><input class="finp" id="ig-ball" type="number" value="10" min="1" max="100"></div>
             <div class="fgrp"><label class="flbl">Muddat (kun)</label><input class="finp" id="ig-mud" type="number" value="3" min="1"></div>
+            <div class="fgrp"><label class="flbl">&#128260; Urinish soni</label>
+              <select class="finp" id="ig-urinish">
+                <option value="1">1 marta</option>
+                <option value="2">2 marta</option>
+                <option value="3">3 marta</option>
+                <option value="5">5 marta</option>
+                <option value="0">Cheksiz</option>
+              </select>
+            </div>
           </div>
           <div class="fgrp" style="margin-bottom:14px"><label class="flbl">Tavsif (ixtiyoriy)</label><input class="finp" id="ig-tavsif" placeholder="Topshiriq tavsifi..."></div>
 
@@ -1466,12 +1475,27 @@ function renderTest(kId,mi){
   var done=localStorage.getItem('mtd_'+sk(CU.ism)+'_'+kId+'_'+mi);
   var el=document.getElementById('mp-t');
   if(!tests.length){el.innerHTML='<div class="empty"><div class="empty-ico">&#9889;</div><p>Bu mavzu uchun test yo\'q</p></div>';return;}
+  // Urinish soni tekshirish
+  var testUrKey='test_urinish_'+sk(CU.ism)+'_'+kId+'_'+mi;
+  var maxTestUr=parseInt(k.testUrinish&&k.testUrinish[mi]!==undefined?k.testUrinish[mi]:0)||0;
+  var curTestUr=parseInt(localStorage.getItem(testUrKey)||0);
+  var testBlocked=maxTestUr>0&&curTestUr>=maxTestUr;
+
+  var urInfo=maxTestUr>0
+    ?'<div style="font-size:12px;color:var(--sky2);font-weight:700;margin-bottom:10px">&#128260; Urinish: '+curTestUr+'/'+maxTestUr+'</div>'
+    :'';
+  var btnLabel=curTestUr>0?'&#128260; Qayta yechish':'&#9654; Boshlash';
+  var startBtn=testBlocked
+    ?'<div class="submitted-box" style="justify-content:center">&#128683; Urinish tugadi ('+curTestUr+'/'+maxTestUr+')</div>'
+    :'<button onclick="startMTest(\''+kId+'\','+mi+')" style="padding:12px 32px;background:var(--sky);color:#fff;border:none;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;font-family:Outfit,sans-serif;box-shadow:0 4px 14px rgba(37,99,235,.3)">'+btnLabel+'</button>';
+
   el.innerHTML='<div class="card" style="text-align:center;padding:26px">'+
     '<div style="font-size:38px;margin-bottom:10px">&#9889;</div>'+
     '<div style="font-size:16px;font-weight:800;margin-bottom:5px">'+m.nom+' - Test</div>'+
-    '<div style="font-size:13px;color:var(--fog);margin-bottom:16px">'+tests.length+' ta savol * 30 soniya</div>'+
+    '<div style="font-size:13px;color:var(--fog);margin-bottom:16px">'+tests.length+' ta savol &bull; 30 soniya</div>'+
+    urInfo+
     (done?'<div class="submitted-box" style="justify-content:center;margin-bottom:14px">&#9989; Test yechilgan</div>':'')+
-    '<button onclick="startMTest(\''+kId+'\','+mi+')" style="padding:12px 32px;background:var(--sky);color:#fff;border:none;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;font-family:Outfit,sans-serif;box-shadow:0 4px 14px rgba(37,99,235,.3)">'+(done?'&#128260; Qayta yechish':'&#9654; Boshlash')+'</button>'+
+    startBtn+
     '</div>';
 }
 
@@ -1488,6 +1512,10 @@ function startMTest(kId,mi){
     })
   };
   fromMavzu={kId:kId,mi:mi};
+  // Urinish sonini +1 qilamiz
+  var testUrKey2='test_urinish_'+sk(CU.ism)+'_'+kId+'_'+mi;
+  var curUr2=parseInt(localStorage.getItem(testUrKey2)||0);
+  localStorage.setItem(testUrKey2, curUr2+1);
   qIdx=0;togri=0;xato=0;ball=0;
   showScreen('quiz-sc');
   document.getElementById('q-ball').textContent='&#11088; 0';
@@ -1519,7 +1547,10 @@ function renderTops(kId,mi){
                 if(t.link&&t.link.trim()){
           var linkEnc=encodeURIComponent(t.link);
           var sKeyChk=sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
-          var alreadyDone=submitted;
+          var maxUr=parseInt(t.urinish||1);
+          var urKey='urinish_'+sk(CU.ism)+'_'+kId+'_'+mi+'_'+sk(t.nom);
+          var urCnt=parseInt(localStorage.getItem(urKey)||0);
+          var alreadyDone=submitted||(maxUr>0&&urCnt>=maxUr);
           var openBtn='<button onclick="openTopLink(\''+linkEnc+'\')" style="padding:10px 18px;background:var(--sky);color:#fff;border:none;border-radius:9px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer">&#128279; Topshiriqni ochish</button>';
           var doneBtn=alreadyDone
             ?'<div style="background:var(--sage2);color:#065f46;padding:10px 14px;border-radius:9px;font-weight:700;font-size:13px">&#9989; Yuborilgan - baholanish kutilmoqda</div>'
@@ -1607,7 +1638,9 @@ function renderMatchUp(t,gid,kId,mi,ti){
   if(!pairs.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Juftlar kiritilmagan</div>';
 
   var sKey=sk(CU&&CU.ism?CU.ism:'')+'_'+kId+'_'+mi+'_'+sk(t.nom);
-  var alreadyDone=!!localStorage.getItem('top_'+sKey);
+  var maxUrinish=parseInt(t.urinish||1);
+  var urinishCount=parseInt(localStorage.getItem('urinish_'+sKey)||0);
+  var alreadyDone=maxUrinish>0&&urinishCount>=maxUrinish;
 
   // Chap: asl tartib, O'ng: aralashtirish
   var rights=pairs.slice().sort(function(){return Math.random()-.5;});
@@ -1633,10 +1666,12 @@ function renderMatchUp(t,gid,kId,mi,ti){
     ' data-kId="'+kId+'" data-mi="'+mi+'"'+
     ' data-nom="'+encodeURIComponent(t.nom)+'"'+
     ' data-max="'+t.maxBall+'"'+
-    ' data-total="'+pairs.length+'">'+
+    ' data-total="'+pairs.length+'"'+
+    ' data-urinish="'+maxUrinish+'" data-urinish-cur="'+urinishCount+'">'+
     '<div class="game-title">&#128279; Juftlashtirish'+
     '<span class="game-score" id="'+gid+'_sc">0/'+pairs.length+'</span></div>'+
     '<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Har bir atamani mos javobiga ulang, keyin Tekshirish bosing</div>'+
+    ''+(!alreadyDone&&maxUrinish>0?'<div style="font-size:11px;color:var(--sky2);margin-bottom:8px;font-weight:700">&#128260; Urinish: '+(urinishCount+1)+'/'+maxUrinish+'</div>':'')+''+
     '<div id="'+gid+'_msg"></div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
     '<div><div style="font-size:10px;font-weight:700;color:var(--fog);margin-bottom:6px;letter-spacing:.05em">ATAMALAR</div>'+lHTML+'</div>'+
@@ -1779,6 +1814,10 @@ function matchCheck(gid){
     '</div></div>';
   wrap.insertAdjacentHTML('beforeend',resultHTML);
 
+  // Urinish sonini yangilash
+  var sKey2=sk(CU&&CU.ism?CU.ism:'')+'_'+kId+'_'+mi+'_'+decodeURIComponent(nom);
+  var curCount=parseInt(localStorage.getItem('urinish_'+sKey2)||0);
+  localStorage.setItem('urinish_'+sKey2, curCount+1);
   // Firebase ga saqlash
   saveGameResult(kId,mi,nom,maxBall,correct,total);
 }
@@ -2869,6 +2908,12 @@ function renderEditMavzu(k,el){
       '<div class="edit-field" style="margin-bottom:10px"><label class="edit-label">Tavsif</label><input class="edit-inp" id="em-tavsif-'+mi+'" value="'+(m.tavsif||'').replace(/"/g,"'")+'"></div>'+
       '<div class="edit-field" style="margin-bottom:10px"><label class="edit-label">&#9654; YouTube havola</label><input class="edit-inp" id="em-yt-'+mi+'" value="'+(m.youtube||'').replace(/"/g,"'").replace("VIDEO_ID","")+'"></div>'+
       '<div class="edit-field" style="margin-bottom:12px"><label class="edit-label">&#128196; PDF havola (Google Drive)</label><input class="edit-inp" id="em-pdf-'+mi+'" value="'+(m.pdf||'').replace(/"/g,"'").replace("FILE_ID","")+'"></div>'+
+      '<div class="edit-field" style="margin-bottom:12px"><label class="edit-label">&#9889; Test urinish soni</label>'+
+      (function(){var cur=k.testUrinish?k.testUrinish[mi]:0;cur=cur||0;
+      return '<select class="edit-sel" id="em-tur-'+mi+'">'+
+      [[0,'Cheksiz'],[1,'1 marta'],[2,'2 marta'],[3,'3 marta'],[5,'5 marta']].map(function(o){
+        return '<option value="'+o[0]+'"'+(cur===o[0]?' selected':'')+'>'+o[1]+'</option>';
+      }).join('')+'</select>';})()+'</div>'+
       '<button class="save-btn sky" onclick="saveMavzu('+mi+')">&#9989; Saqlash</button>'+
       '</div></div>';
   }).join('');
@@ -2884,6 +2929,8 @@ function saveMavzu(mi){
   k.mavzular[mi].tavsif=document.getElementById('em-tavsif-'+mi).value;
   k.mavzular[mi].youtube=document.getElementById('em-yt-'+mi).value;
   k.mavzular[mi].pdf=document.getElementById('em-pdf-'+mi).value;
+  var turEl=document.getElementById('em-tur-'+mi);
+  if(turEl){if(!k.testUrinish)k.testUrinish={};k.testUrinish[mi]=parseInt(turEl.value)||0;}
   var fkey=k._fbKey||k.id;
   fbW('kurslar/'+fkey,k);
   showMsg2('edit-mavzu-msg','&#9989; '+k.mavzular[mi].nom+' saqlandi!','success');
@@ -3384,6 +3431,7 @@ function igSave(){
   if(!k){alert('Kurs topilmadi!');return;}
   var mavzu=k.mavzular[_igMi];
   k.topshiriqlar=k.topshiriqlar||[];
+  var urinish=parseInt((document.getElementById('ig-urinish')||{}).value||1)||1;
   k.topshiriqlar.push({
     mavzuNum:mavzu.num,
     nom:nom,
@@ -3392,7 +3440,8 @@ function igSave(){
     muddat:mud,
     tur:_igTur,
     link:'',
-    data:JSON.stringify(data)
+    data:JSON.stringify(data),
+    urinish:urinish
   });
   var fkey=k._fbKey||k.id;
   fbW('kurslar/'+fkey,k);
@@ -3423,6 +3472,8 @@ function igEdit(ki,dataEnc){
     document.getElementById('ig-ball').value=t.maxBall;
     document.getElementById('ig-mud').value=t.muddat;
     document.getElementById('ig-tavsif').value=t.tavsif||'';
+    var urEl=document.getElementById('ig-urinish');
+    if(urEl)urEl.value=String(t.urinish||1);
     // Malumotlarni forma ga to'ldirish
     var data=[];try{data=JSON.parse(t.data||'[]');}catch(e){}
     setTimeout(function(){igFillForm(t.tur,data);},100);
