@@ -1605,25 +1605,29 @@ function renderMatchUp(t,gid,kId,mi,ti){
   var pairs=[];
   try{pairs=JSON.parse(t.data||'[]');}catch(e){}
   if(!pairs.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Juftlar kiritilmagan</div>';
-  // O'quvchi allaqachon bajardimi?
+
   var sKey=sk(CU&&CU.ism?CU.ism:'')+'_'+kId+'_'+mi+'_'+sk(t.nom);
   var alreadyDone=!!localStorage.getItem('top_'+sKey);
 
-  // O'ng tomondagi javoblarni aralashtirish
+  // Chap: asl tartib, O'ng: aralashtirish
   var rights=pairs.slice().sort(function(){return Math.random()-.5;});
 
+  // Chap tugmalar
   var lHTML=pairs.map(function(p,i){
-    return '<button class="gbtn-item" id="'+gid+'_L'+i+'" data-gid="'+gid+'" data-side="L" data-idx="'+i+'" onclick="matchClickHandler(this)">'+p.l+'</button>';
+    return '<button class="gbtn-item" id="'+gid+'_L'+i+'" data-gid="'+gid+'" data-side="L" data-idx="'+i+'"'+
+      ' onclick="matchClickHandler(this)" style="text-align:left">'+p.l+'</button>';
   }).join('');
 
+  // O'ng tugmalar — aralashtirilib
   var rHTML=rights.map(function(p){
     var oi=pairs.indexOf(p);
-    return '<button class="gbtn-item" id="'+gid+'_R'+oi+'" data-gid="'+gid+'" data-side="R" data-idx="'+oi+'" onclick="matchClickHandler(this)">'+p.r+'</button>';
+    return '<button class="gbtn-item" id="'+gid+'_R'+oi+'" data-gid="'+gid+'" data-side="R" data-idx="'+oi+'"'+
+      ' onclick="matchClickHandler(this)" style="text-align:left">'+p.r+'</button>';
   }).join('');
 
-  var submitBtn=alreadyDone?
-    '<div style="margin-top:12px;background:var(--sage2);color:#065f46;padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;text-align:center">&#9989; Allaqachon bajarilgan</div>':
-    '<button id="'+gid+'_save" data-fn="match-save" data-gid="'+gid+'" style="display:none;margin-top:14px;width:100%;padding:12px;background:var(--sage);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:800;cursor:pointer">&#9989; Saqlash va natijani korish</button>';
+  var bottomBtn=alreadyDone
+    ? '<div style="margin-top:12px;background:var(--sage2);color:#065f46;padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;text-align:center">&#9989; Allaqachon bajarilgan</div>'
+    : '<button id="'+gid+'_check" data-fn="match-check" data-gid="'+gid+'" style="margin-top:14px;width:100%;padding:12px;background:var(--sky);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:800;cursor:pointer">&#9989; Tekshirish va saqlash</button>';
 
   return '<div class="game-wrap match-up" id="'+gid+'"'+
     ' data-kId="'+kId+'" data-mi="'+mi+'"'+
@@ -1632,124 +1636,70 @@ function renderMatchUp(t,gid,kId,mi,ti){
     ' data-total="'+pairs.length+'">'+
     '<div class="game-title">&#128279; Juftlashtirish'+
     '<span class="game-score" id="'+gid+'_sc">0/'+pairs.length+'</span></div>'+
-    '<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Chap tomondagi atamani bosing, keyin ong tomondagi togri javobni bosing</div>'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Har bir atamani mos javobiga ulang, keyin Tekshirish bosing</div>'+
     '<div id="'+gid+'_msg"></div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
     '<div><div style="font-size:10px;font-weight:700;color:var(--fog);margin-bottom:6px;letter-spacing:.05em">ATAMALAR</div>'+lHTML+'</div>'+
     '<div><div style="font-size:10px;font-weight:700;color:var(--fog);margin-bottom:6px;letter-spacing:.05em">JAVOBLAR</div>'+rHTML+'</div>'+
     '</div>'+
-    submitBtn+
+    bottomBtn+
     '</div>';
 }
 
-var _matchSel={},_matchMatched={};
-
-function matchClickHandler(btn){
-  var gid=btn.getAttribute('data-gid');
-  var side=btn.getAttribute('data-side');
-  var idx=parseInt(btn.getAttribute('data-idx'));
-  matchClick(btn,side,idx,gid);
-}
-
-function matchClick(btn,side,idx,gid){
-  if(btn.disabled||btn.classList.contains('gmatched'))return;
-  if(!_matchSel[gid])_matchSel[gid]=null;
-  if(!_matchMatched[gid])_matchMatched[gid]=[];
-
-  // Birinchi tanlov
-  if(!_matchSel[gid]){
-    _matchSel[gid]={btn:btn,side:side,idx:idx};
-    btn.classList.add('gsel');
-    return;
-  }
-  // Xuddi shu tugma — bekor qilish
-  if(_matchSel[gid].btn===btn){
-    _matchSel[gid].btn.classList.remove('gsel');
-    _matchSel[gid]=null;
-    return;
-  }
-  // Bir tomondagi tugma — o'zgartirish
-  if(_matchSel[gid].side===side){
-    _matchSel[gid].btn.classList.remove('gsel');
-    _matchSel[gid]={btn:btn,side:side,idx:idx};
-    btn.classList.add('gsel');
-    return;
-  }
-
-  var lIdx=_matchSel[gid].side==='L'?_matchSel[gid].idx:idx;
-  var rIdx=_matchSel[gid].side==='R'?_matchSel[gid].idx:idx;
-  var lb=document.getElementById(gid+'_L'+lIdx);
-  var rb=document.getElementById(gid+'_R'+rIdx);
-
-  if(lIdx===rIdx){
-    // Togri juft
-    [lb,rb].forEach(function(b){
-      if(b){b.classList.remove('gsel');b.classList.add('gmatched');b.disabled=true;}
-    });
-    _matchMatched[gid].push(lIdx);
-    var sc=document.getElementById(gid+'_sc');
-    var total=0;
-    if(sc){
-      var t2=sc.textContent.split('/');
-      sc.textContent=_matchMatched[gid].length+'/'+t2[1];
-      total=parseInt(t2[1])||0;
-    }
-    if(_matchMatched[gid].length>=total&&total>0){
-      // Hammasi tugadi - Saqlash tugmasini ko'rsat
-      var saveBtn=document.getElementById(gid+'_save');
-      if(saveBtn)saveBtn.style.display='block';
-      gameMsg(gid+'_msg','Barcha juftlar topildi! Saqlash tugmasini bosing!','sage');
-    } else {
-      gameMsg(gid+'_msg','Togri!','sage');
-    }
-  } else {
-    // Xato juft
-    var wrongL=_matchSel[gid].side==='L'?_matchSel[gid].btn:btn;
-    var wrongR=_matchSel[gid].side==='R'?_matchSel[gid].btn:btn;
-    [wrongL,wrongR].forEach(function(b){if(b)b.classList.add('gno');});
-    gameMsg(gid+'_msg','Xato!','rose');
-    setTimeout(function(){
-      [wrongL,wrongR].forEach(function(b){if(b)b.classList.remove('gno','gsel');});
-      var msgEl=document.getElementById(gid+'_msg');
-      if(msgEl)msgEl.innerHTML='';
-    },800);
-  }
-  _matchSel[gid]=null;
-}
-
-// Juftlashtirish — yakuniy saqlash
-function matchSave(gid){
+// Juftlashtirish — tekshirish va saqlash
+function matchCheck(gid){
   var wrap=document.getElementById(gid);
   if(!wrap)return;
-  var matched=(_matchMatched[gid]||[]).length;
-  var total=parseInt(wrap.getAttribute('data-total')||0);
+  var pairs=_matchPairs[gid]||[];
+  var selected=_matchSel2[gid]||{};
+  var total=parseInt(wrap.getAttribute('data-total')||pairs.length||0);
   var kId=wrap.getAttribute('data-kId')||'';
   var mi=wrap.getAttribute('data-mi')||0;
   var nom=wrap.getAttribute('data-nom')||'';
   var maxBall=parseInt(wrap.getAttribute('data-max')||10);
-  var pct=Math.round((matched/total)*100);
-  var ball=Math.round((matched/total)*maxBall);
 
-  // Firebase ga saqlash
-  saveGameResult(kId,mi,nom,maxBall,matched,total);
+  // Har bir chap tugma uchun tanlangan o'ng indeksni tekshir
+  var correct=0;
+  for(var i=0;i<total;i++){
+    var lBtn=document.getElementById(gid+'_L'+i);
+    var selRIdx=selected['L'+i]; // O'quvchi L[i] uchun tanlagan R indeks
+    var rBtn=selRIdx!==undefined?document.getElementById(gid+'_R'+selRIdx):null;
 
-  // Saqlash tugmasini yashirish
-  var saveBtn=document.getElementById(gid+'_save');
-  if(saveBtn)saveBtn.style.display='none';
+    if(selRIdx!==undefined&&parseInt(selRIdx)===i){
+      // Togri juft
+      correct++;
+      if(lBtn){lBtn.classList.remove('gsel','gno');lBtn.classList.add('gmatched');lBtn.disabled=true;}
+      if(rBtn){rBtn.classList.remove('gsel','gno');rBtn.classList.add('gmatched');rBtn.disabled=true;}
+    } else {
+      // Xato yoki tanlanmagan
+      if(lBtn){lBtn.classList.remove('gsel','gmatched');lBtn.classList.add('gno');}
+      if(rBtn){rBtn.classList.remove('gsel','gmatched');rBtn.classList.add('gno');}
+    }
+  }
 
-  // O'zlashtirish ko'rsatkichi
+  var pct=Math.round((correct/total)*100);
+  var ball=Math.round((correct/total)*maxBall);
   var color=pct>=80?'var(--sage)':pct>=50?'var(--gold)':'var(--rose)';
   var label=pct>=80?"A'lo":pct>=60?'Yaxshi':pct>=40?'Qoniqarli':'Zaif';
+
+  // Tekshirish tugmasini yashir
+  var checkBtn=document.getElementById(gid+'_check');
+  if(checkBtn)checkBtn.style.display='none';
+
+  // Natija
   var resultHTML='<div style="margin-top:14px;border-radius:12px;overflow:hidden;border:1.5px solid '+color+'">'+
-    '<div style="background:'+color+';padding:12px 16px;display:flex;align-items:center;justify-content:space-between">'+
-    '<div style="color:#fff;font-size:18px;font-weight:900">'+pct+'% — '+label+'</div>'+
-    '<div style="color:#fff;font-size:13px;font-weight:700">'+matched+'/'+total+' juft</div>'+
+    '<div style="background:'+color+';padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">'+
+    '<div style="color:#fff;font-size:20px;font-weight:900">'+pct+'% — '+label+'</div>'+
+    '<div style="color:#fff;font-size:13px;font-weight:700">'+correct+'/'+total+' togri</div>'+
     '</div>'+
     '<div style="padding:12px 16px;background:var(--snow);display:flex;align-items:center;justify-content:space-between">'+
     '<div style="font-size:13px;color:var(--ink)">Ball: <strong>'+ball+'/'+maxBall+'</strong></div>'+
     '<div style="font-size:12px;color:var(--fog)">&#9989; Natija saqlandi</div>'+
     '</div></div>';
   wrap.insertAdjacentHTML('beforeend',resultHTML);
+
+  // Firebase ga saqlash
+  saveGameResult(kId,mi,nom,maxBall,correct,total);
 }
 
 // ── 2. BO'SHLIQ TO'LDIRISH (FILL IN) ─────────────────────────
@@ -2044,7 +1994,7 @@ document.addEventListener('click',function(e){
     var enc=btn.getAttribute('data-enc');
     igEdit(ki,enc);
   }
-  if(fn==='match-save'){matchSave(btn.getAttribute('data-gid'));}
+  if(fn==='match-check'){matchCheck(btn.getAttribute('data-gid'));}
   if(fn==='ig-add-pair')igAddPair();
   if(fn==='ig-add-question')igAddQuestion();
   if(fn==='ig-add-word')igAddWord();
