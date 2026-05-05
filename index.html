@@ -1728,9 +1728,9 @@ function matchClickHandler(btn){
 function matchCheck(gid){
   var wrap=document.getElementById(gid);
   if(!wrap)return;
-  var pairs=_matchPairs[gid]||[];
   var selected=_matchSel2[gid]||{};
-  var total=parseInt(wrap.getAttribute('data-total')||pairs.length||0);
+  var total=parseInt(wrap.getAttribute('data-total')||0);
+  if(!total){alert('Avval juftlarni moslang!');return;}
   var kId=wrap.getAttribute('data-kId')||'';
   var mi=wrap.getAttribute('data-mi')||0;
   var nom=wrap.getAttribute('data-nom')||'';
@@ -1744,14 +1744,17 @@ function matchCheck(gid){
     var rBtn=selRIdx!==undefined?document.getElementById(gid+'_R'+selRIdx):null;
 
     if(selRIdx!==undefined&&parseInt(selRIdx)===i){
-      // Togri juft
+      // Togri juft — yashil
       correct++;
-      if(lBtn){lBtn.classList.remove('gsel','gno');lBtn.classList.add('gmatched');lBtn.disabled=true;}
-      if(rBtn){rBtn.classList.remove('gsel','gno');rBtn.classList.add('gmatched');rBtn.disabled=true;}
+      if(lBtn){lBtn.style.background='var(--sage2)';lBtn.style.borderColor='var(--sage)';lBtn.style.color='#065f46';lBtn.disabled=true;}
+      if(rBtn){rBtn.style.background='var(--sage2)';rBtn.style.borderColor='var(--sage)';rBtn.style.color='#065f46';rBtn.disabled=true;}
+    } else if(selRIdx!==undefined){
+      // Xato juft — qizil
+      if(lBtn){lBtn.style.background='#fef2f2';lBtn.style.borderColor='var(--rose)';lBtn.style.color='var(--rose)';}
+      if(rBtn){rBtn.style.background='#fef2f2';rBtn.style.borderColor='var(--rose)';rBtn.style.color='var(--rose)';}
     } else {
-      // Xato yoki tanlanmagan
-      if(lBtn){lBtn.classList.remove('gsel','gmatched');lBtn.classList.add('gno');}
-      if(rBtn){rBtn.classList.remove('gsel','gmatched');rBtn.classList.add('gno');}
+      // Tanlanmagan — kulrang
+      if(lBtn){lBtn.style.background='#f8fafc';lBtn.style.borderColor='var(--mist)';lBtn.style.color='var(--fog)';}
     }
   }
 
