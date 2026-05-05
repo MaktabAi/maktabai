@@ -1605,32 +1605,55 @@ function renderMatchUp(t,gid,kId,mi,ti){
   var pairs=[];
   try{pairs=JSON.parse(t.data||'[]');}catch(e){}
   if(!pairs.length)return '<div class="game-msg" style="background:var(--snow);color:var(--fog)">Juftlar kiritilmagan</div>';
+  // O'quvchi allaqachon bajardimi?
+  var sKey=sk(CU&&CU.ism?CU.ism:'')+'_'+kId+'_'+mi+'_'+sk(t.nom);
+  var alreadyDone=!!localStorage.getItem('top_'+sKey);
+
+  // O'ng tomondagi javoblarni aralashtirish
   var rights=pairs.slice().sort(function(){return Math.random()-.5;});
-    var lHTML=pairs.map(function(p,i){return '<button class="gbtn-item" id="'+gid+'_L'+i+'" data-gid="'+gid+'" data-side="L" data-idx="'+i+'" onclick="matchClickHandler(this)">'+p.l+'</button>';}).join('');
-  var rHTML=rights.map(function(p){var oi=pairs.indexOf(p);return '<button class="gbtn-item" id="'+gid+'_R'+oi+'" data-gid="'+gid+'" data-side="R" data-idx="'+oi+'" onclick="matchClickHandler(this)">'+p.r+'</button>';}).join('');;
-  return '<div class="game-wrap match-up" id="'+gid+'" data-kId="'+kId+'" data-mi="'+mi+'" data-nom="'+encodeURIComponent(t.nom)+'" data-max="'+t.maxBall+'">'+
-    '<div class="game-title">&#128279; Juftlashtirish <span class="game-score" id="'+gid+'_sc">0/'+pairs.length+'</span></div>'+
+
+  var lHTML=pairs.map(function(p,i){
+    return '<button class="gbtn-item" id="'+gid+'_L'+i+'" data-gid="'+gid+'" data-side="L" data-idx="'+i+'" onclick="matchClickHandler(this)">'+p.l+'</button>';
+  }).join('');
+
+  var rHTML=rights.map(function(p){
+    var oi=pairs.indexOf(p);
+    return '<button class="gbtn-item" id="'+gid+'_R'+oi+'" data-gid="'+gid+'" data-side="R" data-idx="'+oi+'" onclick="matchClickHandler(this)">'+p.r+'</button>';
+  }).join('');
+
+  var submitBtn=alreadyDone?
+    '<div style="margin-top:12px;background:var(--sage2);color:#065f46;padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;text-align:center">&#9989; Allaqachon bajarilgan</div>':
+    '<button id="'+gid+'_save" data-fn="match-save" data-gid="'+gid+'" style="display:none;margin-top:14px;width:100%;padding:12px;background:var(--sage);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:800;cursor:pointer">&#9989; Saqlash va natijani korish</button>';
+
+  return '<div class="game-wrap match-up" id="'+gid+'"'+
+    ' data-kId="'+kId+'" data-mi="'+mi+'"'+
+    ' data-nom="'+encodeURIComponent(t.nom)+'"'+
+    ' data-max="'+t.maxBall+'"'+
+    ' data-total="'+pairs.length+'">'+
+    '<div class="game-title">&#128279; Juftlashtirish'+
+    '<span class="game-score" id="'+gid+'_sc">0/'+pairs.length+'</span></div>'+
+    '<div style="font-size:11px;color:var(--fog);margin-bottom:10px">Chap tomondagi atamani bosing, keyin ong tomondagi togri javobni bosing</div>'+
     '<div id="'+gid+'_msg"></div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
-    '<div><div style="font-size:11px;font-weight:700;color:var(--fog);margin-bottom:6px">ATAMALAR</div>'+lHTML+'</div>'+
-    '<div><div style="font-size:11px;font-weight:700;color:var(--fog);margin-bottom:6px">JAVOBLAR</div>'+rHTML+'</div>'+
+    '<div><div style="font-size:10px;font-weight:700;color:var(--fog);margin-bottom:6px;letter-spacing:.05em">ATAMALAR</div>'+lHTML+'</div>'+
+    '<div><div style="font-size:10px;font-weight:700;color:var(--fog);margin-bottom:6px;letter-spacing:.05em">JAVOBLAR</div>'+rHTML+'</div>'+
     '</div>'+
-    '<div style="margin-top:10px;font-size:11px;color:var(--fog)">Ball: Max '+t.maxBall+'</div>'+
+    submitBtn+
     '</div>';
 }
 
 var _matchSel={},_matchMatched={};
+
 function matchClickHandler(btn){
   var gid=btn.getAttribute('data-gid');
   var side=btn.getAttribute('data-side');
   var idx=parseInt(btn.getAttribute('data-idx'));
   matchClick(btn,side,idx,gid);
 }
+
 function matchClick(btn,side,idx,gid){
-  if(btn.disabled)return;
-  // Allaqachon juftlashgan tugmani qayta tanlash mumkin emas
-  if(btn.classList.contains('gmatched'))return;
-  if(!_matchSel[gid]){_matchSel[gid]=null;}
+  if(btn.disabled||btn.classList.contains('gmatched'))return;
+  if(!_matchSel[gid])_matchSel[gid]=null;
   if(!_matchMatched[gid])_matchMatched[gid]=[];
 
   // Birinchi tanlov
@@ -1639,13 +1662,13 @@ function matchClick(btn,side,idx,gid){
     btn.classList.add('gsel');
     return;
   }
-  // Xuddi shu tugma qayta bosilsa — bekor qilish
+  // Xuddi shu tugma — bekor qilish
   if(_matchSel[gid].btn===btn){
     _matchSel[gid].btn.classList.remove('gsel');
     _matchSel[gid]=null;
     return;
   }
-  // Bir tomondagi tugma bosilsa — o'zgartirish (eski selection ni bekor qil)
+  // Bir tomondagi tugma — o'zgartirish
   if(_matchSel[gid].side===side){
     _matchSel[gid].btn.classList.remove('gsel');
     _matchSel[gid]={btn:btn,side:side,idx:idx};
@@ -1659,38 +1682,34 @@ function matchClick(btn,side,idx,gid){
   var rb=document.getElementById(gid+'_R'+rIdx);
 
   if(lIdx===rIdx){
-    // ✅ Togri juft
+    // Togri juft
     [lb,rb].forEach(function(b){
       if(b){b.classList.remove('gsel');b.classList.add('gmatched');b.disabled=true;}
     });
     _matchMatched[gid].push(lIdx);
     var sc=document.getElementById(gid+'_sc');
-    if(sc){var t2=sc.textContent.split('/');sc.textContent=_matchMatched[gid].length+'/'+t2[1];}
-    var total=parseInt((sc?sc.textContent:'0/1').split('/')[1])||0;
-    if(_matchMatched[gid].length>=total&&total>0){
-      // Hammasi tugadi — o'zlashtirish saqlash
-      var wrap=document.getElementById(gid);
-      if(wrap){
-        var kId=wrap.getAttribute('data-kId')||wrap.getAttribute('data-kid')||'';
-        var mi=wrap.getAttribute('data-mi')||0;
-        var nom=wrap.getAttribute('data-nom')||'';
-        var maxB=parseInt(wrap.getAttribute('data-max')||10);
-        saveGameResult(kId,mi,nom,maxB,total,total);
-        // O'zlashtirish ballini ko'rsat
-        showGameFinish(gid,total,total,maxB);
-      }
-      gameMsg(gid+'_msg','Barakalla! Hammasi togri! Ball: '+maxB+'/'+maxB,'sage');
-    } else {
-      gameMsg(gid+'_msg','Togri! '+_matchMatched[gid].length+'/'+total,'sage');
+    var total=0;
+    if(sc){
+      var t2=sc.textContent.split('/');
+      sc.textContent=_matchMatched[gid].length+'/'+t2[1];
+      total=parseInt(t2[1])||0;
     }
-  }else{
-    // ❌ Xato juft — qizil ko'rsat, keyin qaytarish
-    var wrongBtns=[_matchSel[gid].side==='L'?_matchSel[gid].btn:btn,
-                   _matchSel[gid].side==='R'?_matchSel[gid].btn:btn];
-    wrongBtns.forEach(function(b){if(b)b.classList.add('gno');});
-    gameMsg(gid+'_msg','Xato! Qayta urining','rose');
+    if(_matchMatched[gid].length>=total&&total>0){
+      // Hammasi tugadi - Saqlash tugmasini ko'rsat
+      var saveBtn=document.getElementById(gid+'_save');
+      if(saveBtn)saveBtn.style.display='block';
+      gameMsg(gid+'_msg','Barcha juftlar topildi! Saqlash tugmasini bosing!','sage');
+    } else {
+      gameMsg(gid+'_msg','Togri!','sage');
+    }
+  } else {
+    // Xato juft
+    var wrongL=_matchSel[gid].side==='L'?_matchSel[gid].btn:btn;
+    var wrongR=_matchSel[gid].side==='R'?_matchSel[gid].btn:btn;
+    [wrongL,wrongR].forEach(function(b){if(b)b.classList.add('gno');});
+    gameMsg(gid+'_msg','Xato!','rose');
     setTimeout(function(){
-      wrongBtns.forEach(function(b){if(b)b.classList.remove('gno','gsel');});
+      [wrongL,wrongR].forEach(function(b){if(b)b.classList.remove('gno','gsel');});
       var msgEl=document.getElementById(gid+'_msg');
       if(msgEl)msgEl.innerHTML='';
     },800);
@@ -1698,19 +1717,39 @@ function matchClick(btn,side,idx,gid){
   _matchSel[gid]=null;
 }
 
-// O'yin tugaganda o'zlashtirish ko'rsatkich
-function showGameFinish(gid,score,total,maxBall){
-  var pct=Math.round((score/total)*100);
-  var color=pct>=80?'sage':pct>=50?'gold':'rose';
-  var label=pct>=80?"A'lo":pct>=60?'Yaxshi':pct>=40?'Qoniqarli':'Zaif';
-  var html='<div style="margin-top:14px;background:var(--snow);border-radius:12px;padding:16px;border:1.5px solid var(--sage);text-align:center">'+
-    '<div style="font-size:28px;font-weight:900;color:var(--sage)">'+pct+'%</div>'+
-    '<div style="font-size:13px;font-weight:700;color:var(--ink);margin-top:4px">'+label+'</div>'+
-    '<div style="font-size:11px;color:var(--fog);margin-top:4px">Ball: '+Math.round((score/total)*maxBall)+'/'+maxBall+'</div>'+
-    '<div style="font-size:11px;color:var(--fog);margin-top:2px">Natija saqlandi ✅</div>'+
-    '</div>';
+// Juftlashtirish — yakuniy saqlash
+function matchSave(gid){
   var wrap=document.getElementById(gid);
-  if(wrap)wrap.insertAdjacentHTML('beforeend',html);
+  if(!wrap)return;
+  var matched=(_matchMatched[gid]||[]).length;
+  var total=parseInt(wrap.getAttribute('data-total')||0);
+  var kId=wrap.getAttribute('data-kId')||'';
+  var mi=wrap.getAttribute('data-mi')||0;
+  var nom=wrap.getAttribute('data-nom')||'';
+  var maxBall=parseInt(wrap.getAttribute('data-max')||10);
+  var pct=Math.round((matched/total)*100);
+  var ball=Math.round((matched/total)*maxBall);
+
+  // Firebase ga saqlash
+  saveGameResult(kId,mi,nom,maxBall,matched,total);
+
+  // Saqlash tugmasini yashirish
+  var saveBtn=document.getElementById(gid+'_save');
+  if(saveBtn)saveBtn.style.display='none';
+
+  // O'zlashtirish ko'rsatkichi
+  var color=pct>=80?'var(--sage)':pct>=50?'var(--gold)':'var(--rose)';
+  var label=pct>=80?"A'lo":pct>=60?'Yaxshi':pct>=40?'Qoniqarli':'Zaif';
+  var resultHTML='<div style="margin-top:14px;border-radius:12px;overflow:hidden;border:1.5px solid '+color+'">'+
+    '<div style="background:'+color+';padding:12px 16px;display:flex;align-items:center;justify-content:space-between">'+
+    '<div style="color:#fff;font-size:18px;font-weight:900">'+pct+'% — '+label+'</div>'+
+    '<div style="color:#fff;font-size:13px;font-weight:700">'+matched+'/'+total+' juft</div>'+
+    '</div>'+
+    '<div style="padding:12px 16px;background:var(--snow);display:flex;align-items:center;justify-content:space-between">'+
+    '<div style="font-size:13px;color:var(--ink)">Ball: <strong>'+ball+'/'+maxBall+'</strong></div>'+
+    '<div style="font-size:12px;color:var(--fog)">&#9989; Natija saqlandi</div>'+
+    '</div></div>';
+  wrap.insertAdjacentHTML('beforeend',resultHTML);
 }
 
 // ── 2. BO'SHLIQ TO'LDIRISH (FILL IN) ─────────────────────────
@@ -2005,6 +2044,7 @@ document.addEventListener('click',function(e){
     var enc=btn.getAttribute('data-enc');
     igEdit(ki,enc);
   }
+  if(fn==='match-save'){matchSave(btn.getAttribute('data-gid'));}
   if(fn==='ig-add-pair')igAddPair();
   if(fn==='ig-add-question')igAddQuestion();
   if(fn==='ig-add-word')igAddWord();
